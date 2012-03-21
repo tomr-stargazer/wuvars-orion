@@ -21,6 +21,10 @@ t.rice90@gmail.com
 2012-03-20 14:39 TSR: Created.
 '''
 
+import numpy as np
+import matplotlib.pyplot as plt
+import atpy
+
 def stacker(odata, lookup):
     ''' Stacks lightcurves for constant stars and outputs the stacked LC.
 
@@ -36,9 +40,11 @@ def stacker(odata, lookup):
                    Then we can clip them!
     '''
    
+
+
     # Let's remove all the non-constant-star photometry
-    print "old size is ", data.shape
-    data = odata.where(np.array([i in data.SOURCEID for i in lookup.SOURCEID]))
+    print "old size is ", odata.shape
+    data = odata.where(np.array([i in lookup.SOURCEID for i in odata.SOURCEID]))
     print "new size is ", data.shape
     
     # Now let's compute the deviations for each star
@@ -59,10 +65,15 @@ def stacker(odata, lookup):
         data.JDEV[sdata] = data.JAPERMAG3[sdata] - jmean
         data.HDEV[sdata] = data.HAPERMAG3[sdata] - hmean
         data.KDEV[sdata] = data.KAPERMAG3[sdata] - kmean
-        
+
+        # OK, this part worked.
+ #       plt.plot(data.JDEV[sdata])
+#        break
+#    return 1
+
     # So, we need to know what the timestamps are 
     # (and it helps if they are sorted)
-    timestamps = np.array(sorted(list(set(table.MEANMJDOBS))))
+    timestamps = np.array(sorted(list(set(data.MEANMJDOBS))))
 
     j_dev_stack = np.zeros_like(timestamps)
     h_dev_stack = np.zeros_like(timestamps)
@@ -78,16 +89,16 @@ def stacker(odata, lookup):
         
         tdata = np.array(data.MEANMJDOBS == time)
         
-        j_dev_stack = np.sum( data.JDEV[tdata] )
-        h_dev_stack = np.sum( data.HDEV[tdata] )        
-        k_dev_stack = np.sum( data.KDEV[tdata] )
+        j_dev_stack[i] = np.sum( data.JDEV[tdata] )
+        h_dev_stack[i] = np.sum( data.HDEV[tdata] )        
+        k_dev_stack[i] = np.sum( data.KDEV[tdata] )
 
-        j_dev_sig = np.std( data.JDEV[tdata] )
-        h_dev_sig = np.std( data.HDEV[tdata] )        
-        k_dev_sig = np.std( data.KDEV[tdata] )
+        j_dev_sig[i] = np.std( data.JDEV[tdata] )
+        h_dev_sig[i] = np.std( data.HDEV[tdata] )        
+        k_dev_sig[i] = np.std( data.KDEV[tdata] )
 
 
-        pass
+#        pass
     
     # and then create an output table to put it all.
     # with columns for date, stacked jdev, hdev, kdev.
