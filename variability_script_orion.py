@@ -16,7 +16,8 @@ print "               # Note, this one returns the spreadsheet."
 path = '/home/tom/reu/ORION/DATA/'
 path2= path+'spreadsheet/'
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/full_data_errorcorrected.fits')
+data = atpy.Table('constantstars_073112_data_errorcorrected.fits')
+#data = atpy.Table('/home/tom/reu/ORION/DATA/full_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/s3_photometric_errorcorrected.fits')
 print "old data size is ", data.shape
 
