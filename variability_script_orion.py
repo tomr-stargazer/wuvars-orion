@@ -16,7 +16,7 @@ print "               # Note, this one returns the spreadsheet."
 path = '/home/tom/reu/ORION/DATA/'
 path2= path+'spreadsheet/'
 
-data = atpy.Table('constantstars_073112_data_errorcorrected.fits')
+data = atpy.Table('/home/tom/reu/ORION/DATA/constantstars_073112_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/full_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/s3_photometric_errorcorrected.fits')
 print "old data size is ", data.shape
@@ -73,7 +73,8 @@ def calculate_stuff( splits = 10 ):
         # The parameter "-1" is the season that tells data_cut not to make 
         # any cuts on the data.
         sp_i = sp.spreadsheet_write(data_i, lookup_i, -1, 
-                                    path2+'sp%d.fits'%i, flags=256)
+                                    path2+'sp%d.fits'%i, flags=256,
+                                    rob=True)
         
         try:
             now = datetime.datetime.strftime(datetime.datetime.now(),
@@ -90,12 +91,12 @@ def glue_stuff( splits = 10 ):
     if type(splits) is not int:
         raise TypeError
 
-    spread = atpy.Table('sp0.fits')
+    spread = atpy.Table(path2+'sp0.fits')
     
     spread_list = []
  
     for i in range(1,splits):
-        other_spread = atpy.Table('sp%d.fits' %i )
+        other_spread = atpy.Table(path2+'sp%d.fits' %i )
         spread.append(other_spread)
 
 
