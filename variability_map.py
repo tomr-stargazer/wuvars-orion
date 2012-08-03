@@ -138,3 +138,110 @@ def deviation_plot(data, spreadsheet, band,  path, min_mag=17):
 
     """
 
+    if not (len(band)==1 and type(band) is str):
+        raise(ValueError)
+    
+    col = band.upper()+"APERMAG3"
+    bandmean = band.lower()+"_meanr"
+    pperrbits = band.upper()+"PPERRBITS"
+
+    colordict = {'k':'r', 'h':'g', 'j':'b'}
+
+    # First, let's make the list of dates that we are iterating through.
+    date_list = list(set(list(np.trunc(data.MEANMJDOBS))))
+
+    date_list.sort()
+
+    # Now we iterate over our date list.
+
+    for night in date_list:
+        
+        # Grab this night's photometry that corresponds to the input constant
+        # star list.
+        
+        # relevant data
+        rdata = band_cut(data, band, max_flag=256)
+        
+        this_nights_phot = rdata.where( 
+            (np.trunc(rdata.MEANMJDOBS) == night) &
+            (np.in1d(rdata.SOURCEID, spreadsheet.SOURCEID)) &
+            (rdata.data[col] < min_mag))
+
+        # Grab the spreadsheet info that corresponds exactly to this night's 
+        # stars. ("reference photometry")
+
+        ref_phot = spreadsheet.where(
+            np.in1d(spreadsheet.SOURCEID, this_nights_phot.SOURCEID) )
+
+        print "For night %s:" % night
+        print len(this_nights_phot), len(ref_phot)
+        
+        # Now compute the deviation for each star.
+        # (I'd love to do this in an array-based way, but some stars have 
+        # two observations per night, and that breaks my array-based method...)
+        
+        deviation = np.zeros_like( ref_phot.data[bandmean] )
+        
+        for i in range(len(deviation)):
+            
+            this_stars_phot = this_nights_phot.where(
+                this_nights_phot.SOURCEID == ref_phot.SOURCEID[i])
+            
+            deviation[i] = (
+                this_stars_phot.data[col][0] - ref_phot.data[bandmean][i])
+
+        try:
+            fig = plt.figure()
+            
+            plt.plot( ref_phot.data[bandmean], deviation, 
+                      colordict[band.lower()]+'.')
+
+            plt.plot( [5, 20], [0, 0], 'k--')
+            plt.plot( [5, 20], [0.05, 0.05], 'k:')
+            plt.plot( [5, 20], [-0.05, -0.05], 'k:')
+
+            plt.xlabel("Mean %s magnitude" % band.upper())
+            plt.ylabel("Deviation (mag)")
+
+            plt.title("Night: MJD = %s (%d since 01/01/2000)" % 
+                      (str(night), night - 51544))
+
+            plt.xlim(11, min_mag+0.25)
+            plt.ylim(-1,1)
+            plt.gca().invert_yaxis()
+
+            plt.savefig(path+'%s_dev.png' % str(night))
+            plt.close()
+
+#            if night > 54040.0:
+#                break
+
+        except:
+            continue
+
+    return None
+
+def count_constants_calc_ratio(data, spreadsheet, band, min_mag=17):
+    """
+    Investigates the quality of nights by checking 
+    a) how many constant stars are detected
+    b) how many fall inside of, versus outside of, \pm .05 mag deviation
+
+    Parameters
+    ----------
+    data : atpy.Table
+        Table that contains all the photometry data.
+    spreadsheet : atpy.Table
+        Table that contains median photometry and stuff
+    band : str {'j'|'h'|'k'}
+        Which band to use.
+
+    Returns
+    -------
+    n_const : np.ndarray
+        Number of constant stars detected per night
+    ratio : np.ndarray
+        Ratio of (well-behaved)/(deviant) constants per night
+      
+    """
+    
