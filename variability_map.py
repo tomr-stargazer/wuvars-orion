@@ -6,6 +6,7 @@ spatial visualizations of how stars vary over time.
 
 """
 
+from __future__ import division
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -238,6 +239,8 @@ def count_constants_calc_ratio(data, spreadsheet, band, min_mag=17):
 
     Returns
     -------
+    date : np.ndarray
+        Array of truncanted MJD dates corresponding to nights.
     n_const : np.ndarray
         Number of constant stars detected per night
     ratio : np.ndarray
@@ -245,3 +248,74 @@ def count_constants_calc_ratio(data, spreadsheet, band, min_mag=17):
       
     """
     
+    if band.lower() not in ('j','h','k'):
+        raise(ValueError)
+    
+    col = band.upper()+"APERMAG3"
+    bandmean = band.lower()+"_meanr"
+    pperrbits = band.upper()+"PPERRBITS"
+
+    # First, let's make the list of dates that we are iterating through.
+    date_list = list(set(list(np.trunc(data.MEANMJDOBS))))
+
+    date_list.sort()
+
+    print len(date_list)
+
+    dates = np.array(date_list)
+    n_const = np.zeros_like(dates, dtype='int')
+
+    print len(n_const)
+    ratio = np.zeros_like(dates, dtype='float')
+    
+    # Now we iterate over our date list.
+
+    for night, i in zip(date_list, range(len(date_list))):
+        
+        # Grab this night's photometry that corresponds to the input constant
+        # star list.
+        
+        # relevant data
+        rdata = band_cut(data, band, max_flag=256)
+        
+        this_nights_phot = rdata.where( 
+            (np.trunc(rdata.MEANMJDOBS) == night) &
+            (np.in1d(rdata.SOURCEID, spreadsheet.SOURCEID)) &
+            (rdata.data[col] < min_mag))
+
+        # Grab the spreadsheet info that corresponds exactly to this night's 
+        # stars. ("reference photometry")
+
+        ref_phot = spreadsheet.where(
+            np.in1d(spreadsheet.SOURCEID, this_nights_phot.SOURCEID) )
+
+        print "For night %s:" % night
+        print len(this_nights_phot), len(ref_phot)
+        
+        # Now compute the deviation for each star.
+        # (I'd love to do this in an array-based way, but some stars have 
+        # two observations per night, and that breaks my array-based method...)
+        
+        deviation = np.zeros_like( ref_phot.data[bandmean] )
+        
+        for j in range(len(deviation)):
+            
+            this_stars_phot = this_nights_phot.where(
+                this_nights_phot.SOURCEID == ref_phot.SOURCEID[j])
+            
+            deviation[j] = (
+                this_stars_phot.data[col][0] - ref_phot.data[bandmean][j])
+
+        # NOW count how many stars there are and the ratio that fall inside
+        # versus outside the \pm .05 mag bands
+
+        n_const[i] = len(deviation)
+
+        goods = len( deviation[np.abs(deviation) < 0.05] )
+
+        if n_const[i] > 0:
+            ratio[i] = (goods / n_const[i])
+        else:
+            ratio[i] = 0
+        
+    return dates, n_const, ratio
