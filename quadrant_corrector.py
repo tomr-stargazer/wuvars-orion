@@ -219,6 +219,8 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
             source_list = this_night.SOURCEID
             ra_list = this_night.RA
             dec_list = this_night.DEC
+
+            print str(len(source_list)) +" sources on night %d" % date
             
             # And also grab the constants that are in this here night!
 
@@ -257,10 +259,9 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
                 new_data.data[col][(new_data.SOURCEID == s) & 
                                    (new_data.MEANMJDOBS == date)] += adjustment
                 
-                print "Adjusted star %d by %f mag on night %d" % \
-                    (s, adjustment, date)
+                print ("%d: adjusted by %f mag on night %d using %d reference stars" % (s, adjustment, date, len(offset_list)))
                 
-                break
+#                break
 
                     
 
