@@ -23,6 +23,13 @@ import coords
 
 from helpers3 import band_cut
 
+def magnitude_adjustment( deviation_list, offset_list ):
+    """
+    Computes the magnitude correction for a given star.
+
+    Parameters
+    ----------
+
 def quadrant_match( ra, dec, ref_table, max_match=600):
     """ 
     Matches a target to 4 reference stars that enclose that target.
@@ -66,13 +73,11 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
     dec_list = []
     
     p1 = coords.Position( (ra, dec), units='deg')
-    print p1.hmsdms(), "p1"
-
 
     # Quadrants:
-    #  2 | 3
+    #  4 | 1
     #  --+--
-    #  1 | 4
+    #  3 | 2
     #
     #  RA ->
 
@@ -110,7 +115,7 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
             for s2 in range(len(offset)):
                 p2 = coords.Position( (const_ra[box][s2], const_dec[box][s2])
                                       ,  units = 'deg')
-                print p2.hmsdms(), "p2"
+
                 offset[s2] = p1.angsep(p2).arcsec()
 
                 # then we don't care! We want to find one star in each quadrant,
