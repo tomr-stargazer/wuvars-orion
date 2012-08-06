@@ -238,9 +238,11 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
                 # Get the deviation of each constant
                  
                 deviation = []
-                for s in sid_list:
-                    this_stars_phot = this_night.where(this_night.SOURCEID == s)
-                    this_stars_avg = ref_phot.where(ref_phot.SOURCEID == s)
+                for sid in sid_list:
+                    this_stars_phot = this_night.where(
+                        this_night.SOURCEID == sid)
+                    this_stars_avg = ref_phot.where(
+                        ref_phot.SOURCEID == sid)
             
                     deviation.append(this_stars_phot.data[col][0] - 
                                      this_stars_avg.data[bandmean][0])
@@ -252,9 +254,14 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
 
                 # Apply the offset to our working table
 
-
+                new_data.data[col][(new_data.SOURCEID == s) & 
+                                   (new_data.MEANMJDOBS == date)] += adjustment
+                
+                print "Adjusted star %d by %f mag on night %d" % \
+                    (s, adjustment, date)
+                
                 break
 
                     
 
-    return 
+    return new_data
