@@ -108,7 +108,7 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
         offset = -1. * np.ones_like(const_ra[box])
         if offset.size != 0:
             for s2 in range(len(offset)):
-                p2 = coords.Position( (const_ra[box][s2], const_ra[box][s2])
+                p2 = coords.Position( (const_ra[box][s2], const_dec[box][s2])
                                       ,  units = 'deg')
                 print p2.hmsdms(), "p2"
                 offset[s2] = p1.angsep(p2).arcsec()
