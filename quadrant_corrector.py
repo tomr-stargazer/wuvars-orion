@@ -29,6 +29,30 @@ def magnitude_adjustment( deviation_list, offset_list ):
 
     Parameters
     ----------
+    deviation_list : list of float
+        Deviations of the surrounding constant stars. Length 1-4.
+    offset_list : list of float
+        Offsets between surrounding constant stars and target star.
+        Length 1-4 (matches `deviation_list`).
+
+    Returns
+    -------
+    adjustment : float
+        The adjustment to add to the uncorrected target magnitude value.
+
+    """
+    
+    if len(deviation_list) != len(offset_list):
+        raise ValueError("Arguments must be same length")
+
+    deviation_list = np.array(deviation_list)
+    offset_list = np.array(offset_list)
+    
+    adjustment = ( len(deviation_list) * np.sum(offset_list * deviation_list) / 
+                   (4 * np.sum(offset_list)) )
+
+    return adjustment
+
 
 def quadrant_match( ra, dec, ref_table, max_match=600):
     """ 
