@@ -192,7 +192,7 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
     # Make a copy of the data table 
     new_data = data.where(data.SOURCEID != 0)
 
-    new_data.add_column
+#    new_data.add_column
 
     # glue your set of constant lists together
     cdict = {'j':j_constants, 'h':h_constants, 'k':k_constants}
@@ -201,6 +201,10 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
         
         # Grab the timestamps we'll be iterating over
         bdata = band_cut(data, band, max_flag=256)
+
+        col = band.upper()+"APERMAG3"
+        bandmean = band.lower()+"_meanr"
+
 
         timestamp_list = list(set(list(bdata.MEANMJDOBS)))
 
@@ -230,8 +234,27 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
                     np.degrees(ra), np.degrees(dec), ref_phot,
                     max_match=600)
 #                print offset_list, "sup"
+
+                # Get the deviation of each constant
+                 
+                deviation = []
+                for s in sid_list:
+                    this_stars_phot = this_night.where(this_night.SOURCEID == s)
+                    this_stars_avg = ref_phot.where(ref_phot.SOURCEID == s)
+            
+                    deviation.append(this_stars_phot.data[col][0] - 
+                                     this_stars_avg.data[bandmean][0])
+
+
+                # Calculate the relevant offset
+
+                adjustment = magnitude_adjustment(deviation, offset_list)
+
+                # Apply the offset to our working table
+
+
                 break
 
                     
 
-    timestamp_list
+    return 
