@@ -48,7 +48,7 @@ def magnitude_adjustment( deviation_list, offset_list ):
     deviation_list = np.array(deviation_list)
     offset_list = np.array(offset_list)
     
-    adjustment = ( len(deviation_list) * np.sum(offset_list * deviation_list) / 
+    adjustment = (-len(deviation_list) * np.sum(offset_list * deviation_list) / 
                    (4 * np.sum(offset_list)) )
 
     return adjustment
@@ -258,8 +258,9 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
 
                 new_data.data[col][(new_data.SOURCEID == s) & 
                                    (new_data.MEANMJDOBS == date)] += adjustment
-                
-                print ("%d: adjusted by %f mag on night %d using %d reference stars" % (s, adjustment, date, len(offset_list)))
+
+                if s%23 == 0:
+                    print ("%d: adjusted by %f mag (%s) on night %d using %d ref. stars" % (s, adjustment, band.upper(), date, len(offset_list)))
                 
 #                break
 
