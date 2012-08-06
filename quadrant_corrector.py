@@ -15,8 +15,8 @@ Created 3 August 2012 by Tom Rice (t.rice90@gmail.com).
 from __future__ import division
 
 import numpy as np
-from np import where
-from np import intersect1d as sect
+from numpy import where
+from numpy import intersect1d as sect
 
 import atpy
 import coords
@@ -53,8 +53,8 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
     delta = np.cos(np.radians(np.abs(dec)))
     boxsize = max_match / 3600.
 
-    min_offset = -0.1 * np.ones_like(radd1)
-    match      = -1   * np.ones_like(radd1).astype(int)
+#    min_offset = -0.1 * np.ones_like(radd1)
+#    match      = -1   * np.ones_like(radd1).astype(int)
 
     const_ra = np.degrees(ref_table.RA)
     const_dec =np.degrees(ref_table.DEC) 
@@ -66,6 +66,8 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
     dec_list = []
     
     p1 = coords.Position( (ra, dec), units='deg')
+    print p1.hmsdms(), "p1"
+
 
     # Quadrants:
     #  2 | 3
@@ -84,18 +86,21 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
 
     a_list = [0, 0, -boxsize/delta, -boxsize/delta]
     b_list = [boxsize/delta, boxsize/delta, 0, 0]
-    c_list = [0, -boxsize, boxsize, 0]
+    c_list = [0, -boxsize, -boxsize, 0]
     d_list = [boxsize, 0, 0, boxsize]
     
-    for a, b, c, d in zip(a_list, b_list, c_list, d_list):
+    for a, b, c, d, q in zip(a_list, b_list, 
+                             c_list, d_list, range(1,len(a_list)+1)):
 
-        w1 = where(const_ra < ra)[0]
-        w2 = where(const_ra > ra - boxsize/delta)[0]
-        w3 = where(const_dec < dec)[0]
-        w4 = where(const_dec > dec - boxsize)[0]
+        w1 = where(const_ra < ra + b)[0]
+        w2 = where(const_ra > ra + a)[0]
+        w3 = where(const_dec < dec + d)[0]
+        w4 = where(const_dec > dec + c)[0]
 
         # Let's slice a box around our source
         box = sect(sect(w1,w2),sect(w3,w4))
+
+        print "quadrant", q, ": ", len(box), " constants"
 
         # Now let's extract all the sources within "box" 
         # and calculate offsets to all of them
@@ -105,11 +110,14 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
             for s2 in range(len(offset)):
                 p2 = coords.Position( (const_ra[box][s2], const_ra[box][s2])
                                       ,  units = 'deg')
+                print p2.hmsdms(), "p2"
                 offset[s2] = p1.angsep(p2).arcsec()
 
                 # then we don't care! We want to find one star in each quadrant,
                 # so you better do some slicing.
 
+
+            print offset.min(), max_match
             if offset.min() < max_match:
                 # min_offset[s1] = offset.min()
                 offset_list.append(offset.min())
@@ -123,12 +131,12 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
                 #            vprint( "Source %d: Matched with %f arcsec" \
 #                        % (counter, offset.min() ) )
             else:
+                print "match failure?"
                 #            vprint( "Source %d: Failed to match" % counter)
                 pass
 
     print offset_list
     return sid_list, offset_list, ra_list, dec_list
-
 
     
 
@@ -184,12 +192,17 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
             ref_phot = cdict[band].where(
                 np.in1d(cdict[band].SOURCEID, source_list) )
 
-            for s in source_list:
+            for s, ra, dec in zip(source_list, ra_list, dec_list):
                 
                 # Find four nearby constants (one in each column)
 
-                quad_match
+                (sid_list, offset_list, 
+                 ra_list, dec_list) = quadrant_match(
+                    np.degrees(ra), np.degrees(dec), ref_phot,
+                    max_match=600)
+#                print offset_list, "sup"
+                break
 
                     
 
-    night_list
+    timestamp_list
