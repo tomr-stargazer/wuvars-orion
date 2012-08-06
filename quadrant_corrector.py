@@ -129,7 +129,7 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
         # Let's slice a box around our source
         box = sect(sect(w1,w2),sect(w3,w4))
 
-        print "quadrant", q, ": ", len(box), " constants"
+#        print "quadrant", q, ": ", len(box), " constants"
 
         # Now let's extract all the sources within "box" 
         # and calculate offsets to all of them
@@ -146,7 +146,7 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
                 # so you better do some slicing.
 
 
-            print offset.min(), max_match
+#            print offset.min(), max_match
             if offset.min() < max_match:
                 # min_offset[s1] = offset.min()
                 offset_list.append(offset.min())
@@ -160,11 +160,11 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
                 #            vprint( "Source %d: Matched with %f arcsec" \
 #                        % (counter, offset.min() ) )
             else:
-                print "match failure?"
+#                print "match failure?"
                 #            vprint( "Source %d: Failed to match" % counter)
                 pass
 
-    print offset_list
+#    print offset_list
     return sid_list, offset_list, ra_list, dec_list
 
     
