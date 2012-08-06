@@ -45,7 +45,7 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
     offset_list : list of float
         Offset, in arcseconds, of the four matches from target
     ra_list, dec_list : list of float
-        Coordinates of the four matches.
+        Coordinates of the four matches, in decimal degrees.
 
     """
     
@@ -59,41 +59,75 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
     const_ra = np.degrees(ref_table.RA)
     const_dec =np.degrees(ref_table.DEC) 
 
+    # Let's make a data structure where we can keep the results of our matches.    
+    sid_list = []
+    offset_list = []
+    ra_list = []
+    dec_list = []
     
     p1 = coords.Position( (ra, dec), units='deg')
 
-    w1 = where(const_ra < ra + boxsize/delta)[0]
-    w2 = where(const_ra > ra - boxsize/delta)[0]
-    w3 = where(const_dec < dec + boxsize)[0]
-    w4 = where(const_dec > dec - boxsize)[0]
+    # Quadrants:
+    #  2 | 3
+    #  --+--
+    #  1 | 4
+    #
+    #  RA ->
 
-    # Let's slice a box around our source
-    box = sect(sect(w1,w2),sect(w3,w4))
+    #    all quadrants:
+    #    w1 = where(const_ra < ra + boxsize/delta)[0]
+    #    w2 = where(const_ra > ra - boxsize/delta)[0]
+    #    w3 = where(const_dec < dec + boxsize)[0]
+    #    w4 = where(const_dec > dec - boxsize)[0]
 
-    # Now let's extract all the sources within "box" 
-    # and calculate offsets to all of them
+    # first quadrant
 
-    offset = -1. * np.ones_like(const_ra[box])
-    if offset.size != 0:
-        for s2 in range(len(offset)):
-            p2 = coords.Position( (const_ra[box][s2], const_ra[box][s2])
-                                  ,  units = 'deg')
-            offset[s2] = p1.angsep(p2).arcsec()
+    a_list = [0, 0, -boxsize/delta, -boxsize/delta]
+    b_list = [boxsize/delta, boxsize/delta, 0, 0]
+    c_list = [0, -boxsize, boxsize, 0]
+    d_list = [boxsize, 0, 0, boxsize]
+    
+    for a, b, c, d in zip(a_list, b_list, c_list, d_list):
 
-        # If the closest match is within our matching circle
-        # then we don't care! We want to find one star in each quadrant, 
-        # so you better do some slicing.
+        w1 = where(const_ra < ra)[0]
+        w2 = where(const_ra > ra - boxsize/delta)[0]
+        w3 = where(const_dec < dec)[0]
+        w4 = where(const_dec > dec - boxsize)[0]
 
-        # DEAR TOM: RECODE EVERYTHING BELOW from scratch (:
-        # because our requirements have changed.
-        if offset.min() < max_match:
-            min_offset[s1] = offset.min()
-            match[s1] = box[where(offset == offset.min() )][0]
-            vprint( "Source %d: Matched with %f arcsec" \
-                        % (counter, offset.min() ) )
-        else:
-            vprint( "Source %d: Failed to match" % counter)
+        # Let's slice a box around our source
+        box = sect(sect(w1,w2),sect(w3,w4))
 
+        # Now let's extract all the sources within "box" 
+        # and calculate offsets to all of them
+
+        offset = -1. * np.ones_like(const_ra[box])
+        if offset.size != 0:
+            for s2 in range(len(offset)):
+                p2 = coords.Position( (const_ra[box][s2], const_ra[box][s2])
+                                      ,  units = 'deg')
+                offset[s2] = p1.angsep(p2).arcsec()
+
+                # then we don't care! We want to find one star in each quadrant,
+                # so you better do some slicing.
+
+            if offset.min() < max_match:
+                # min_offset[s1] = offset.min()
+                offset_list.append(offset.min())
+            
+                match = box[where(offset == offset.min() )][0]
+
+                sid_list.append( ref_table.SOURCEID[match] )
+                ra_list.append( np.degrees(ref_table.RA[match]) )
+                dec_list.append( np.degrees(ref_table.DEC[match]) )
+            
+                #            vprint( "Source %d: Matched with %f arcsec" \
+#                        % (counter, offset.min() ) )
+            else:
+                #            vprint( "Source %d: Failed to match" % counter)
+                pass
+
+    print offset_list
+    return sid_list, offset_list, ra_list, dec_list
 
 
     
