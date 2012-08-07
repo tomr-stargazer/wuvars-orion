@@ -48,6 +48,8 @@ def magnitude_adjustment( deviation_list, offset_list ):
     deviation_list = np.array(deviation_list)
     offset_list = np.array(offset_list)
     
+    if len(offset_list) == 0:
+        return 0
     adjustment = (-len(deviation_list) * np.sum(offset_list * deviation_list) / 
                    (4 * np.sum(offset_list)) )
 
