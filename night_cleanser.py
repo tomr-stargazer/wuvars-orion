@@ -16,6 +16,9 @@ def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9,
                    null=np.double(-9.99999488e+08)):
     """
     Cleans data by nullifying.
+    
+    For any night with a quality lower than `threshold` in a given band,
+    this function replaces all photometry in that band with `null`.
 
     Parameters
     ----------
@@ -54,13 +57,13 @@ def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9,
        
             if rdict[band][i] < threshold:
                 
-                cleansed_data.data[col][ cleansed_data.MEANMJDOBS == nights[i] ] = 
+                cleansed_data.data[col][ 
+                    cleansed_data.MEANMJDOBS == nights[i] ] = null
                 
-            
+                print( "nullified night %d band %s (quality: %.2f)" % 
+                       (nights[i], band, rdict[band][i]) )
 
-        if j_ratio[i] < threshold:
-            cleansed_data.JAPERMAG3
-            
+    return cleansed_data
 
 
 def flag_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9 ):
