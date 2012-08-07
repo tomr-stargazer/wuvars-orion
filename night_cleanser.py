@@ -12,11 +12,10 @@ tables that can feed into anything that uses helpers3.py
 import numpy as np
 
 
-def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9 ):
+def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9,
+                   null=np.double(-9.99999488e+08)):
     """
     Cleans data by nullifying.
-
-    For 
 
     Parameters
     ----------
@@ -28,16 +27,40 @@ def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9 ):
         Quality ratios (0.0 - 1.0) for each night at J, H, and K bands.
     threshold : float, optional
         Data below this threshold are cleansed by nullification.
+    null : float, optional
+        What value to use as a 'null' when cleansing data.
+        Default value -9.99999e+08 (as used by WSA).
 
 
     Returns
     -------
-    
-
+    cleansed_data : atpy.Table
+        Table with bad data nullified and ready to go.
 
     """
+    
+    # Make a copy of the data table
+    cleansed_data = data.where(data.SOURCEID != 0)
 
-    return
+    rdict =  {'j':j_ratio, 'h':h_ratio, 'k':k_ratio}
+
+    null = 
+
+    for band in ['j', 'h', 'k']:
+
+        col = band.upper()+"APERMAG3"
+
+        for i in range(len(nights)):
+       
+            if rdict[band][i] < threshold:
+                
+                cleansed_data.data[col][ cleansed_data.MEANMJDOBS == nights[i] ] = 
+                
+            
+
+        if j_ratio[i] < threshold:
+            cleansed_data.JAPERMAG3
+            
 
 
 def flag_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9 ):
