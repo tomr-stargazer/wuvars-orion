@@ -80,3 +80,36 @@ def flag_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9 ):
     
     """
     pass
+
+
+def null_cleanser_grader(data, nights, j_ratio, h_ratio, k_ratio, 
+                         threshold=0.9, null=np.double(-9.99999488e+08)):
+    """
+    Cleans data by nullifying, and imprints grades onto data.
+    
+    For any night with a quality lower than `threshold` in a given band,
+    this function replaces all photometry in that band with `null`.
+    Also, the data is given three new columns
+
+    Parameters
+    ----------
+    data : atpy.Table
+        Table that contains all the photometry data.
+    nights : np.ndarray
+        Array of nights that have data.
+    j_ratio, h_ratio, k_ratio : np.ndarray
+        Quality ratios (0.0 - 1.0) for each night at J, H, and K bands.
+    threshold : float, optional
+        Data below this threshold are cleansed by nullification.
+    null : float, optional
+        What value to use as a 'null' when cleansing data.
+        Default value -9.99999e+08 (as used by WSA).
+
+
+    Returns
+    -------
+    cleansed_data : atpy.Table
+        Table with bad data nullified and ready to go.
+
+    """
+    
