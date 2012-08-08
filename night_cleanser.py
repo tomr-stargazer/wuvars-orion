@@ -47,8 +47,6 @@ def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9,
 
     rdict =  {'j':j_ratio, 'h':h_ratio, 'k':k_ratio}
 
-    null = 
-
     for band in ['j', 'h', 'k']:
 
         col = band.upper()+"APERMAG3"
@@ -57,11 +55,21 @@ def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9,
        
             if rdict[band][i] < threshold:
                 
+                # print len(cleansed_data.data[col][ 
+                #     np.trunc(cleansed_data.MEANMJDOBS) == nights[i] ])
+
+                # print np.max(cleansed_data.data[col][ 
+                #     np.trunc(cleansed_data.MEANMJDOBS) == nights[i] ])
                 cleansed_data.data[col][ 
-                    cleansed_data.MEANMJDOBS == nights[i] ] = null
+                    np.trunc(cleansed_data.MEANMJDOBS) == nights[i] ] = null
+
+                # print np.max(cleansed_data.data[col][ 
+                #     np.trunc(cleansed_data.MEANMJDOBS) == nights[i] ])
+
+                # return
                 
-                print( "nullified night %d band %s (quality: %.2f)" % 
-                       (nights[i], band, rdict[band][i]) )
+                print( "nullified night %d %s band (quality: %.2f)" % 
+                       (nights[i], band.upper(), rdict[band][i]) )
 
     return cleansed_data
 
