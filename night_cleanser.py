@@ -125,8 +125,8 @@ def null_cleanser_grader(data, timestamps, j_ratio, h_ratio, k_ratio,
 
     # Add columns to it!
     jgrade = -1. * np.ones_like(cleansed_data.JAPERMAG3)
-    hgrade = -1. * np_ones_like(jgrade)
-    kgrade = -1. * np_ones_like(jgrade)
+    hgrade = -1. * np.ones_like(jgrade)
+    kgrade = -1. * np.ones_like(jgrade)
 
     cleansed_data.add_column("JGRADE", jgrade)
     cleansed_data.add_column("HGRADE", hgrade)
@@ -161,7 +161,7 @@ def null_cleanser_grader(data, timestamps, j_ratio, h_ratio, k_ratio,
 
                 # return
 
-                print( "nullified timestamp %d %s band (quality: %.2f)" % 
+                print( "nullified timestamp %f %s band (quality: %.2f)" % 
                        (timestamps[i], band.upper(), rdict[band][i]) )
 
     return cleansed_data
