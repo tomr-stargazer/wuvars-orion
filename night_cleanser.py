@@ -82,21 +82,27 @@ def flag_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9 ):
     pass
 
 
-def null_cleanser_grader(data, nights, j_ratio, h_ratio, k_ratio, 
+def null_cleanser_grader(data, timestamps, j_ratio, h_ratio, k_ratio, 
                          threshold=0.9, null=np.double(-9.99999488e+08)):
     """
-    Cleans data by nullifying, and imprints grades onto data.
+    Cleans data by nullifying, and appends quality grades onto data.
     
-    For any night with a quality lower than `threshold` in a given band,
+    For any exposure with a quality lower than `threshold` in a given band,
     this function replaces all photometry in that band with `null`.
-    Also, the data is given three new columns
+    Also, the data is given three new columns: 
+    "JGRADE", "HGRADE", and "KGRADE", which  describe a 
+    given night's quality at these bands.
+
+    Operates on individual exposure timestamps rather than nights, 
+    so this function relies on the output of 
+    "variability_map.exposure_grader()"
 
     Parameters
     ----------
     data : atpy.Table
         Table that contains all the photometry data.
-    nights : np.ndarray
-        Array of nights that have data.
+    timestamps : np.ndarray
+        Array of timestamps corresponding to exposure times.
     j_ratio, h_ratio, k_ratio : np.ndarray
         Quality ratios (0.0 - 1.0) for each night at J, H, and K bands.
     threshold : float, optional
@@ -109,7 +115,38 @@ def null_cleanser_grader(data, nights, j_ratio, h_ratio, k_ratio,
     Returns
     -------
     cleansed_data : atpy.Table
-        Table with bad data nullified and ready to go.
+        Table with bad data nullified and all data "graded"
+        using new columns JGRADE, HGRADE, KGRADE.
 
     """
     
+    # Make a copy of the data table
+    cleansed_data = data.where(data.SOURCEID != 0)
+
+    rdict =  {'j':j_ratio, 'h':h_ratio, 'k':k_ratio}
+
+    for band in ['j', 'h', 'k']:
+
+        col = band.upper()+"APERMAG3"
+
+        for i in range(len(timestamps)):
+
+            if rdict[band][i] < threshold:
+
+                # print len(cleansed_data.data[col][ 
+                #     np.trunc(cleansed_data.MEANMJDOBS) == timestamps[i] ])
+
+                # print np.max(cleansed_data.data[col][ 
+                #     np.trunc(cleansed_data.MEANMJDOBS) == timestamps[i] ])
+                cleansed_data.data[col][ 
+                    np.trunc(cleansed_data.MEANMJDOBS) == timestamps[i] ] = null
+
+                # print np.max(cleansed_data.data[col][ 
+                #     np.trunc(cleansed_data.MEANMJDOBS) == timestamps[i] ])
+
+                # return
+
+                print( "nullified timestamp %d %s band (quality: %.2f)" % 
+                       (timestamps[i], band.upper(), rdict[band][i]) )
+
+    return cleansed_data
