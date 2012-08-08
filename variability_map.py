@@ -362,12 +362,11 @@ def exposure_grader(data, spreadsheet, band, min_mag=17):
 
     date_list.sort()
 
-    print len(date_list)
+    print len(date_list), " timestamps in this dataset"
 
     dates = np.array(date_list)
     n_const = np.zeros_like(dates, dtype='int')
 
-    print len(n_const)
     ratio = np.zeros_like(dates, dtype='float')
     
     # Now we iterate over our date list.
