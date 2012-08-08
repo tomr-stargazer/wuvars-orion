@@ -123,26 +123,41 @@ def null_cleanser_grader(data, timestamps, j_ratio, h_ratio, k_ratio,
     # Make a copy of the data table
     cleansed_data = data.where(data.SOURCEID != 0)
 
+    # Add columns to it!
+    jgrade = -1. * np.ones_like(cleansed_data.JAPERMAG3)
+    hgrade = -1. * np_ones_like(jgrade)
+    kgrade = -1. * np_ones_like(jgrade)
+
+    cleansed_data.add_column("JGRADE", jgrade)
+    cleansed_data.add_column("HGRADE", hgrade)
+    cleansed_data.add_column("KGRADE", kgrade)
+
     rdict =  {'j':j_ratio, 'h':h_ratio, 'k':k_ratio}
 
     for band in ['j', 'h', 'k']:
 
         col = band.upper()+"APERMAG3"
+        grade = band.upper()+"GRADE"
 
         for i in range(len(timestamps)):
+
+            # first, assign tonight's grade to all the data here
+            
+            cleansed_data.data[grade][
+                cleansed_data.MEANMJDOBS == timestamps[i]] = rdict[band][i]
 
             if rdict[band][i] < threshold:
 
                 # print len(cleansed_data.data[col][ 
-                #     np.trunc(cleansed_data.MEANMJDOBS) == timestamps[i] ])
+                #     (cleansed_data.MEANMJDOBS) == timestamps[i] ])
 
                 # print np.max(cleansed_data.data[col][ 
-                #     np.trunc(cleansed_data.MEANMJDOBS) == timestamps[i] ])
+                #     (cleansed_data.MEANMJDOBS) == timestamps[i] ])
                 cleansed_data.data[col][ 
-                    np.trunc(cleansed_data.MEANMJDOBS) == timestamps[i] ] = null
+                    cleansed_data.MEANMJDOBS == timestamps[i] ] = null
 
                 # print np.max(cleansed_data.data[col][ 
-                #     np.trunc(cleansed_data.MEANMJDOBS) == timestamps[i] ])
+                #     (cleansed_data.MEANMJDOBS) == timestamps[i] ])
 
                 # return
 
