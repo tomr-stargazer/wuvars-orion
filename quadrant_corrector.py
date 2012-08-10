@@ -218,23 +218,27 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants,
 
         for date in timestamp_list:
 
+            this_night = bdata.where(bdata.MEANMJDOBS == date)
+
             # Can we skip this night due to a sufficient grade?
+            print( "min_grade: %f, max_grade: %f, grade: %f" % 
+                   (min_grade, max_grade, this_night.data[bandgrade][0]))
+
             if min_grade == 0.0 and max_grade == 1.0:
                 pass
-            else:
-                if ((bdata.data[bandgrade][0] < min_grade) or 
-                    (bdata.data[bandgrade][0] > max_grade)):
-                    continue
+            elif ((this_night.data[bandgrade][0] < min_grade) or 
+                  (this_night.data[bandgrade][0] > max_grade)):
+                print "Night %s skipped re:quality" % str(date)
+                continue
+            
             
             # first, grab the sourceids that are in this here night
             
-            this_night = bdata.where(bdata.MEANMJDOBS == date)
-
             source_list = this_night.SOURCEID
             ra_list = this_night.RA
             dec_list = this_night.DEC
 
-            print str(len(source_list)) +" sources on night %d" % date
+            print str(len(source_list)) +" sources on night %f" % date
             
             # And also grab the constants that are in this here night!
 
