@@ -171,7 +171,8 @@ def quadrant_match( ra, dec, ref_table, max_match=600):
 
     
 
-def quadrant_corrector(data, j_constants, h_constants, k_constants):
+def quadrant_corrector(data, j_constants, h_constants, k_constants,
+                       min_grade=None, max_grade=None):
     """
     Corrects magnitudes using a network of constant stars.
 
@@ -183,6 +184,8 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
         Table with 'spreadsheet' information on J, H, and K constants.
         Requires robust statistical information. 
         Must be pre-cleaned (we'll use all the constants you give us)
+    min_grade, max_grade : float, optional
+        What range of grades to correct data for. Default is all of them.
 
     Returns
     -------
@@ -206,6 +209,7 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
 
         col = band.upper()+"APERMAG3"
         bandmean = band.lower()+"_meanr"
+        bandgrade = band.upper()+"GRADE"
 
 
         timestamp_list = list(set(list(bdata.MEANMJDOBS)))
@@ -213,6 +217,14 @@ def quadrant_corrector(data, j_constants, h_constants, k_constants):
         timestamp_list.sort()
 
         for date in timestamp_list:
+
+            # Can we skip this night due to a sufficient grade?
+            if min_grade == 0.0 and max_grade == 1.0:
+                pass
+            else:
+                if ((bdata.data[bandgrade][0] < min_grade) or 
+                    (bdata.data[bandgrade][0] > max_grade)):
+                    continue
             
             # first, grab the sourceids that are in this here night
             
