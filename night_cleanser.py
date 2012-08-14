@@ -7,9 +7,13 @@ It currently relies on the output of
 tables that can feed into anything that uses helpers3.py
 (such as plot3, spread3, etc.).
 
+Preferred function: null_cleanser_grader().
+
 """
 
 import numpy as np
+
+from helpers3 import data_cut, band_cut
 
 
 def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9,
@@ -165,3 +169,62 @@ def null_cleanser_grader(data, timestamps, j_ratio, h_ratio, k_ratio,
                        (timestamps[i], band.upper(), rdict[band][i]) )
 
     return cleansed_data
+
+
+def selective_flag_scrubber(data, lookup, threshold=0.2, 
+                            null=np.double(-9.99999488e+08)):
+    """ 
+    Scrubs error-flagged points from data of normally-unflagged stars.
+
+    Goes through a data file star by star, replacing error-flagged
+    data with `null`, only in stars where the ratio of flagged
+    data to all data is below `threshold`.
+    
+    If a star has proportionally more flagged data than `threshold`, 
+    its data is left intact. The purpose of this is to purify lightcurves
+    that are polluted by just a couple of bad points.
+
+    Parameters
+    ----------
+    data : atpy.Table
+        Table that contains all the photometry data.
+    lookup : atpy.Table
+        A statistics spreadsheet (produced by spread3.py) that
+        contains only stars you want to clean up, as well
+        as columns for N_j_noflags, N_j_info, etc. (for all 3 bands).
+    threshold : float, optional
+        Upper limit on how much flagged data to remove.
+        If a star has more flagged data than this, its data are 
+        left untouched.
+        Default: 0.2
+    null : float, optional
+        What value to use as a 'null' when cleansing data.
+        Default value -9.99999e+08 (as used by WSA).
+
+    Returns
+    -------
+    scrubbed_data : atpy.Table
+        Table with selected flagged data scrubbed.
+
+    """
+
+    # Make a copy of the data table
+    scrubbed_data = data.where(data.SOURCEID != 0)
+
+    for s in lookup.SOURCEID:
+        
+        s_table = data_cut( data, sid )
+
+        sj_table = band_cut
+
+        jflag_ratio = 
+        
+        for band in ['j', 'h', 'k']:
+
+            col = band.upper()+"APERMAG3"
+            pperrbits = band.upper()+"PPERRBITS"
+
+
+
+
+    return scrubbed_data
