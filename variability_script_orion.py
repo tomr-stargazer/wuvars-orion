@@ -12,11 +12,15 @@ print "         # before wasting a lot of time."
 print " -calculate_stuff() # To calculate stuff."
 print " -glue_stuff() # To glue together the calculated stuff."
 print "               # Note, this one returns the spreadsheet."
+print ""
+print "New feature: you can pass a number to calculate_stuff() and glue_stuff()"
+print "(such as 25, 50, 100) as a manual control on how many chunks to split"
+print "the data into. Make sure to use the same number for both functions!!"
 
 path = '/home/tom/reu/ORION/DATA/'
 path2= path+'spreadsheet/'
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/fde_graded_clipped0.8.fits')
+data = atpy.Table('/home/tom/reu/ORION/DATA/fde_graded_clipped0.8_scrubbed0.1.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/constantstars_073112_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/full_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/s3_photometric_errorcorrected.fits')
@@ -98,7 +102,7 @@ def glue_stuff( splits = 10 ):
  
     for i in range(1,splits):
         other_spread = atpy.Table(path2+'sp%d.fits' %i )
-        spread.append(other_spread)
+        spread.append(other_spread) 
 
 
     return spread
