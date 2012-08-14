@@ -11,6 +11,8 @@ Preferred function: null_cleanser_grader().
 
 """
 
+from __future__ import division
+
 import numpy as np
 
 from helpers3 import data_cut, band_cut
@@ -171,7 +173,7 @@ def null_cleanser_grader(data, timestamps, j_ratio, h_ratio, k_ratio,
     return cleansed_data
 
 
-def selective_flag_scrubber(data, lookup, threshold=0.2, 
+def selective_flag_scrubber(data, lookup, threshold=0.1, 
                             null=np.double(-9.99999488e+08)):
     """ 
     Scrubs error-flagged points from data of normally-unflagged stars.
@@ -196,7 +198,7 @@ def selective_flag_scrubber(data, lookup, threshold=0.2,
         Upper limit on how much flagged data to remove.
         If a star has more flagged data than this, its data are 
         left untouched.
-        Default: 0.2
+        Default: 0.1
     null : float, optional
         What value to use as a 'null' when cleansing data.
         Default value -9.99999e+08 (as used by WSA).
@@ -213,18 +215,33 @@ def selective_flag_scrubber(data, lookup, threshold=0.2,
 
     for s in lookup.SOURCEID:
         
-        s_table = data_cut( data, sid )
+#        s_table = data_cut( data, s )
 
-        sj_table = band_cut
+#        jt = band_cut(s_table, 'j')
+#        ht = band_cut(s_table, 'h')
+#        kt = band_cut(s_table, 'k')
 
-        jflag_ratio = 
+        jflag_ratio = (lookup.N_j_info)/(lookup.N_j_noflag + lookup.N_j_info)
+        hflag_ratio = (lookup.N_h_info)/(lookup.N_h_noflag + lookup.N_h_info)
+        kflag_ratio = (lookup.N_k_info)/(lookup.N_k_noflag + lookup.N_k_info)
+
+        rdict =  {'j':jflag_ratio, 'h':hflag_ratio, 'k':kflag_ratio}
         
         for band in ['j', 'h', 'k']:
+
+            # Check to see if this star and band qualifies for correction
+            if rdict[band] > threshold:
+                continue
+
+            print "Scrubbing star %s at %s band" % (str(s), band.upper())
 
             col = band.upper()+"APERMAG3"
             pperrbits = band.upper()+"PPERRBITS"
 
-
+            # otherwise, looks like we qualify, so let's run our stuff:
+            # For this star's data, null out the nonzero-flagged points
+            scrubbed_data.data[col][(scrubbed_data.data[pperrbits] > 0) & 
+                                    (scrubbed_data.SOURCEID == s)] = null
 
 
     return scrubbed_data
