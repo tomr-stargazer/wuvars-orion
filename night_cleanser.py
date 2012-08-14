@@ -213,7 +213,14 @@ def selective_flag_scrubber(data, lookup, threshold=0.1,
     # Make a copy of the data table
     scrubbed_data = data.where(data.SOURCEID != 0)
 
-    for s in lookup.SOURCEID:
+    # Calculate flag ratio arrays
+
+    jflag_ratio = (lookup.N_j_info)/(lookup.N_j_noflag + lookup.N_j_info)
+    hflag_ratio = (lookup.N_h_info)/(lookup.N_h_noflag + lookup.N_h_info)
+    kflag_ratio = (lookup.N_k_info)/(lookup.N_k_noflag + lookup.N_k_info)
+
+    for s, jfr, hfr, kfr in zip(lookup.SOURCEID, 
+                                jflag_ratio, hflag_ratio, kflag_ratio):
         
 #        s_table = data_cut( data, s )
 
@@ -221,11 +228,7 @@ def selective_flag_scrubber(data, lookup, threshold=0.1,
 #        ht = band_cut(s_table, 'h')
 #        kt = band_cut(s_table, 'k')
 
-        jflag_ratio = (lookup.N_j_info)/(lookup.N_j_noflag + lookup.N_j_info)
-        hflag_ratio = (lookup.N_h_info)/(lookup.N_h_noflag + lookup.N_h_info)
-        kflag_ratio = (lookup.N_k_info)/(lookup.N_k_noflag + lookup.N_k_info)
-
-        rdict =  {'j':jflag_ratio, 'h':hflag_ratio, 'k':kflag_ratio}
+        rdict =  {'j':jfr, 'h':hfr, 'k':kfr}
         
         for band in ['j', 'h', 'k']:
 
