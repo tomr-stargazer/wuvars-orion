@@ -287,6 +287,7 @@ def selective_flag_scrubber2(data, lookup, threshold=0.1,
 
     """
 
+
     # Make a copy of the data table
     scrubbed_data = data.where(data.SOURCEID != 0)
 
@@ -296,33 +297,21 @@ def selective_flag_scrubber2(data, lookup, threshold=0.1,
     hflag_ratio = (lookup.N_h_info)/(lookup.N_h_noflag + lookup.N_h_info)
     kflag_ratio = (lookup.N_k_info)/(lookup.N_k_noflag + lookup.N_k_info)
 
-    for s, jfr, hfr, kfr in zip(lookup.SOURCEID, 
-                                jflag_ratio, hflag_ratio, kflag_ratio):
-        
-#        s_table = data_cut( data, s )
+    rdict =  {'j':jflag_ratio, 'h':hflag_ratio, 'k':kflag_ratio}
 
-#        jt = band_cut(s_table, 'j')
-#        ht = band_cut(s_table, 'h')
-#        kt = band_cut(s_table, 'k')
+    for band in ['j', 'h', 'k']:
 
-        rdict =  {'j':jfr, 'h':hfr, 'k':kfr}
-        
-        for band in ['j', 'h', 'k']:
+        col = band.upper()+"APERMAG3"
+        pperrbits = band.upper()+"PPERRBITS"
 
-            # Check to see if this star and band qualifies for correction
-            if rdict[band] > threshold:
-                continue
+        qualified_sources = lookup.SOURCEID[ (rdict[band] < threshold) & 
+                                             (rdict[band] > 0)]
 
-            print "Scrubbing star %s at %s band" % (str(s), band.upper())
+        scrubbed_data.data[col][
+            (scrubbed_data.data[pperrbits] > 0) & 
+            np.in1d(scrubbed_data.SOURCEID, qualified_sources)] = null
 
-            col = band.upper()+"APERMAG3"
-            pperrbits = band.upper()+"PPERRBITS"
-
-            # otherwise, looks like we qualify, so let's run our stuff:
-            # For this star's data, null out the nonzero-flagged points
-            scrubbed_data.data[col][(scrubbed_data.data[pperrbits] > 0) & 
-                                    (scrubbed_data.SOURCEID == s)] = null
-
+        print "scrubbed %d sources at %s band" % (len(qualified_sources), 
+                                                  band.upper())
 
     return scrubbed_data
-
