@@ -63,6 +63,9 @@ def do_it_all( table, sid_list, name_list, path='',
     
     """
 
+    # until we figure out orion seasons...
+    season = 0
+
     if path=='' or type(path) is not str:
         print "`path` must be a string. Exiting without action."
         return
@@ -87,19 +90,21 @@ def do_it_all( table, sid_list, name_list, path='',
     mkdir_p(path+"phase/")
     mkdir_p(path+"tables/")
 
-    ss = ['s1', 's2', 's3', 's123']
+#    ss = ['s1', 's2', 's3', 's123']
     types = ['h_fx2', 'h_lsp', 'j_fx2', 'j_lsp', 'k_fx2', 'k_lsp', 'lsp_power']
 
-    for s in ss:
-        mkdir_p(path+"lc/"+s)
-        mkdir_p(path+"tables/"+s)
-        for t in types:
-            mkdir_p("%sphase/%s/%s"%(path,s,t))
+#    for s in ss:
+    mkdir_p(path+"lc/")
+    mkdir_p(path+"tables/")
+    for t in types:
+        mkdir_p("%sphase/%s"%(path,t))
             
     # We should now be done making directories. Let's test this.
     # Tested! Woo.
 
     ## Second, let's make tables.
+
+    tables = path+"tables/"
 
     if 'tables' in option:
 
@@ -114,12 +119,12 @@ def do_it_all( table, sid_list, name_list, path='',
         lookup.add_column("SOURCEID", sid_list)
         lookup.add_column("Designation", name_list)
         
-        for season, s in zip([1,2,3,123], ss):
+#        for season, s in zip([1,2,3,123], ss):
             
-            # Write the spreadsheet and save it to the relevant directory.
-            spread3.spreadsheet_write(table, lookup, season, 
-                                          tables+s+'/spreadsheet.fits', 
-                                          flags=256, per=True)
+        # Write the spreadsheet and save it to the relevant directory.
+        spread3.spreadsheet_write(table, lookup, season, 
+                                  tables+s+'/spreadsheet.fits', 
+                                  flags=256, per=True)
             
 
     # What command do we want to make plots?
@@ -131,15 +136,15 @@ def do_it_all( table, sid_list, name_list, path='',
     # And put the gorram Stetson index in the title!
 
         
-    for season, s in zip([1,2,3,123], ss):
+#    for season, s in zip([1,2,3,123], ss):
 
-        s_stats = atpy.Table(tables+s+'/spreadsheet.fits')
+    s_stats = atpy.Table(tables+'/spreadsheet.fits')
 
-        for name, sid in zip(name_list, sid_list):
-            # The specific plot command we use here depends a lot
-            # on what functions are available.
-            tplot.lc(table, sid, season=season, name=name, #flags=16,
-                     outfile=path+"lc/"+s+"/"+name, png_too=True) #png, eps, pdf
+    for name, sid in zip(name_list, sid_list):
+        # The specific plot command we use here depends a lot
+        # on what functions are available.
+        tplot.lc(table, sid, season=0, name=name, #flags=16,
+                 outfile=path+"lc/"+name, png_too=True) #png, eps, pdf
 
 
 
@@ -148,19 +153,19 @@ def do_it_all( table, sid_list, name_list, path='',
         # once "spread3" is functional.
 
         # Well... spread3 is now functional!
-            for t in types:
-                if t == 'lsp_power':
-                    tplot.lsp_power(table, sid, season=season, name=name,
-                                    outfile=path+"phase/"+s+"/lsp_power/"+name, 
-                                    png_too=True) 
-
-                else:
-                    per = s_stats.data[t+"_per"][s_stats.SOURCEID == sid]
-                    tplot.phase(table, sid, period=per, season=season, 
-                                name=name,
-                                outfile=path+"phase/"+s+"/"+t+"/"+name, 
+        for t in types:
+            if t == 'lsp_power':
+                tplot.lsp_power(table, sid, season=0, name=name,
+                                outfile=path+"phase/lsp_power/"+name, 
                                 png_too=True) 
-
+                
+            else:
+                per = s_stats.data[t+"_per"][s_stats.SOURCEID == sid]
+                tplot.phase(table, sid, period=per, season=0, 
+                            name=name,
+                            outfile=path+"phase/"+t+"/"+name, 
+                            png_too=True) 
+                
                 # elif t == 'k_fx2':
                 #     tplot.phase(table, sid, season=season, name=name,
                 #                 outfile=path+"phase/"+s+"/k_fx2/"+name, 
