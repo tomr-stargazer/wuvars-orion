@@ -143,8 +143,9 @@ def do_it_all( table, sid_list, name_list, path='',
     for name, sid in zip(name_list, sid_list):
         # The specific plot command we use here depends a lot
         # on what functions are available.
-        tplot.lc(table, sid, season=0, name=name, #flags=16,
-                 outfile=path+"lc/"+name, png_too=True) #png, eps, pdf
+        tplot.graded_lc(table, sid, season=0, name=name, #flags=16,
+                        outfile=path+"lc/"+name, png_too=True,
+                        abridged=True) #png, eps, pdf
 
 
 
