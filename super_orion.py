@@ -143,9 +143,10 @@ def do_it_all( table, sid_list, name_list, path='',
     for name, sid in zip(name_list, sid_list):
         # The specific plot command we use here depends a lot
         # on what functions are available.
-        tplot.graded_lc(table, sid, season=0, name=name, #flags=16,
-                        outfile=path+"lc/"+name, png_too=True,
-                        abridged=True) #png, eps, pdf
+        if 'lc' in option:
+            tplot.graded_lc(table, sid, season=0, name=name, #flags=16,
+                            outfile=path+"lc/"+name, png_too=True,
+                            abridged=True) #png, eps, pdf
 
 
 
@@ -154,18 +155,19 @@ def do_it_all( table, sid_list, name_list, path='',
         # once "spread3" is functional.
 
         # Well... spread3 is now functional!
-        for t in types:
-            if t == 'lsp_power':
-                tplot.lsp_power(table, sid, season=0, name=name,
-                                outfile=path+"phase/lsp_power/"+name, 
+        if 'phase' in option:
+            for t in types:
+                if t == 'lsp_power':
+                    tplot.lsp_power(table, sid, season=0, name=name,
+                                    outfile=path+"phase/lsp_power/"+name, 
+                                    png_too=True) 
+                    
+                else:
+                    per = s_stats.data[t+"_per"][s_stats.SOURCEID == sid]
+                    tplot.phase(table, sid, period=per, season=0, 
+                                name=name,
+                                outfile=path+"phase/"+t+"/"+name, 
                                 png_too=True) 
-                
-            else:
-                per = s_stats.data[t+"_per"][s_stats.SOURCEID == sid]
-                tplot.phase(table, sid, period=per, season=0, 
-                            name=name,
-                            outfile=path+"phase/"+t+"/"+name, 
-                            png_too=True) 
                 
                 # elif t == 'k_fx2':
                 #     tplot.phase(table, sid, season=season, name=name,
