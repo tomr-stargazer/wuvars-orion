@@ -146,7 +146,8 @@ def do_it_all( table, sid_list, name_list, path='',
         if 'lc' in option:
             tplot.graded_lc(table, sid, season=0, name=name, #flags=16,
                             outfile=path+"lc/"+name, png_too=True,
-                            abridged=True) #png, eps, pdf
+                            abridged=True, color_slope=True) 
+#png, eps, pdf
 
 
 
