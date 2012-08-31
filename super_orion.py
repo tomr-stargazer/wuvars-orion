@@ -165,10 +165,10 @@ def do_it_all( table, sid_list, name_list, path='',
                     
                 else:
                     per = s_stats.data[t+"_per"][s_stats.SOURCEID == sid]
-                    tplot.phase(table, sid, period=per, season=0, 
-                                name=name,
-                                outfile=path+"phase/"+t+"/"+name, 
-                                png_too=True) 
+                    tplot.graded_phase(table, sid, period=per, season=0, 
+                                       name=name, color_slope=True,
+                                       outfile=path+"phase/"+t+"/"+name, 
+                                       png_too=True) 
                 
                 # elif t == 'k_fx2':
                 #     tplot.phase(table, sid, season=season, name=name,
