@@ -83,6 +83,8 @@ def null_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9,
 def flag_cleanser( data, nights, j_ratio, h_ratio, k_ratio, threshold=0.9 ):
     """
     Cleans data by flagging. Not yet implemented.
+
+    Probably not ever going to be implemented.
     
     """
     pass
@@ -242,4 +244,39 @@ def selective_flag_scrubber(data, lookup, threshold=0.1,
         print "scrubbed %d sources at %s band" % (len(qualified_sources), 
                                                   band.upper())
 
+    return scrubbed_data
+
+
+def errorbar_scrubber(data, threshold=0.5, null=np.double(-9.99999488e+08)):
+    """
+    Removes datapoints with very bad errorbars; replaces them with `null`.
+    
+    A really simple function.
+
+    Parameters
+    ----------
+    data : atpy.Table
+        Table that contains all the photometry data.
+    threshold : float, optional
+        Data with error values above this threshold are scrubbed 
+        and replaced with `null`.
+    null : float, optional
+        What value to use as a 'null' when scrubbing data.
+        Default value -9.99999e+08 (as used by WSA).
+
+    Returns
+    -------
+    scrubbed_data : atpy.Table
+        Table with large-errorbar data scrubbed.
+
+    """
+
+    # Make a copy of the data table
+    scrubbed_data = data.where(data.SOURCEID != 0)
+
+    # Do some scrubbing
+    scrubbed_data.JAPERMAG3[scrubbed_data.JAPERMAG3ERR > threshold] = null
+    scrubbed_data.HAPERMAG3[scrubbed_data.HAPERMAG3ERR > threshold] = null
+    scrubbed_data.KAPERMAG3[scrubbed_data.KAPERMAG3ERR > threshold] = null
+    
     return scrubbed_data
