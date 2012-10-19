@@ -9,6 +9,11 @@ tables that can feed into anything that uses helpers3.py
 
 Preferred function: null_cleanser_grader().
 
+3 things in here:
+1. Cleansing: refers to removing low-grade datapoints, using constant stars to measure "grade".
+2. Scrubbing: refers to removing flagged data in stars whose data are predominantly *un*flagged. Uses the PPerrbits as "error flags".
+3. Dusting: refers to removing points with very large error bars from the dataset. 
+
 """
 
 from __future__ import division
@@ -247,7 +252,7 @@ def selective_flag_scrubber(data, lookup, threshold=0.1,
     return scrubbed_data
 
 
-def errorbar_scrubber(data, threshold=0.5, null=np.double(-9.99999488e+08)):
+def errorbar_duster(data, threshold=0.5, null=np.double(-9.99999488e+08)):
     """
     Removes datapoints with very bad errorbars; replaces them with `null`.
     
@@ -258,25 +263,25 @@ def errorbar_scrubber(data, threshold=0.5, null=np.double(-9.99999488e+08)):
     data : atpy.Table
         Table that contains all the photometry data.
     threshold : float, optional
-        Data with error values above this threshold are scrubbed 
+        Data with error values above this threshold are dusted 
         and replaced with `null`.
     null : float, optional
-        What value to use as a 'null' when scrubbing data.
+        What value to use as a 'null' when dusting data.
         Default value -9.99999e+08 (as used by WSA).
 
     Returns
     -------
-    scrubbed_data : atpy.Table
-        Table with large-errorbar data scrubbed.
+    dusted_data : atpy.Table
+        Table with large-errorbar data dusted.
 
     """
 
     # Make a copy of the data table
-    scrubbed_data = data.where(data.SOURCEID != 0)
+    dusted_data = data.where(data.SOURCEID != 0)
 
-    # Do some scrubbing
-    scrubbed_data.JAPERMAG3[scrubbed_data.JAPERMAG3ERR > threshold] = null
-    scrubbed_data.HAPERMAG3[scrubbed_data.HAPERMAG3ERR > threshold] = null
-    scrubbed_data.KAPERMAG3[scrubbed_data.KAPERMAG3ERR > threshold] = null
+    # Do some dusting
+    dusted_data.JAPERMAG3[dusted_data.JAPERMAG3ERR > threshold] = null
+    dusted_data.HAPERMAG3[dusted_data.HAPERMAG3ERR > threshold] = null
+    dusted_data.KAPERMAG3[dusted_data.KAPERMAG3ERR > threshold] = null
     
-    return scrubbed_data
+    return dusted_data
