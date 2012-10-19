@@ -4,10 +4,14 @@ quantify variability for my stars.
 
 """
 
-import numpy as np
-import atpy
-import spread3 as sp
 import datetime
+
+import numpy as np
+
+import atpy
+
+import spread3 as sp
+
 
 print "Hey, just a heads-up, this is an INTERACTIVE script."
 print " You should call the following functions:"
