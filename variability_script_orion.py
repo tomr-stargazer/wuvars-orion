@@ -24,7 +24,7 @@ print "the data into. Make sure to use the same number for both functions!!"
 path = '/home/tom/reu/ORION/DATA/'
 path2= path+'spreadsheet/'
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/varsdata_ce.fits')
+data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/constantstars_073112_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/full_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/s3_photometric_errorcorrected.fits')
@@ -83,7 +83,7 @@ def calculate_stuff( splits = 10 ):
         # any cuts on the data.
         sp_i = sp.spreadsheet_write(data_i, lookup_i, -1, 
                                     path2+'sp%d.fits'%i, flags=256,
-                                    per=True, graded=True, rob=True,
+                                    per=False, graded=True, rob=True,
                                     colorslope=True)
         
         try:
@@ -114,7 +114,3 @@ def glue_stuff( splits = 10 ):
         
 #    for i in range(1,splits):
 #        spread_list.append( atpy.Table('sp'+str(i)))
-
-    
-
-    
