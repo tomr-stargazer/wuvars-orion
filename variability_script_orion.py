@@ -1,4 +1,8 @@
-""" This is a script (not a program!) that uses my functions to quantify variability for my stars. """
+""" 
+This is a script (not a program!) that uses my functions to 
+quantify variability for my stars. 
+
+"""
 
 import numpy as np
 import atpy
