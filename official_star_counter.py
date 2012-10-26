@@ -193,3 +193,7 @@ print "Number of stars that meet autoquality cuts: %d" % len(autocandidates)
 print " "
 print "Number of TRUE autovariables: %d" % len(autovars_true)
 print "Number of TRUE autocandidates: %d" % len(autocan_true)
+
+subjectives = maxvars.where( ~np.in1d(maxvars.SOURCEID, autovars_true.SOURCEID))
+
+print "Number of stars requiring subjective verification: %d" % len(subjectives)
