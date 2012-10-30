@@ -134,6 +134,8 @@ case2 = ( (sp.Stetson > 1) & (
 
 autovars_true = sp.where( case1 | case2 )
 
+autovars_strict = sp.where( case1 )
+
 autocandidates = sp.where( (
         (sp.N_j >= 50) & (sp.N_j <= 125) &    # J band criteria
         (sp.j_mean > 11) & (sp.j_mean < 17) & # J
@@ -187,6 +189,8 @@ cand_case2 = (
 
 autocan_true = sp.where( cand_case1 | cand_case2 )
 
+autocan_strict = sp.where( cand_case1 )
+
 
 print "Number of automatically detected variables: %d" % len(autovars)
 print "Number of stars that meet autoquality cuts: %d" % len(autocandidates)
@@ -197,3 +201,10 @@ print "Number of TRUE autocandidates: %d" % len(autocan_true)
 subjectives = maxvars.where( ~np.in1d(maxvars.SOURCEID, autovars_true.SOURCEID))
 
 print "Number of stars requiring subjective verification: %d" % len(subjectives)
+
+# Now let's count stars that meet our strict criteria in ALL 3 bands
+
+print ""
+
+print "Number of STRICT autovariables: %d" % len(autovars_strict)
+print "Number of STRICT autocandidates: %d" % len(autocan_strict)
