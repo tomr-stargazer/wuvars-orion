@@ -201,6 +201,11 @@ print "    %.2f%s, drawn from a looser sample." % (len(autovars_true)/len(autoca
 periodics_s123 = ps.periodic_selector(maxvars_spread_per)
 periodics_s1 = ps.periodic_selector(maxvars_s1_spread_per)
 
+maxvars_periodics = maxvars.where( 
+    np.in1d(maxvars.SOURCEID, periodics_s123.SOURCEID) |
+    np.in1d(maxvars.SOURCEID, periodics_s1.SOURCEID) )
+
+
 autovars_true_periodics = autovars_true.where( 
     np.in1d(autovars_true.SOURCEID, periodics_s123.SOURCEID) |
     np.in1d(autovars_true.SOURCEID, periodics_s1.SOURCEID) )
@@ -223,3 +228,18 @@ print ""
 print " Q: What fraction of stars in this dataset are periodic variables?"
 print " A: %.2f%s, drawn from the tightest-controlled sample;" % (len(autovars_strict_periodics)/len(autocan_strict) * 100, r"%")
 print "    %.2f%s, drawn from a looser sample." % (len(autovars_true_periodics)/len(autocan_true) * 100, r"%")
+
+# The following is only suitable for almost-but-not-quite 
+# accurate histogram analysis (because
+
+# intersection of periodics_s123 and maxvars_periodics
+maxvars_periods = periodics_s123.where( 
+    np.in1d(periodics_s123.SOURCEID, maxvars_periodics.SOURCEID))
+
+# etc
+autovars_true_periods = periodics_s123.where( 
+    np.in1d(periodics_s123.SOURCEID, autovars_true_periodics.SOURCEID))
+
+autovars_strict_periods = periodics_s123.where( 
+    np.in1d(periodics_s123.SOURCEID, autovars_strict_periodics.SOURCEID))
+
