@@ -28,7 +28,7 @@ print "the data into. Make sure to use the same number for both functions!!"
 path = '/home/tom/reu/ORION/DATA/'
 path2= path+'spreadsheet/'
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/maxvars_data_s1.fits')
+data = atpy.Table('/home/tom/reu/ORION/DATA/gosu_inbetween.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/constantstars_073112_data_errorcorrected.fits')
@@ -63,14 +63,14 @@ def test():
     ''' Runs spread_write_test. '''
     sp.spread_write_test (data, sp.base_lookup(data))
 
-def calculate_stuff( splits = 10 ):
+def calculate_stuff( splits = 10, start=0 ):
     ''' 
     Runs the spreadsheet, first splitting it into `splits` 
     spreadsheets and then joining them. 
     
     '''
     
-    if type(splits) is not int:
+    if type(splits) is not int or type(start) is not int:
         raise TypeError
 
 # We are going to split this into 10 smaller pieces through the magic of mod operations! woo.
@@ -78,7 +78,7 @@ def calculate_stuff( splits = 10 ):
     split_data = []
     spreadsheets = []
 
-    for i in range(splits):
+    for i in range(start, splits):
         data_i = data.where(data.SOURCEID % splits == i)
         
         split_data.append(data_i)
@@ -101,17 +101,17 @@ def calculate_stuff( splits = 10 ):
                                            
 
 
-def glue_stuff( splits = 10 ):
+def glue_stuff( splits = 10, start=0 ):
     ''' Read in the tables from earlier and glue them together '''
 
     if type(splits) is not int:
         raise TypeError
 
-    spread = atpy.Table(path2+'sp0.fits')
+    spread = atpy.Table(path2+'sp%d.fits' % start)
     
     spread_list = []
  
-    for i in range(1,splits):
+    for i in range(1+start,splits):
         other_spread = atpy.Table(path2+'sp%d.fits' %i )
         spread.append(other_spread) 
 
