@@ -215,8 +215,10 @@ autovars_strict_periodics = autovars_strict.where(
     np.in1d(autovars_strict.SOURCEID, periodics_s1.SOURCEID) )
 
 print ""
+print "Number of possible variables with detected periods: %d" % len(maxvars_periodics)
 print "Number of autovariables that are periodic: %d" % len(autovars_true_periodics)
 print "Number of STRICT autovariables that are periodic: %d" % len(autovars_strict_periodics)
+print "Number of possible periodic variables requiring subjective validation: %d" % (len(maxvars_periodics) - len(autovars_true_periodics))
 print ""
 
 
