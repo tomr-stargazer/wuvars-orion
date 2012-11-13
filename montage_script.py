@@ -17,6 +17,8 @@ path3 = "/home/tom/reu/ORION/DATA/subjective/nonperiodic_book/"
 
 subjective_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_periodic_candidate_spreadsheet.fits")
 
+subjective_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_nonperiod_candidate_spreadsheet.fits")
+
 data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 
 def gen_periodic_plots(start=0):
@@ -48,5 +50,15 @@ def gen_periodic_plots(start=0):
         call(["montage","-mode", "concatenate", "-tile", "2x", 
              path1+"%s_*.png" % str(s), path2+"%s-glued.png" % str(s) ])
 
-def gen_nonper_lc():
-    """ Makes lightcurves for 
+        return
+
+def gen_nonper_lc(start=0):
+    """ Makes lightcurves for nonperiodic variable candidates. """
+
+    for s in subjective_nonpers.SOURCEID[start:]:
+
+        plot3.graded_lc(data, s, abridged=True, color_slope=True, 
+                        timecolor=True,
+                        outfile=path3+"%s_lc.png"%str(s))
+
+    return
