@@ -13,6 +13,7 @@ import plot3
 
 path1 = "/home/tom/reu/ORION/DATA/subjective/periodic_book/"
 path2 = "/home/tom/reu/ORION/DATA/subjective/periodic_book/glued/"
+path3 = "/home/tom/reu/ORION/DATA/subjective/nonperiodic_book/"
 
 subjective_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_periodic_candidate_spreadsheet.fits")
 
@@ -28,12 +29,12 @@ def gen_periodic_plots(start=0):
 
         plot3.graded_lc(data, s, abridged=True, color_slope=True, 
                         timecolor=True,
-                        outfile=path1+"%s_phase.png"%str(s))
+                        outfile=path1+"%s_lc.png"%str(s))
 
         plot3.graded_phase(data, s, timecolor='time', 
                            period=subjective_periodics.best_period[
                 subjective_periodics.SOURCEID==s][0], 
-                           color_slope=True, outfile=path1+"%s_lc.png"%str(s))
+                           color_slope=True, outfile=path1+"%s_phase.png"%str(s))
 
         try:
             plot3.lsp_power(data, s, outfile=path1+"%s_pgram.png"%str(s))
@@ -46,3 +47,6 @@ def gen_periodic_plots(start=0):
 
         call(["montage","-mode", "concatenate", "-tile", "2x", 
              path1+"%s_*.png" % str(s), path2+"%s-glued.png" % str(s) ])
+
+def gen_nonper_lc():
+    """ Makes lightcurves for 
