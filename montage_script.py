@@ -100,7 +100,7 @@ def gen_conf_periodic_plots(start=0):
         call(["montage","-mode", "concatenate", "-tile", "2x", 
              path4+"%s_*.png" % str(s), path5+"%s-glued.png" % str(s) ])
 
-        return
+    return
 
 def gen_conf_nonper_lc(start=0):
     """ Makes lightcurves for nonperiodic variable candidates. """
