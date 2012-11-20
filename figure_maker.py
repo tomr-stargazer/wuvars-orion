@@ -6,6 +6,18 @@ Each figure (or, sometimes, group of closely related figures) is generated
 by its own function, so that you don't HAVE to regenerate them all at the same
 time if you only want one.
 
+Guide to variable names:
+
+ =====PERIODICS======
+ Currently, we're using 
+ `conf_subj_periodics` for subjective periodics,
+ `autovars_true_periodics` for the superset of automatically detected and pristine/strict periodic variables, and `autovars_true_periods` when we need their `best_period`s (but NEVER otherwise, for strange reasons)
+ `autovars_strict_periodics` for pristine/strict variables, and `autovars_strict_periods` when we need their `best_period`s (but NEVER otherwise, for strange reasons)
+ =====NON-PERIODICS======
+ `conf_subj_nonpers` for subjective nonperiodics
+ `autovars_true_nonpers` for the superset of automatically detected and pristine/strict nonperiodic variables
+ `autovars_strict_nonpers` for pristine/strict nonperiodic variables
+
 """
 
 import matplotlib.pyplot as plt
@@ -16,10 +28,6 @@ from montage_script import conf_subj_periodics, conf_subj_nonpers
 
 # As a test, let's make a histogram of periods.
 
-# Guide to variable names:
-# Currently, we're using 
-# `conf_subj_periodics` for subjective periodics,
-# `autovars_true_periodics` for the superset of automatically detected and pristine/strict
 
 # Filled: strict dudes
 # Cross-hatched: autovars_true
@@ -103,4 +111,30 @@ def f_map_variables():
 
     """
     
-    pass
+    fig = plt.figure()
+
+    # First group
+    plt.plot( np.degrees(conf_subj_nonpers.RA),
+              np.degrees(conf_subj_nonpers.DEC), 'wo', 
+              label=r"Non-periodics that needed subjective confirmation",
+              figure=fig)
+    
+    # Second group
+    plt.plot( np.degrees(autovars_true_nonpers.RA),
+              np.degrees(autovars_true_nonpers.DEC), 'bo',
+              label=r"Non-periodics with $\geq$ 1 pristine band",
+              figure=fig)
+
+    # Third group
+    plt.plot( np.degrees(autovars_strict_nonpers.RA),
+              np.degrees(autovars_strict_nonpers.DEC), 'ro',
+              label="Non-periodics in strictest sample: 3 pristine bands",
+              figure=fig)
+
+    # Right ascension is plotted increasing right-to-left, conventionally
+    plt.gca().invert_xaxis()
+
+    plt.legend()
+
+    plt.show()
+
