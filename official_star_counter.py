@@ -13,6 +13,14 @@ import atpy
 
 import periodic_selector as ps
 
+def c_print(str):
+    if __name__ == '__main__':
+        print str
+    else:
+        pass
+    return
+    
+
 spread = atpy.Table("/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5_spread.fits")
 
 maxvars_spread_per = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/maxvars_data_statsper.fits")
@@ -20,8 +28,8 @@ maxvars_s1_spread_per = atpy.Table("/media/storage/Documents/Research/reu/ORION/
 
 
 # Number of detected sources in the dataset
-print "Number of detected sources in the dataset:"
-print len(spread)
+c_print( "Number of detected sources in the dataset:" )
+c_print( len(spread) )
 
 # Stars with valid data (that could be considered candidates for inclusion)
 # Criteria:
@@ -32,9 +40,9 @@ minimum = spread.where((spread.N_j >= 50) |
                        (spread.N_k >= 50) |
                        (spread.N_h >= 50) )
 
-print "Number of stars that meet absolute minimum considerations for valid data:"
-print "(i.e., have at least 50 recorded observations in at least one band)"
-print len(minimum)
+c_print( "Number of stars that meet absolute minimum considerations for valid data:" )
+c_print( "(i.e., have at least 50 recorded observations in at least one band)" )
+c_print( len(minimum) )
 
 # Automatic variables
 # Criteria:
@@ -52,7 +60,7 @@ maxvars = sp.where( (sp.Stetson > 1) & (
         (sp.N_j >= 50) |
         (sp.N_k >= 50) |
         (sp.N_h >= 50) ) )
-print "Maximum possible number of variables: %d" % len(maxvars)
+c_print( "Maximum possible number of variables: %d" % len(maxvars) )
 
 autovars_old = sp.where( 
     (sp.Stetson > 1) & ( (
@@ -171,26 +179,26 @@ autocan_true = sp.where( cand_case1 | cand_case2 )
 
 autocan_strict = sp.where( cand_case1 )
 
-print "Number of stars automatically classed as variables: %d" % len(autovars_true)
-print "Number of stars that have the data quality for auto-classification: %d" % len(autocan_true)
+c_print( "Number of stars automatically classed as variables: %d" % len(autovars_true) )
+c_print( "Number of stars that have the data quality for auto-classification: %d" % len(autocan_true) )
 
 subjectives = maxvars.where( ~np.in1d(maxvars.SOURCEID, autovars_true.SOURCEID))
 
-print ""
-print "Number of probably-variable stars requiring subjective verification due to imperfect data quality: %d" % len(subjectives)
+c_print( "" )
+c_print( "Number of probably-variable stars requiring subjective verification due to imperfect data quality: %d" % len(subjectives) )
 
 # Now let's count stars that meet our strict criteria in ALL 3 bands
 
-print ""
+c_print( "" )
 
-print "Number of STRICT autovariables: %d" % len(autovars_strict)
-print "Number of STRICT autocandidates: %d" % len(autocan_strict)
+c_print( "Number of STRICT autovariables: %d" % len(autovars_strict) )
+c_print( "Number of STRICT autocandidates: %d" % len(autocan_strict) )
 
-print ""
+c_print( "" )
 
-print " Q: Statistically, what fraction of our stars are variables?"
-print " A: %.2f%s, drawn from the tightest-controlled sample;" % (len(autovars_strict)/len(autocan_strict) * 100, r"%")
-print "    %.2f%s, drawn from a looser sample." % (len(autovars_true)/len(autocan_true) * 100, r"%")
+c_print( " Q: Statistically, what fraction of our stars are variables?" )
+c_print( " A: %.2f%s, drawn from the tightest-controlled sample;" % (len(autovars_strict)/len(autocan_strict) * 100, r"%") )
+c_print( "    %.2f%s, drawn from a looser sample." % (len(autovars_true)/len(autocan_true) * 100, r"%") )
 
 # Now for periodicity analysis, which relies on periodic_selector
 
@@ -214,34 +222,34 @@ autovars_strict_periodics = autovars_strict.where(
     np.in1d(autovars_strict.SOURCEID, periodics_s123.SOURCEID) |
     np.in1d(autovars_strict.SOURCEID, periodics_s1.SOURCEID) )
 
-print ""
-print "Number of possible variables with detected periods: %d" % len(maxvars_periodics)
-print "Number of autovariables that are periodic: %d" % len(autovars_true_periodics)
-print "Number of STRICT autovariables that are periodic: %d" % len(autovars_strict_periodics)
-print "Number of possible periodic variables requiring subjective validation: %d" % (len(maxvars_periodics) - len(autovars_true_periodics))
-print ""
+c_print( "" )
+c_print( "Number of possible variables with detected periods: %d" % len(maxvars_periodics) )
+c_print( "Number of autovariables that are periodic: %d" % len(autovars_true_periodics) )
+c_print( "Number of STRICT autovariables that are periodic: %d" % len(autovars_strict_periodics) )
+c_print( "Number of possible periodic variables requiring subjective validation: %d" % (len(maxvars_periodics) - len(autovars_true_periodics)) )
+c_print( "" )
 
 
-print " Q: Statistically, what fraction of our variables are periodic?"
-print " A: %.2f%s, drawn from the tightest-controlled sample;" % (len(autovars_strict_periodics)/len(autovars_strict) * 100, r"%")
-print "    %.2f%s, drawn from a looser sample." % (len(autovars_true_periodics)/len(autovars_true) * 100, r"%")
+c_print( " Q: Statistically, what fraction of our variables are periodic?" )
+c_print( " A: %.2f%s, drawn from the tightest-controlled sample;" % (len(autovars_strict_periodics)/len(autovars_strict) * 100, r"%") )
+c_print( "    %.2f%s, drawn from a looser sample." % (len(autovars_true_periodics)/len(autovars_true) * 100, r"%") )
 
-print ""
-print " Q: What fraction of stars in this dataset are periodic variables?"
-print " A: %.2f%s, drawn from the tightest-controlled sample;" % (len(autovars_strict_periodics)/len(autocan_strict) * 100, r"%")
-print "    %.2f%s, drawn from a looser sample." % (len(autovars_true_periodics)/len(autocan_true) * 100, r"%")
+c_print( "" )
+c_print( " Q: What fraction of stars in this dataset are periodic variables?" )
+c_print( " A: %.2f%s, drawn from the tightest-controlled sample;" % (len(autovars_strict_periodics)/len(autocan_strict) * 100, r"%") )
+c_print( "    %.2f%s, drawn from a looser sample." % (len(autovars_true_periodics)/len(autocan_true) * 100, r"%") )
 
 # The following is only suitable for almost-but-not-quite 
-# accurate histogram analysis (because
+# accurate histogram analysis (because it ditches the s1-only periodocs)
 
 # intersection of periodics_s123 and maxvars_periodics
 maxvars_periods = periodics_s123.where( 
     np.in1d(periodics_s123.SOURCEID, maxvars_periodics.SOURCEID))
 
 # etc
-autovars_true_periods = periodics_s123.where( 
-    np.in1d(periodics_s123.SOURCEID, autovars_true_periodics.SOURCEID))
+autovars_true_periods = ps.best_period(periodics_s123.where( 
+    np.in1d(periodics_s123.SOURCEID, autovars_true_periodics.SOURCEID)))
 
-autovars_strict_periods = periodics_s123.where( 
-    np.in1d(periodics_s123.SOURCEID, autovars_strict_periodics.SOURCEID))
+autovars_strict_periods = ps.best_period(periodics_s123.where( 
+    np.in1d(periodics_s123.SOURCEID, autovars_strict_periodics.SOURCEID)))
 
