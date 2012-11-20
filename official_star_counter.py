@@ -254,3 +254,13 @@ autovars_strict_periods = ps.best_period(periodics_s123.where(
     np.in1d(periodics_s123.SOURCEID, autovars_strict_periodics.SOURCEID)))
 
 #print "hey look i'm here"
+
+## The following creates spreadsheets of nonvariables, as an official reference,
+# such that I don't botch anything down the line.
+
+# Nonperiodic autovariables
+autovars_true_nonpers = autovars_true.where(
+    ~np.in1d(autovars_true.SOURCEID, autovars_true_periodics.SOURCEID))
+
+autovars_strict_nonpers = autovars_strict.where(
+    ~np.in1d(autovars_strict.SOURCEID, autovars_strict_periodics.SOURCEID))
