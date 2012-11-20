@@ -253,3 +253,4 @@ autovars_true_periods = ps.best_period(periodics_s123.where(
 autovars_strict_periods = ps.best_period(periodics_s123.where( 
     np.in1d(periodics_s123.SOURCEID, autovars_strict_periodics.SOURCEID)))
 
+#print "hey look i'm here"
