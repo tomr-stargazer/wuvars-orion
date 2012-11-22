@@ -29,6 +29,9 @@ Guide to variable names:
 import matplotlib.pyplot as plt
 
 from official_star_counter import *
+from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
+                                   hk_empty, hk_filled)
+
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
 
@@ -209,12 +212,47 @@ def f_cc_nonpers(title=False):
 
     plt.show()
 
+# HERE IS SOME FILTERING FOR COLOR SLOPES
 
+        
 def f_colorslope_threepanel():
     """
     Creates a three-panel figure analyzing color slopes just like CHS fig.20.
 
-    A lot of careful filtering takes place here.
+    A lot of careful filtering takes place in color_slope_filtering.py.
     """
 
+    fig = plt.figure()
     
+    s1 = plt.subplot(3,1,1)
+    s2 = plt.subplot(3,1,2, sharex=s1, sharey=s1)
+    s3 = plt.subplot(3,1,3, sharex=s1, sharey=s1)
+
+    # JHK
+    s1.hist(np.degrees(np.arctan(jhk_empty.jhk_slope)), range=[-90, 90],
+            bins=36, color='k', histtype='step')
+    s1.hist(np.degrees(np.arctan(jhk_filled.jhk_slope)), range=[-90, 90],
+            bins=36, color='b')
+    s1.set_xlim(-90,90)
+    s1.set_xticks([-90, -45, 0, 45, 90])
+    s1.set_xticks(np.arange(-90, 90, 15), minor=True)
+
+    # JJH
+    s2.hist(np.degrees(np.arctan(jh_empty.jjh_slope)), range=[-90, 90],
+            bins=36, color='k', histtype='step')
+    s2.hist(np.degrees(np.arctan(jh_filled.jjh_slope)), range=[-90, 90],
+            bins=36, color='g')
+    s2.set_xlim(-90,90)
+    s2.set_xticks([-90, -45, 0, 45, 90])
+    s2.set_xticks(np.arange(-90, 90, 15), minor=True)
+
+    # KHK
+    s3.hist(np.degrees(np.arctan(hk_empty.khk_slope)), range=[-90, 90],
+            bins=36, color='k', histtype='step')
+    s3.hist(np.degrees(np.arctan(hk_filled.khk_slope)), range=[-90, 90],
+            bins=36, color='r')
+    s3.set_xlim(-90,90)
+    s3.set_xticks([-90, -45, 0, 45, 90])
+    s3.set_xticks(np.arange(-90, 90, 15), minor=True)
+    
+    plt.show()
