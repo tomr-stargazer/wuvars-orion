@@ -18,13 +18,19 @@ Guide to variable names:
  `autovars_true_nonpers` for the superset of automatically detected and pristine/strict nonperiodic variables
  `autovars_strict_nonpers` for pristine/strict nonperiodic variables
 
+ =====GLOBAL======
+ `autovars_true` for all automatically detected variables (incl. pristines)
+ `autovars_strict` for all pristine variables
+ `maxvars`
+
+
 """
 
 import matplotlib.pyplot as plt
 
 from official_star_counter import *
-
 from montage_script import conf_subj_periodics, conf_subj_nonpers
+from plot2 import plot_trajectory_vanilla
 
 # As a test, let's make a histogram of periods.
 
@@ -102,9 +108,9 @@ def f_map_periods():
     plt.show()
 
 
-def f_map_variables():
+def f_map_nonpers():
     """
-    A figure showing positions of all variables.
+    A figure showing positions of non-periodic variables.
 
     At some point I'll think more carefully about which maps I actually need
     to produce, and whether APLpy is necessary for all of them.
@@ -138,3 +144,77 @@ def f_map_variables():
 
     plt.show()
 
+
+def f_cc_periodics(title=False):
+    """
+    A figure showing periodic variables' mean color-color space locations.
+
+    Underplotted is the main sequence, reddening lines, and the CTTS locus.
+    """
+
+    fig = plt.figure()
+    ax = plt.gca()
+
+    plot_trajectory_vanilla(ax)
+
+    # First group: only group! Because of how the data quality works.
+    plt.scatter(autovars_strict_periodics.hmk_median, 
+                autovars_strict_periodics.jmh_median, 
+                c=autovars_strict_periodics.k_median)
+
+    plt.xlabel(r"median $H-K$")
+    plt.ylabel(r"median $J-H$")
+
+    plt.xlim(-0.1,2.5)
+    plt.ylim(-0.2, 2.8)
+    
+    cbar = plt.colorbar()
+    cbar.ax.invert_yaxis()
+    cbar.set_label(r"Median $K$ magnitude")
+    
+    if title:
+        plt.title("Color-color diagram of periodic variables")
+
+    plt.show()
+
+def f_cc_nonpers(title=False):
+    """
+    A figure showing non-periodic variables' mean color-color space locations.
+
+    Underplotted is the main sequence, reddening lines, and the CTTS locus.
+    """
+
+    fig = plt.figure()
+    ax = plt.gca()
+
+    plot_trajectory_vanilla(ax)
+
+    # First group: only group! Because of how the data quality works.
+    plt.scatter(autovars_strict_nonpers.hmk_median, 
+                autovars_strict_nonpers.jmh_median, 
+                c=autovars_strict_nonpers.k_median)
+
+    plt.xlabel(r"median $H-K$")
+    plt.ylabel(r"median $J-H$")
+
+    plt.xlim(-0.1,2.5)
+    plt.ylim(-0.2, 2.8)
+    
+    cbar = plt.colorbar()
+    cbar.ax.invert_yaxis()
+    cbar.set_label(r"Median $K$ magnitude")
+    
+    if title:
+        plt.title("Color-color diagram of non-periodic variables")
+
+    plt.show()
+
+
+def f_colorslope_threepanel():
+    """
+    Creates a three-panel figure analyzing color slopes just like CHS fig.20.
+
+    A lot of careful filtering takes place here.
+    """
+
+    
