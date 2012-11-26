@@ -173,7 +173,8 @@ def f_cc_generic(spread, title=""):
     plot_trajectory_vanilla(ax)
 
     # First group: only group! Because of how the data quality works.
-    plt.scatter(spread.hmk_median, spread.jmh_median, c=spread.k_median)
+    plt.scatter(spread.hmk_median, spread.jmh_median, c=spread.k_median,
+                vmin=11, vmax=15)
 
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $J-H$")
@@ -271,7 +272,7 @@ def f_cc_color_negative(title=False):
 
 
         
-def f_colorslope_threepanel():
+def f_colorslope_threepanel(title=False):
     """
     Creates a three-panel figure analyzing color slopes just like CHS fig.20.
 
@@ -288,7 +289,7 @@ def f_colorslope_threepanel():
     s1.hist(np.degrees(np.arctan(jhk_empty.jhk_slope)), range=[-90, 90],
             bins=36, color='k', histtype='step')
     s1.hist(np.degrees(np.arctan(jhk_filled.jhk_slope)), range=[-90, 90],
-            bins=36, color='b')
+            bins=36, color='g')
     s1.set_xlim(-90,90)
     s1.set_xticks([-90, -45, 0, 45, 90])
     s1.set_xticks(np.arange(-90, 90, 15), minor=True)
@@ -297,7 +298,7 @@ def f_colorslope_threepanel():
     s2.hist(np.degrees(np.arctan(jh_empty.jjh_slope)), range=[-90, 90],
             bins=36, color='k', histtype='step')
     s2.hist(np.degrees(np.arctan(jh_filled.jjh_slope)), range=[-90, 90],
-            bins=36, color='g')
+            bins=36, color='b')
     s2.set_xlim(-90,90)
     s2.set_xticks([-90, -45, 0, 45, 90])
     s2.set_xticks(np.arange(-90, 90, 15), minor=True)
@@ -310,5 +311,17 @@ def f_colorslope_threepanel():
     s3.set_xlim(-90,90)
     s3.set_xticks([-90, -45, 0, 45, 90])
     s3.set_xticks(np.arange(-90, 90, 15), minor=True)
+
+    # Labelling stuff
+
+    s3.set_xlabel("Slope (degrees)")
+    s3.set_ylabel("N_stars")
+
+    s1.text(-80, 28, r"$J-H$ vs. $H-K$")
+    s2.text(-80, 28, r"$J$  vs. $J-H$")
+    s3.text(-80, 28, r"$K$  vs. $H-K$")
+    
+    if title:
+        s1.set_title("Histograms of slopes in color-color and color-magnitude space")
     
     plt.show()
