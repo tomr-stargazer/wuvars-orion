@@ -148,6 +148,28 @@ def f_map_nonpers():
     plt.show()
 
 
+def f_cc_generic(spread, title=""):
+    """
+    Given an input dataset, makes a color-color plot with cool 
+    colors and stuff.
+
+    Parameters
+    ----------
+    spread : atpy.Table
+        A spreadsheet with information on stars whose J-H and H-K colors
+        want to be plotted.
+    title : str
+        Desired title for the plot, if any.
+
+    Returns
+    -------
+    fig : Figure object
+        Figure that we plotted onto.
+    
+    """
+
+
+
 def f_cc_periodics(title=False):
     """
     A figure showing periodic variables' mean color-color space locations.
