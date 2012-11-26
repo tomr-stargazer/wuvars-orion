@@ -224,6 +224,52 @@ def f_cc_nonpers(title=False):
 
 # HERE IS SOME FILTERING FOR COLOR SLOPES... moved to color_slope_filtering.py
 
+
+def f_cc_color_vars(title=False):
+    """
+    Shows mean color-color space locations of color-variables.
+
+    Underplotted is the main sequence, reddening lines, and the CTTS locus.
+    """
+    if title:
+        title_string = "Color-color diagram of all high color-change variables"
+    else:
+        title_string = ""
+
+    return f_cc_generic(jhk_empty, title=title_string)
+
+def f_cc_color_positive(title=False):
+    """
+    Shows mean color-color space locations of positively-sloped color-variables.
+
+    Underplotted is the main sequence, reddening lines, and the CTTS locus.
+    """
+    if title:
+        title_string = "Color-color diagram: positively (K vs H-K) sloped color-change variables"
+    else:
+        title_string = ""
+
+    positives = jhk_empty.where( jhk_empty.khk_slope > 0 )
+
+    return f_cc_generic(positives, title=title_string)
+
+def f_cc_color_negative(title=False):
+    """
+    Shows mean color-color space locations of negatively-sloped color-variables.
+
+    Underplotted is the main sequence, reddening lines, and the CTTS locus.
+    """
+    if title:
+        title_string = "Color-color diagram: negatively (K vs H-K) sloped color-change variables"
+    else:
+        title_string = ""
+
+    negatives = jhk_empty.where( jhk_empty.khk_slope < 0 )
+
+    return f_cc_generic(negatives, title=title_string)
+
+
+
         
 def f_colorslope_threepanel():
     """
