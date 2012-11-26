@@ -200,30 +200,12 @@ def f_cc_periodics(title=False):
     Underplotted is the main sequence, reddening lines, and the CTTS locus.
     """
 
-    fig = plt.figure()
-    ax = plt.gca()
-
-    plot_trajectory_vanilla(ax)
-
-    # First group: only group! Because of how the data quality works.
-    plt.scatter(autovars_strict_periodics.hmk_median, 
-                autovars_strict_periodics.jmh_median, 
-                c=autovars_strict_periodics.k_median)
-
-    plt.xlabel(r"median $H-K$")
-    plt.ylabel(r"median $J-H$")
-
-    plt.xlim(-0.1,2.5)
-    plt.ylim(-0.2, 2.8)
-    
-    cbar = plt.colorbar()
-    cbar.ax.invert_yaxis()
-    cbar.set_label(r"Median $K$ magnitude")
-    
     if title:
-        plt.title("Color-color diagram of periodic variables")
+        title_string = "Color-color diagram of periodic variables"
+    else:
+        title_string = ""
 
-    plt.show()
+    return f_cc_generic(autovars_strict_periodics, title=title_string)
 
 def f_cc_nonpers(title=False):
     """
@@ -232,32 +214,15 @@ def f_cc_nonpers(title=False):
     Underplotted is the main sequence, reddening lines, and the CTTS locus.
     """
 
-    fig = plt.figure()
-    ax = plt.gca()
-
-    plot_trajectory_vanilla(ax)
-
-    # First group: only group! Because of how the data quality works.
-    plt.scatter(autovars_strict_nonpers.hmk_median, 
-                autovars_strict_nonpers.jmh_median, 
-                c=autovars_strict_nonpers.k_median)
-
-    plt.xlabel(r"median $H-K$")
-    plt.ylabel(r"median $J-H$")
-
-    plt.xlim(-0.1,2.5)
-    plt.ylim(-0.2, 2.8)
-    
-    cbar = plt.colorbar()
-    cbar.ax.invert_yaxis()
-    cbar.set_label(r"Median $K$ magnitude")
-    
     if title:
-        plt.title("Color-color diagram of non-periodic variables")
+        title_string = "Color-color diagram of non-periodic variables"
+    else:
+        title_string = ""
 
-    plt.show()
+    return f_cc_generic(autovars_strict_nonpers, title=title_string)
 
-# HERE IS SOME FILTERING FOR COLOR SLOPES
+
+# HERE IS SOME FILTERING FOR COLOR SLOPES... moved to color_slope_filtering.py
 
         
 def f_colorslope_threepanel():
