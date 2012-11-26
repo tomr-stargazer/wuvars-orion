@@ -156,8 +156,8 @@ def f_cc_generic(spread, title=""):
     Parameters
     ----------
     spread : atpy.Table
-        A spreadsheet with information on stars whose J-H and H-K colors
-        want to be plotted.
+        A spreadsheet with information on stars whose median 
+        J-H and H-K colors want to be plotted.
     title : str
         Desired title for the plot, if any.
 
@@ -167,7 +167,30 @@ def f_cc_generic(spread, title=""):
         Figure that we plotted onto.
     
     """
+    fig = plt.figure()
+    ax = plt.gca()
 
+    plot_trajectory_vanilla(ax)
+
+    # First group: only group! Because of how the data quality works.
+    plt.scatter(spread.hmk_median, spread.jmh_median, c=spread.k_median)
+
+    plt.xlabel(r"median $H-K$")
+    plt.ylabel(r"median $J-H$")
+
+    plt.xlim(-0.1,2.5)
+    plt.ylim(-0.2, 2.8)
+    
+    cbar = plt.colorbar()
+    cbar.ax.invert_yaxis()
+    cbar.set_label(r"Median $K$ magnitude")
+    
+    if title:
+        plt.title(title)
+
+    plt.show()
+
+    return fig
 
 
 def f_cc_periodics(title=False):
