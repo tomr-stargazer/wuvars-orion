@@ -30,7 +30,7 @@ print "the data into. Make sure to use the same number for both functions!!"
 path = '/home/tom/reu/ORION/DATA/'
 path2= path+'spreadsheet/'
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/maxvars_data.fits')
+data = atpy.Table('/home/tom/reu/ORION/DATA/maxvars_data.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/gosu_inbetween.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
