@@ -30,9 +30,9 @@ print "the data into. Make sure to use the same number for both functions!!"
 path = '/home/tom/reu/ORION/DATA/'
 path2= path+'spreadsheet/'
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/maxvars_data.fits')
+#data = atpy.Table('/home/tom/reu/ORION/DATA/maxvars_data.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/gosu_inbetween.fits')
-#data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
+data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/constantstars_073112_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/full_data_errorcorrected.fits')
@@ -92,7 +92,7 @@ def calculate_stuff( splits = 10, start=0 ):
         # any cuts on the data.
         sp_i = sp.spreadsheet_write(data_i, lookup_i, -1, 
                                     path2+'sp%d.fits'%i, flags=256,
-                                    per=False, graded=True, rob=False,
+                                    per=False, graded=True, rob=True,
                                     colorslope=True)
         # EEEEE this is a flag to come and find this section of code
         
