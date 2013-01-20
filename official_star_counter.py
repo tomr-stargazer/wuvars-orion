@@ -21,10 +21,13 @@ def c_print(str):
     return
     
 
-spread = atpy.Table("/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5_spread.fits")
+#spread = atpy.Table("/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5_spread.fits")
+spread = atpy.Table("/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5_spread_pstar.fits")
 
 maxvars_spread_per = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/maxvars_data_statsper.fits")
 maxvars_s1_spread_per = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/maxvars_data_s1_statsper.fits")
+
+maxvars_pstar = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/maxvars_pstar.fits")
 
 
 # Number of detected sources in the dataset
@@ -93,7 +96,7 @@ autocandidates_old = sp.where( (
 
 # Constructing these as two separate arrays for ease of reading/editing.
 # Case 1: all 3 bands are quality; S > 1. Note "&"s uniform throughout.
-case1 = ( (sp.Stetson > 1) &
+case1 = ( (sp.Stetson > 1) & (sp.pstar_median > 0.75) &
           (
         (sp.N_j >= 50) & (sp.N_j <= 125) &    # J band criteria
         (sp.j_mean > 11) & (sp.j_mean < 17) & 
@@ -113,7 +116,7 @@ case1 = ( (sp.Stetson > 1) &
 # Case 2: at least one band quality and rchi^2 > 1; S > 1. Note mixed "&"s 
 # and "|"s, as well as another layer of parentheses around the complex of "|"
 # criteria.
-case2 = ( (sp.Stetson > 1) & (
+case2 = ( ((sp.Stetson > 1) & (sp.pstar_median > 0.75)) & (
           (
         (sp.N_j >= 50) & (sp.N_j <= 125) &    # J band criteria
         (sp.j_mean > 11) & (sp.j_mean < 17) & 
@@ -139,7 +142,7 @@ autovars_strict = sp.where( case1 )
 
 # Constructing these as two separate arrays for ease of reading/editing.
 # Case 1: all 3 bands are quality. Note "&"s uniform throughout.
-cand_case1 = ( ( 
+cand_case1 = ( (sp.pstar_median > 0.75) & ( 
         (sp.N_j >= 50) & (sp.N_j <= 125) &    # J band criteria
         (sp.j_mean > 11) & (sp.j_mean < 17) & 
         (sp.N_j_info == 0) 
@@ -157,7 +160,7 @@ cand_case1 = ( (
 
 # Case 2: at least one band quality. Note mixed "&"s and "|"s, 
 # as well as another layer of parentheses around the complex of "|" criteria.
-cand_case2 = ( 
+cand_case2 = ( (sp.pstar_median > 0.75) & (
     (
         (sp.N_j >= 50) & (sp.N_j <= 125) &    # J band criteria
         (sp.j_mean > 11) & (sp.j_mean < 17) & 
@@ -172,7 +175,7 @@ cand_case2 = (
         (sp.N_k >= 50) & (sp.N_k <= 125) &    # K band criteria
         (sp.k_mean > 11) & (sp.k_mean < 16) & 
         (sp.N_k_info == 0) 
-        ) )
+        ) ) )
 
 
 autocan_true = sp.where( cand_case1 | cand_case2 )
@@ -184,8 +187,14 @@ c_print( "Number of stars that have the data quality for auto-classification: %d
 
 subjectives = maxvars.where( ~np.in1d(maxvars.SOURCEID, autovars_true.SOURCEID))
 
+old_subjectives = atpy.Table("/home/tom/reu/ORION/DATA/old_subjectives.fits")
+
+new_subjectives = subjectives.where( ~np.in1d(subjectives.SOURCEID, old_subjectives.SOURCEID))
+
 c_print( "" )
 c_print( "Number of probably-variable stars requiring subjective verification due to imperfect data quality: %d" % len(subjectives) )
+
+c_print( "Number of new subjectives: %d" % len(new_subjectives) )
 
 # Now let's count stars that meet our strict criteria in ALL 3 bands
 
