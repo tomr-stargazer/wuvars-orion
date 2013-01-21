@@ -44,6 +44,20 @@ new_subjective_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_sub
 
 data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 
+
+### This is where we conjoin the "new" guys to the "old" guys.
+
+conf_subj_periodics.remove_columns(
+    ['stats', "CONFIRMED PERIODIC", "CONFIRMED VARIABLE"])
+new_conf_subj_periodics.remove_columns(
+    ["CONFIRMED_PERIODIC", "CONFIRMED_VARIABLE"])
+conf_subj_periodics.append( new_conf_subj_periodics )
+
+new_conf_subj_nonpers.remove_columns(
+    ['pstar_mean', 'pstar_median', 'pstar_rms'])
+conf_subj_nonpers.append( new_conf_subj_nonpers)
+
+
 def gen_periodic_plots(start=0):
     """ 
     Makes glued 3-panel plots for all of the periodic variable candidates
@@ -88,7 +102,7 @@ def gen_nonper_lc(start=0):
 
 def gen_conf_periodic_plots(start=0):
     """ 
-    Makes glued 3-panel plots for all of the periodic variable candidates
+    Makes glued 3-panel plots for all the CONFIRMED subjective periodic variables.
     """
 
     for s in conf_subj_periodics.SOURCEID[start:]:
@@ -118,7 +132,7 @@ def gen_conf_periodic_plots(start=0):
     return
 
 def gen_conf_nonper_lc(start=0):
-    """ Makes lightcurves for nonperiodic variable candidates. """
+    """ Makes lightcurves for CONFIRMED subjective nonperiodic variables. """
 
     for s in conf_subj_nonpers.SOURCEID[start:]:
 
