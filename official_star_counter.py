@@ -273,3 +273,28 @@ autovars_true_nonpers = autovars_true.where(
 
 autovars_strict_nonpers = autovars_strict.where(
     ~np.in1d(autovars_strict.SOURCEID, autovars_strict_periodics.SOURCEID))
+
+
+### Here we're gonna sort the NEW subjectives into two categories:
+# Periodic, and Nonperiodic. This will be via a comparison with the 
+# `maxvars_periodics` table.
+
+new_subjectives_nonpers = new_subjectives.where(
+    ~np.in1d(new_subjectives.SOURCEID, maxvars_periodics.SOURCEID))
+
+new_subjectives_per_s123 = periodics_s123.where(
+    np.in1d(periodics_s123.SOURCEID, new_subjectives.SOURCEID))
+
+# those that are in s1 but NOT in s123
+new_subjectives_per_s1 = periodics_s1.where(
+    np.in1d(periodics_s1.SOURCEID, new_subjectives.SOURCEID) & 
+    ~np.in1d(periodics_s1.SOURCEID, periodics_s123.SOURCEID))
+
+print len(new_subjectives_nonpers)
+print len(new_subjectives_per_s123)
+print len(new_subjectives_per_s1)
+print "those are things. End."
+
+if len(new_subjectives_per_s1) == 0:
+    new_subjectives_per = ps.best_period(new_subjectives_per_s123)
+    print "assigned best periods"
