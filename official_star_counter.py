@@ -290,11 +290,11 @@ new_subjectives_per_s1 = periodics_s1.where(
     np.in1d(periodics_s1.SOURCEID, new_subjectives.SOURCEID) & 
     ~np.in1d(periodics_s1.SOURCEID, periodics_s123.SOURCEID))
 
-print len(new_subjectives_nonpers)
-print len(new_subjectives_per_s123)
-print len(new_subjectives_per_s1)
-print "those are things. End."
+#print len(new_subjectives_nonpers)
+#print len(new_subjectives_per_s123)
+#print len(new_subjectives_per_s1)
+#print "those are things. End."
 
 if len(new_subjectives_per_s1) == 0:
     new_subjectives_per = ps.best_period(new_subjectives_per_s123)
-    print "assigned best periods"
+#    print "assigned best periods"
