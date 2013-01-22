@@ -3,6 +3,17 @@ This is a script (not a module) that counts different types of
 stars in my dataset using a self-consistent, editable, referenceable 
 set of filters.
 
+Useful importable variable names:
+==Global==
+ `autovars_true`: all automatically detected variables
+ `autovars_strict`: all pristine auto-variables (a subset of `autovars_true`)
+==Periodics==
+ `autovars_true_periodics`: subset of `autovars_true` who are periodic
+ `autovars_strict_periodics`: subset of `autovars_strict` who are periodic
+==Non-periodic==
+ `autovars_true_nonpers`: subset of `autovars_true` who are non-periodic
+ `autovars_strict_nonpers`: subset of `autovars_strict` who are non-periodic
+
 """ 
 
 from __future__ import division
