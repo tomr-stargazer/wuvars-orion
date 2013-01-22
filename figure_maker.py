@@ -73,7 +73,6 @@ def f_hist_periods():
     
     plt.show()
 
-    
 def f_map_periods():
     """
     A figure showing positions of periodic variables.
@@ -110,7 +109,6 @@ def f_map_periods():
 
     plt.show()
 
-
 def f_map_nonpers():
     """
     A figure showing positions of non-periodic variables.
@@ -146,7 +144,6 @@ def f_map_nonpers():
     plt.legend()
 
     plt.show()
-
 
 def f_cc_generic(spread, title=""):
     """
@@ -193,7 +190,6 @@ def f_cc_generic(spread, title=""):
 
     return fig
 
-
 def f_cc_periodics(title=False):
     """
     A figure showing periodic variables' mean color-color space locations.
@@ -222,9 +218,7 @@ def f_cc_nonpers(title=False):
 
     return f_cc_generic(autovars_strict_nonpers, title=title_string)
 
-
 # HERE IS SOME FILTERING FOR COLOR SLOPES... moved to color_slope_filtering.py
-
 
 def f_cc_color_vars(title=False):
     """
@@ -269,9 +263,6 @@ def f_cc_color_negative(title=False):
 
     return f_cc_generic(negatives, title=title_string)
 
-
-
-        
 def f_colorslope_threepanel(title=False):
     """
     Creates a three-panel figure analyzing color slopes just like CHS fig.20.
@@ -325,3 +316,23 @@ def f_colorslope_threepanel(title=False):
         s1.set_title("Histograms of slopes in color-color and color-magnitude space")
     
     plt.show()
+
+f_list = [f_hist_periods, 
+          f_map_periods,
+          f_map_nonpers,
+          f_cc_periodics,
+          f_cc_nonpers,
+          f_cc_color_vars,
+          f_cc_color_positive,
+          f_cc_color_negative,
+          f_colorslope_threepanel]
+
+def f_allfigures():
+    """
+    Generates all desired figures.
+    """
+    for f in f_list:
+        f()
+
+    print "generated all figures"
+    return
