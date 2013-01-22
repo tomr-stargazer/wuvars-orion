@@ -48,7 +48,7 @@ def gen_autovar_periodic_plots(start=0):
 
         # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
         plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                        timecolor=True,
+                        timecolor=True, name=flag+str(s),
                         outfile=periodic_path+"%s_lc.png"%str(s))
 
         plot3.graded_phase(data, s, timecolor='time', 
@@ -81,7 +81,7 @@ def gen_autovar_nonper_lc(start=0):
             flag = ""
 
         plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                        timecolor=True,
+                        timecolor=True, name=flag+str(s),
                         outfile=nonper_path+flag+"%s_lc.png"%str(s))
 
     return
