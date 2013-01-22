@@ -15,86 +15,74 @@ import plot3
 from official_star_counter import *
 
 # let's rename these from `path1`... etc because they are unhelpful.
-path1 = "/home/tom/reu/ORION/DATA/subjective/periodic_book/"
-path2 = "/home/tom/reu/ORION/DATA/subjective/periodic_book/glued/"
-path3 = "/home/tom/reu/ORION/DATA/subjective/nonperiodic_book/"
 
-path4 = '/home/tom/reu/ORION/DATA/subjective/confirmed_book/periodic/'
-path5 = '/home/tom/reu/ORION/DATA/subjective/confirmed_book/periodic/glued/'
-path6 = '/home/tom/reu/ORION/DATA/subjective/confirmed_book/nonperiodic/'
+periodic_path = "/home/tom/reu/ORION/DATA/autovar/periodic/"
+periodic_path_g = "/home/tom/reu/ORION/DATA/autovar/periodic/glued/"
+nonper_path = "/home/tom/reu/ORION/DATA/autovar/nonperiodic/"
 
-subjective_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_periodic_candidate_spreadsheet.fits")
-
-conf_subj_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_periodics_confirmed_spread.fits")
-
-new_conf_subj_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_periodics_confirmed_spread.fits")
-
-subjective_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_nonperiod_candidate_spreadsheet.fits")
-
-conf_subj_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_nonpers_confirmed_spread.fits")
-
-new_conf_subj_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_nonpers_confirmed_spread.fits")
-
-# this is for the new dudes
-new_subjective_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_periodic_candidate_spreadsheet.fits")
-
-new_subjective_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_nonperiod_candidate_spreadsheet.fits")
+# Relevant variable names:
+# ==Global==
+# `autovars_true`: all automatically detected variables
+# `autovars_strict`: all pristine auto-variables (a subset of `autovars_true`)
+#==Periodics==
+# `autovars_true_periodics`: subset of `autovars_true` who are periodic
+# `autovars_strict_periodics`: subset of `autovars_strict` who are periodic
+#==Non-periodic==
+# `autovars_true_nonpers`: subset of `autovars_true` who are non-periodic
+# `autovars_strict_nonpers`: subset of `autovars_strict` who are non-periodic
 
 data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 
 
-### This is where we conjoin the "new" guys to the "old" guys.
-
-conf_subj_periodics.remove_columns(
-    ['stats', "CONFIRMED PERIODIC", "CONFIRMED VARIABLE"])
-new_conf_subj_periodics.remove_columns(
-    ["CONFIRMED_PERIODIC", "CONFIRMED_VARIABLE"])
-conf_subj_periodics.append( new_conf_subj_periodics )
-
-new_conf_subj_nonpers.remove_columns(
-    ['pstar_mean', 'pstar_median', 'pstar_rms'])
-conf_subj_nonpers.append( new_conf_subj_nonpers)
-
-
-def gen_periodic_plots(start=0):
+def gen_autovar_periodic_plots(start=0):
     """ 
-    Makes glued 3-panel plots for all of the periodic variable candidates
+    Makes glued 3-panel plots for all of the periodic autovars.
     """
 
-    for s in subjective_periodics.SOURCEID[start:]:
-        # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
+    for s in autovars_periodics.SOURCEID[start:]:
+        # If this is a strict autovar, we give it special stuff.
+        if s in autovars_strict.SOURCEID:
+            flag = "s_"
+        else:
+            flag = ""
 
+        # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
         plot3.graded_lc(data, s, abridged=True, color_slope=True, 
                         timecolor=True,
-                        outfile=path1+"%s_lc.png"%str(s))
+                        outfile=periodic_path+"%s_lc.png"%str(s))
 
         plot3.graded_phase(data, s, timecolor='time', 
-                           period=subjective_periodics.best_period[
-                subjective_periodics.SOURCEID==s][0], 
-                           color_slope=True, outfile=path1+"%s_phase.png"%str(s))
+                           period=autovars_periods.best_period[
+                autovars_periodics.SOURCEID==s][0], 
+                           color_slope=True, outfile=periodic_path+"%s_phase.png"%str(s))
 
         try:
-            plot3.lsp_power(data, s, outfile=path1+"%s_pgram.png"%str(s))
+            plot3.lsp_power(data, s, outfile=periodic_path+"%s_pgram.png"%str(s))
         except Exception, e:
             print "periodogram failed for %s" % str(s)
             print e
 
 
         # now glue em together!
-
         call(["montage","-mode", "concatenate", "-tile", "2x", 
-             path1+"%s_*.png" % str(s), path2+"%s-glued.png" % str(s) ])
-
+             periodic_path+"%s_*.png" % str(s), 
+              periodic_path_g+flag+"%s-glued.png" % str(s) ])
     return
 
-def gen_nonper_lc(start=0):
-    """ Makes lightcurves for nonperiodic variable candidates. """
+def gen_autovar_nonper_lc(start=0):
+    """ Makes lightcurves for nonperiodic autovars. """
 
-    for s in subjective_nonpers.SOURCEID[start:]:
+    for s in autovars_true_nonpers.SOURCEID[start:]:
+
+        # If this is a strict autovar, we give it special stuff.
+        if s in autovars_strict.SOURCEID:
+            flag = "s_"
+        else:
+            flag = ""
 
         plot3.graded_lc(data, s, abridged=True, color_slope=True, 
                         timecolor=True,
-                        outfile=path3+"%s_lc.png"%str(s))
+                        outfile=nonper_path+flag+"%s_lc.png"%str(s))
 
     return
 
@@ -140,46 +128,4 @@ def gen_conf_nonper_lc(start=0):
 
     return
 
-### Everything that follows is for the "NEW" subjectives.
 
-def gen_new_periodic_plots(start=0):
-    """ 
-    Makes glued 3-panel plots for all of the NEW periodic variable candidates
-    """
-
-    for s in new_subjective_periodics.SOURCEID[start:]:
-        # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
-
-        plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                        timecolor=True,
-                        outfile=path7+"%s_lc.png"%str(s))
-
-        plot3.graded_phase(data, s, timecolor='time', 
-                           period=new_subjective_periodics.best_period[
-                new_subjective_periodics.SOURCEID==s][0], 
-                           color_slope=True, outfile=path7+"%s_phase.png"%str(s))
-
-        try:
-            plot3.lsp_power(data, s, outfile=path7+"%s_pgram.png"%str(s))
-        except Exception, e:
-            print "periodogram failed for %s" % str(s)
-            print e
-
-
-        # now glue em together!
-
-        call(["montage","-mode", "concatenate", "-tile", "2x", 
-             path7+"%s_*.png" % str(s), path8+"%s-glued.png" % str(s) ])
-
-    return
-
-def gen_new_nonper_lc(start=0):
-    """ Makes lightcurves for nonperiodic variable candidates. """
-
-    for s in new_subjective_nonpers.SOURCEID[start:]:
-
-        plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                        timecolor=True,
-                        outfile=path9+"%s_lc.png"%str(s))
-
-    return
