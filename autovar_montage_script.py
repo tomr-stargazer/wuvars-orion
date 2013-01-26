@@ -38,39 +38,56 @@ def gen_autovar_periodic_plots(start=0):
     """ 
     Makes glued 3-panel plots for all of the periodic autovars.
     """
+    
+    counter = 1
+    c_max = len(autovars_true_periodics)
 
-    for s in autovars_periodics.SOURCEID[start:]:
-        # If this is a strict autovar, we give it special stuff.
-        if s in autovars_strict.SOURCEID:
-            flag = "s_"
-        else:
-            flag = ""
+    tables_of_periodics = [autovars_true_periods, autovars_true_periods_s1]
 
-        # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
-        plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                        timecolor=True, name=flag+str(s),
-                        outfile=periodic_path+"%s_lc.png"%str(s))
+    for t in tables_of_periodics:
 
-        plot3.graded_phase(data, s, timecolor='time', 
-                           period=autovars_periods.best_period[
-                autovars_periodics.SOURCEID==s][0], 
-                           color_slope=True, outfile=periodic_path+"%s_phase.png"%str(s))
+        # first, the s123 periodics (more than 95% of them)
+        for s in t.SOURCEID[start:]:
+            # If this is a strict autovar, we give it special stuff.
+            if s in autovars_strict.SOURCEID:
+                flag = "s_"
+            else:
+                flag = ""
 
-        try:
-            plot3.lsp_power(data, s, outfile=periodic_path+"%s_pgram.png"%str(s))
-        except Exception, e:
-            print "periodogram failed for %s" % str(s)
-            print e
+            # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
+            plot3.graded_lc(data, s, abridged=True, color_slope=True, 
+                            timecolor=True, name=flag+str(s),
+                            outfile=periodic_path+"%s_lc.png"%str(s))
 
 
-        # now glue em together!
-        call(["montage","-mode", "concatenate", "-tile", "2x", 
-             periodic_path+"%s_*.png" % str(s), 
-              periodic_path_g+flag+"%s-glued.png" % str(s) ])
+            plot3.graded_phase(data, s, timecolor='time', 
+                               name=flag+str(s),
+                               period=t.best_period[t.SOURCEID==s], 
+                               color_slope=True, outfile=periodic_path+"%s_phase.png"%str(s))
+
+            try:
+                plot3.lsp_power(data, s, outfile=periodic_path+"%s_pgram.png"%str(s))
+            except Exception, e:
+                print "periodogram failed for %s" % str(s)
+                print e
+
+
+            # now glue em together!
+            call(["montage","-mode", "concatenate", "-tile", "2x", 
+                 periodic_path+"%s_*.png" % str(s), 
+                  periodic_path_g+flag+"%s-glued.png" % str(s) ])
+
+
+            print "Completed plot %d of %d" % (counter, c_max)
+            counter += 1
+        
     return
 
 def gen_autovar_nonper_lc(start=0):
     """ Makes lightcurves for nonperiodic autovars. """
+
+    counter = 1
+    c_max = len(autovars_true_nonpers)
 
     for s in autovars_true_nonpers.SOURCEID[start:]:
 
@@ -83,6 +100,9 @@ def gen_autovar_nonper_lc(start=0):
         plot3.graded_lc(data, s, abridged=True, color_slope=True, 
                         timecolor=True, name=flag+str(s),
                         outfile=nonper_path+flag+"%s_lc.png"%str(s))
+
+        print "Completed plot %d of %d" % (counter, c_max)
+        counter += 1
 
     return
 
