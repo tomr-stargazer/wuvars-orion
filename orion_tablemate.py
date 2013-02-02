@@ -27,17 +27,17 @@ class TableParameters(object):
     
     """
     
-    def __init__(self, path, alias, full_name, 
+    def __init__(self, data, alias, full_name, 
                  ra_cols, dec_cols, radec_fmt,
-                 name_col, max_match = 1.0, data=None):
+                 name_col, max_match = 1.0):
         """
         Initializing method.
 
         Parameters
         ----------
-        path : str or None
-            The location of the file containing our table data.
-            Only use None if `data` is specified.
+        data : str or atpy.Table
+            The location of the file containing our table data, OR
+            an atpy.Table object containing the data itself.
         alias : str
             A consise string describing the table's name.
         full_name : str
@@ -58,29 +58,27 @@ class TableParameters(object):
 
         # We're gonna check to make sure that the provided filepath is valid.
         # If it's not, throw some exceptions around.
-        if data = None:
+        if type(data) is atpy.basetable.Table:
+            self.data = data
+            self.path = None
+        elif type(data) is str:
             try:
-                self.data = atpy.Table(path)
+                self.path = data
+                self.data = atpy.Table(self.path)
             except IOError:
                 raise IOError("File '%s' not found" % path)
             except Exception, e:
                 raise e
-        elif type(data) is atpy.basetable.Table:
-            self.data = data
-            self.path = None
         else:
             raise Exception("Data in `data` is invalid.")
 
         # Is this sloppy? See http://stackoverflow.com/questions/12191075/is-there-a-shortcut-for-self-somevariable-somevariable-in-a-python-class-con
-        self.path = path
         self.alias = alias
         self.full_name = full_name
         self.ra_cols, self.dec_cols = ra_cols, dec_cols
         self.radec_fmt = radec_fmt
         self.name_col = name_col
         self.max_match = max_match
-
-
 
 def tablemater(primary_table, secondary_table_list):
     """ 
@@ -126,9 +124,25 @@ def test():
        
     # WFCAM Orion Variables - autovars, strict
     wov_avs_data = atpy.Table(osc.autovars_strict)
+    
+    wov_avs = TableParameters(
+        #data
+        wov_avs_data,
+        #alias
+        "WFCAM Orion",
+        #full name
+        "Strict automatic variables found in the WFCAM Orion monitoring survey. From 'High Amplitude and Periodic Near-Infrared Variables in the Orion Nebula Cluster' by Rice, Thomas S.; Reipurth, Bo; et al.",
+        #ra_cols, dec_cols
+        ['RA'], ['DEC'],
+        #radec_fmt
+        'decimal radians',
+        #name_col
+        'SOURCEID')
+
+    # Carpenter Hillenbrand Skrutskie 2001: the other big Orion nir var study.
 
     chs = TableParameters(
-        # path
+        # data
         "/home/tom/reu/ORION/DATA/carpenter_table4.fits", 
         # alias
         "CHS2001",
@@ -141,7 +155,9 @@ def test():
         #name_col
         '__CHS2001_')
 
-    
+    # now that they're defined, match em!
+
+    test_mate = tablemater(wov_avs, [chs])
     
         
         
