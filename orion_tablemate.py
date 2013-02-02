@@ -99,10 +99,40 @@ def tablemater(primary_table, secondary_table_list):
         A catalog where each row corresponds to a star in `primary_table`
         and contains a cross-identification for the secondary_tables 
         in each column (or a sentinel value indicating failure to match).
+
+        Indices start at zero.
+
+        The mated table does not contain ANY extra information about any
+        sources - not even RA/Dec, brightnesses, etc.
+        (MAYBE a column or two saying if stars were automatic/subjective,
+         and periodic/nonperiodic.)
         
     """
 
-    # First, 
+    # First, construct a table with columns belonging to Primary Table
+    # : we'll be adding more columns later!
+
+    mated_table = atpy.Table()
+
+    mated_table.add_column( primary_table.alias+"_ID", 
+                            primary_table.data[primary_table.name_col] )
+    mated_table.add_column( primary_table.alias+"_index", 
+                            np.arange(len(primary_table.data)) )
+
+    # Now, we'll need to extract the RA and Dec information.
+    # This is actually something that needs to be done uniformly to every
+    # single table object, so I think I should actually stick it in the
+    # class constructor so it's done at initialization and never worried
+    # about ever again!
+    # Namely, semantics to take the RA/Dec columns and the provided radec_fmt
+    # and append an .RA and a .DEC to the TableParameters object itself
+    # that's in a standard decimal-degrees format.
+    # So that we never have to worry about that in the tablemater() function
+    # itself.
+    # okay, that's the goal for next session: put the format-parsing code
+    # in the __init__ method!
+
+    
 
     for st in secondary_table_list:
         
