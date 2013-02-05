@@ -241,7 +241,7 @@ def test():
     """
        
     # WFCAM Orion Variables - autovars, strict
-    wov_avs_data = atpy.Table(osc.autovars_strict)
+    wov_avs_data = osc.autovars_strict
     
     wov_avs = TableParameters(
         #data
@@ -273,14 +273,36 @@ def test():
         #name_col
         '__CHS2001_')
 
+    # This is Bo's Ha survey
+    eso_ha = TableParameters(
+        # data
+        "/home/tom/reu/ORION/DATA/ESOHa_m42_fc_P_fits.fits", 
+        # alias
+        "ESO_Ha_PAR",
+        # full_name
+        "'ESO H-alpha survey of ONC, 5 x 5 degrees' by Petterson, B.; Armond, T.; & Reipurth, B. 2013, in prep.",
+        # ra_cols, dec_cols
+        ['R.A.(2000)', 'col7', 'col8'], ['Dec(2000)', 'col10', 'col11'],
+        #radec_fmt
+        'sex-three',
+        #name_col
+        '2MASS identity')
+
+
     # now that they're defined, match em!
 
-    test_mate = tablemater(wov_avs, [chs])
-    
-        
-        
-        
+    # Test 0: can we at least match to ourself?
+    wov_avs2 = copy.copy(wov_avs)
+    wov_avs2.alias = "WOO_TEST"
+    test_mate0 = tablemater(wov_avs, [wov_avs2])
 
+#    return test_mate0
+    # Test 1: simple
+    test_mate1 = tablemater(wov_avs, [chs])
 
+#    return test_mate1
 
-    
+    # Test 2: harder, cuz a) multiple tables now and b) three-column sex
+    test_mate2 = tablemater(wov_avs, [chs, eso_ha])
+
+    return test_mate2
