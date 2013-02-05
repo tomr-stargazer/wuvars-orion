@@ -9,7 +9,9 @@ Useful importable variable names:
  `autovars_strict`: all pristine auto-variables (a subset of `autovars_true`)
 ==Periodics==
  `autovars_true_periodics`: subset of `autovars_true` who are periodic
+ `autovars_true_periods`: same as above, but only when we need their periods
  `autovars_strict_periodics`: subset of `autovars_strict` who are periodic
+ `autovars_strict_periods`: same as above, but only when we need their periods
 ==Non-periodic==
  `autovars_true_nonpers`: subset of `autovars_true` who are non-periodic
  `autovars_strict_nonpers`: subset of `autovars_strict` who are non-periodic
@@ -272,6 +274,10 @@ autovars_true_periods = ps.best_period(periodics_s123.where(
 
 autovars_strict_periods = ps.best_period(periodics_s123.where( 
     np.in1d(periodics_s123.SOURCEID, autovars_strict_periodics.SOURCEID)))
+
+autovars_true_periods_s1 = ps.best_period(periodics_s1.where( 
+    np.in1d(periodics_s1.SOURCEID, autovars_true_periodics.SOURCEID) &
+    ~np.in1d(periodics_s1.SOURCEID, autovars_true_periods.SOURCEID)))
 
 #print "hey look i'm here"
 
