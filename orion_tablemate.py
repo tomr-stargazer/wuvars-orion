@@ -84,6 +84,92 @@ class TableParameters(object):
         self.name_col = name_col
         self.max_match = max_match
 
+        # Now, the logic that makes the RA and Dec columns uniform.
+        
+        # Now, we'll need to extract the RA and Dec information.
+        # This is actually something that needs to be done uniformly to every
+        # single table object, so I think I should actually stick it in the
+        # class constructor so it's done at initialization and never worried
+        # about ever again!
+        # Namely, semantics to take the RA/Dec columns and the provided radec_fmt
+        # and append an .RA and a .DEC to the TableParameters object itself
+        # that's in a standard decimal-degrees format.
+        # So that we never have to worry about that in the tablemater() function
+        # itself.
+        # okay, that's the goal for next session: put the format-parsing code
+        # in the __init__ method!
+
+        # What cases are there? 
+        # 1. Simple: single-column, decimal format (degrees, hours, or radians)
+        # 2. Complex SC: single-column of STRINGS in sex format 
+        # 3. Complex TC: triple-column of numbers or strings in sex format
+        # 4. "other"
+
+        # Determine or construct decimal-degree RA and Dec columns.
+
+        # Simple case: single-column, decimal format
+        if (not 'sex' in radec_fmt.lower()) and (len(ra_cols) == len(dec_cols) == 1):
+            print "Case 1"
+            ra_raw = self.data[ra_cols[0]]
+            dec_raw = self.data[dec_cols[0]]
+
+            # Is RA in hours? (unlikely!)
+            if 'hours' in radec_fmt.lower():
+                # put the RA from hours to degrees 
+                self.RA = ra_raw * 15
+                self.DEC = dec_raw
+            # Are we in degrees?
+            elif 'deg' in radec_fmt.lower():
+                self.RA = ra_raw
+                self.DEC = dec_raw
+            # Are we in radians?
+            elif 'rad' in radec_fmt.lower():
+                self.RA = np.degrees(ra_raw)
+                self.DEC = np.degrees(dec_raw)
+        
+        elif 'sex' in radec_fmt.lower():
+            if len(ra_cols) == len(dec_cols) == 3:
+
+                print "Case 3"
+
+                rhcol, rmcol, rscol = (self.data[ra_cols[0]],
+                                       self.data[ra_cols[1]],
+                                       self.data[ra_cols[2]])
+                ddcol, dmcol, dscol = (self.data[dec_cols[0]],
+                                       self.data[dec_cols[1]],
+                                       self.data[dec_cols[2]])
+                
+                ra_decimal = []
+                dec_decimal = []
+                
+                for (rh, rm, rs, 
+                     dd, dm, ds) in zip( rhcol, rmcol, rscol,
+                                         ddcol, dmcol, dscol ):
+                     coord_string = ("%02d:%02d:%05.2f %03d:%02d:%05.2f" %
+                                     (rh, rm, rs, dd, dm, ds) )
+                     print coord_string
+                     coord = coords.Position( coord_string )
+                     print coord.hmsdms()
+                     print coord.dd()
+                     radec_dd = coord.dd()
+                     
+                     ra_decimal.append( radec_dd[0] )
+                     dec_decimal.append( radec_dd[1] )
+                
+                self.RA = np.array(ra_decimal)
+                self.DEC = np.array(dec_decimal)
+            else:
+                print "I don't yet know how to deal with this."
+                    
+                
+            # For each row 
+            pass # until I implement the above
+#        elif None
+#            if 'deg' in 
+
+
+
+
 def tablemater(primary_table, secondary_table_list):
     """ 
     Creates the mated table.
