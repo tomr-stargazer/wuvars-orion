@@ -209,32 +209,30 @@ def tablemater(primary_table, secondary_table_list):
     mated_table.add_column( primary_table.alias+"_index", 
                             np.arange(len(primary_table.data)) )
 
-    # Now, we'll need to extract the RA and Dec information.
-    # This is actually something that needs to be done uniformly to every
-    # single table object, so I think I should actually stick it in the
-    # class constructor so it's done at initialization and never worried
-    # about ever again!
-    # Namely, semantics to take the RA/Dec columns and the provided radec_fmt
-    # and append an .RA and a .DEC to the TableParameters object itself
-    # that's in a standard decimal-degrees format.
-    # So that we never have to worry about that in the tablemater() function
-    # itself.
-    # okay, that's the goal for next session: put the format-parsing code
-    # in the __init__ method!
-
-    
+    pt = primary_table
 
     for st in secondary_table_list:
         
-        # Determine or construct decimal-degree RA and Dec columns.
-        if 'sex' in st.radec_fmt.lower():
-            # For each row 
-            pass # until I implement the above
-        elif len(ra_cols) == len(dec_cols) == 1:
-            if 'deg' in 
-                
+        # We are appending two columns to mated_table:
+        #  secondary_table.alias+"_ID", (THING 1)
+        #  secondary_table.alias+"_index", (THING 2)
+        # where things 1 and 2 are created using match.core_match
 
+        matches = match.core_match( pt.RA, pt.DEC, st.RA, st.DEC, 
+                                    max_match=st.max_match, verbose=False)
+        
+        # I like this solution!
+        mated_indices = matches[0]
+        
+        mated_names = st.data[st.name_col][mated_indices]
+        # Enforce that -1 means failed match:
+        mated_names[mated_indices == -1] = -1
 
+        mated_table.add_column(st.alias+"_ID", mated_names)
+        mated_table.add_column(st.alias+"_index", mated_indices)
+
+    return mated_table
+        
 
 def test():
     """
