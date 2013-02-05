@@ -14,10 +14,14 @@ ago in `match.py` is expected.
 
 """
 
+import copy
+
 import numpy as np
 
 import atpy
+import coords
 
+import match
 import official_star_counter as osc
 
 # I think I'm gonna have to make a Table_Parameters class
