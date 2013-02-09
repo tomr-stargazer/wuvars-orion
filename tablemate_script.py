@@ -92,6 +92,23 @@ Robberto2010 = TableParameters(
     radec_fmt = 'decimal_degrees',
     name_col = 'ID')
 
+DaRio2012 = TableParameters(
+    data = atpy.Table(dpath+"DaRio2012_table3.txt", type='ascii'),
+    alias = "DaRio2012",
+    full_name = "'Table 3: Derived Stellar Parameters of the ONC Population', from 'The Initial Mass Function of the Orion Nebula Cluster Across the H-Burning Limit' by Da Rio et al. 2012.",
+    ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
+    radec_fmt = ['decimal degrees'],
+    name_col = 'ID')
+
+Andersen2011 = TableParameters(
+    data = dpath+"Andersen2011_table1.fits",
+    alias = "Andersen2011",
+    full_name = "'Table 1: Sources detected in the NICMOS camera 3 mosaics', from 'The low-mass initial mass function in the Orion nebula cluster based on HST/NICMOS III imaging' by Andersen et al. 2011. 2011A&A...534A..10A",
+    ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
+    radec_fmt = 'decimal degrees',
+    name_col = 'Seq')
+    
+
 eso_ha = TableParameters(
     data = dpath+"ESOHa_m42_fc_P_fits.fits", 
     alias = "ESO_Ha_PAR",
