@@ -1,5 +1,5 @@
 """
-A script that mates tables in the Orion catalog.
+A module for mating tables in the Orion catalog.
 
 I hope to be able to implement this in two pieces:
 1. A generic table-mating module that could be adapted to anything,
@@ -70,7 +70,7 @@ class TableParameters(object):
                 self.path = data
                 self.data = atpy.Table(self.path)
             except IOError:
-                raise IOError("File '%s' not found" % path)
+                raise IOError("File '%s' not found" % data)
             except Exception, e:
                 raise e
         else:
