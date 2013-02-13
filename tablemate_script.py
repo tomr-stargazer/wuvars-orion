@@ -2,6 +2,14 @@
 This is the SCRIPT that mates tables in the Orion catalog,
 by calling the MODULE orion_tablemate.py.
 
+This should be kept, broadly, in sync with the Google Doc
+"Auxiliary Tables in ONC".
+
+We are asking three broad questions:
+1. How many of our variables are previously-known sources?
+2. How many of our variables are previously-known variables?
+3. How many previously-known variables in this field do we recover?
+
 """
 
 
@@ -12,6 +20,42 @@ from orion_tablemate import TableParameters, atpy
 # Top half of the script: defining various tables
 
 dpath = "/home/tom/Dropbox/Bo_Tom/aux_catalogs/"
+tables = []
+
+
+Rice_2013_vars = TableParameters(
+    data = dpath+"gluedvars_1240_variables.fits",
+    alias= "Rice2013_vars",
+    full_name = "'Master spreadsheet for 1240 variables', from 'High-amplitude and Periodic Near-Infrared Variables in the Orion Nebula Cluster', Rice, Reipurth, Vaz, Wolk, Cross, Guimaraes 2013.",
+    ra_cols = ['RA'], dec_cols=['DEC'],
+    radec_fmt = 'decimal-radians',
+    name_col = 'SOURCEID')
+
+Rice_2013_all = TableParameters(
+    data = dpath+"Rice_allsources_spreadsheet_2013_02_13.fits",
+    alias= "Rice2013_all",
+    full_name = "'Master spreadsheet for all 40630 detected sources', from 'High-amplitude and Periodic Near-Infrared Variables in the Orion Nebula Cluster', Rice, Reipurth, Vaz, Wolk, Cross, Guimaraes 2013.",
+    ra_cols = ['RA'], dec_cols=['DEC'],
+    radec_fmt = 'decimal-radians',
+    name_col = 'SOURCEID')
+
+Twomass = TableParameters(
+    data = dpath+"fp_2mass.fp_psc27078_M42_boxdegree_search.tbl",
+    alias = "2MASS_PSC",
+    full_name = "Two Micron All-Sky Survey: All-Sky Data Release Point Source Catalog. Released 2003 Mar 25. Box search: center (83.83743,-5.41019), sidelength 3600 arcsec.",
+    ra_cols = ['ra'], dec_cols = ['dec'],
+    radec_fmt = 'decimal-degrees',
+    name_col = 'designation')
+tables.append(Twomass)
+
+Wise = TableParameters(
+    data = dpath+"wise_allsky.wise_allsky_4band_M42_boxdegree_search.tbl",
+    alias = "WISE",
+    full_name = "Wide-field Infrared Survey Explorer (WISE) All-Sky Source Catalog. Box search: center (83.83743,-5.41019), sidelength 3800.02 arcsec.",
+    ra_cols = ['ra'], dec_cols = ['dec'],
+    radec_fmt = 'decimal-degrees',
+    name_col = 'designation')
+tables.append(Wise)
 
 Carpenter_2001 = TableParameters(
     # data
@@ -26,6 +70,7 @@ Carpenter_2001 = TableParameters(
     radec_fmt = 'decimal degrees',
     #name_col
     name_col = '__CHS2001_')
+tables.append(Carpenter_2001)
 
 DaRio_2009 = TableParameters(
     data = dpath+"DaRio2009_table2.fits",
@@ -34,6 +79,7 @@ DaRio_2009 = TableParameters(
     ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
     radec_fmt = 'decimal degrees',
     name_col = '__DRS2009_')
+tables.append(DaRio_2009)
 
 DaRio_2010 = TableParameters(
     data = dpath+"DaRio2010_table3.fits",
@@ -42,6 +88,7 @@ DaRio_2010 = TableParameters(
     ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
     radec_fmt = 'decimal degrees',
     name_col = 'ID')
+tables.append(DaRio_2010)
 
 YSOVAR_YSOs = TableParameters(
     data = atpy.Table(dpath+"YSOVAR_OrionYSOs.table", type='ascii'),
@@ -50,6 +97,7 @@ YSOVAR_YSOs = TableParameters(
     ra_cols = ['RA_IRAC'], dec_cols = ['DEC_IRAC'],
     radec_fmt = 'decimal degrees',
     name_col = 'SOYname')
+tables.append(YSOVAR_YSOs)
 
 YSOVAR_NoExcess = TableParameters(
     data = atpy.Table(dpath+"YSOVAR_OrionNoExcess.table", type='ascii'),
@@ -58,6 +106,7 @@ YSOVAR_NoExcess = TableParameters(
     ra_cols = ['RA_IRAC'], dec_cols = ['DEC_IRAC'],
     radec_fmt = 'decimal degrees',
     name_col = 'SOYname')
+tables.append(YSOVAR_NoExcess)
 
 Herbst2002 = TableParameters(
     data = dpath+"Herbst2002_table1.fits",
@@ -66,6 +115,7 @@ Herbst2002 = TableParameters(
     ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
     radec_fmt = 'decimal degrees',
     name_col = 'ID')
+tables.append(Herbst2002)
 
 
 COUP_Getman2005 = TableParameters(
@@ -75,6 +125,7 @@ COUP_Getman2005 = TableParameters(
     ra_cols = ['RAdeg'], dec_cols = ['DEdeg'],
     radec_fmt = 'decimal degrees',
     name_col = 'CXOONCJ')
+tables.append(COUP_Getman2005)
 
 Parihar2009 = TableParameters(
     data = dpath+"Parihar2009_table2.fits",
@@ -83,6 +134,7 @@ Parihar2009 = TableParameters(
     ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
     radec_fmt = 'decimal degrees',
     name_col = 'Seq')
+tables.append(Parihar2009)
 
 Robberto2010 = TableParameters(
     data = dpath+"Robberto2010_table5.fits",
@@ -91,14 +143,27 @@ Robberto2010 = TableParameters(
     ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
     radec_fmt = 'decimal_degrees',
     name_col = 'ID')
+tables.append(Robberto2010)
 
 DaRio2012 = TableParameters(
     data = atpy.Table(dpath+"DaRio2012_table3.txt", type='ascii'),
     alias = "DaRio2012",
     full_name = "'Table 3: Derived Stellar Parameters of the ONC Population', from 'The Initial Mass Function of the Orion Nebula Cluster Across the H-Burning Limit' by Da Rio et al. 2012.",
-    ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
-    radec_fmt = ['decimal degrees'],
+    ra_cols = ['RAh', 'RAm', 'RAs'], 
+    dec_cols = ['DE-', 'DEd', 'DEm', 'DEs'],
+    radec_fmt = 'sex-three-four',
     name_col = 'ID')
+tables.append(DaRio2012)
+
+Manara2012_table2 = TableParameters(
+    data = atpy.Table(dpath+"Manara2012_table2.txt", type='ascii'),
+    alias="Manara2012_table2",
+    full_name= "'Table 2: Stellar parameters of the sources where the 2CD method leads to a determination of A_V and L_acc', from 'HST Measures of Mass Accretion Rates in the Orion Nebula Cluster', by Manara et al. 2012. 2012ApJ...755..154M",
+    ra_cols = ['RAh', 'RAm', 'RAs'],
+    dec_cols = ['DE-', 'DEd', 'DEm', 'DEs'],
+    radec_fmt = 'sex-three-four',
+    name_col = 'OM')
+tables.append(Manara2012_table2)
 
 Andersen2011 = TableParameters(
     data = dpath+"Andersen2011_table1.fits",
@@ -107,6 +172,7 @@ Andersen2011 = TableParameters(
     ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
     radec_fmt = 'decimal degrees',
     name_col = 'Seq')
+tables.append(Andersen2011)
     
 
 eso_ha = TableParameters(
@@ -117,8 +183,19 @@ eso_ha = TableParameters(
     dec_cols = ['Dec(2000)', 'col10', 'col11'],
     radec_fmt = 'sex-three',
     name_col = '2MASS identity')
+tables.append(eso_ha)
 
+Megeath2012 = TableParameters(
+    data = atpy.Table(dpath+"Megeath2012_table1.txt", type='ascii'),
+    alias = "Megeath2012",
+    full_name = "'Table 1: Spitzer-identified YSOs: IRAC, MIPS, and 2MASS Magnitudes', from 'The Spitzer Space Telescope Survey of the Orion A & B Molecular Clouds - Part I: A Census of Dusty Young Stellar Objects and a Study of their Mid-IR Variability' by Megeath et al., 2012.",
+    ra_cols = ["RAh", "RAm", "RAs"],
+    dec_cols = ["DE-", "DEd", "DEm", "DEs"],
+    radec_fmt = 'sex-three-four',
+    name_col = 'Num')
+tables.append(Megeath2012)
 
+    
 # Here's our first function, that we'll use just to get things rolling
 def test():
     wov = orion_tablemate.osc.autovars_strict
@@ -142,3 +219,13 @@ def test():
             Herbst2002, YSOVAR_NoExcess, YSOVAR_YSOs, DaRio_2010,
             DaRio_2009, Carpenter_2001, COUP_Getman2005, eso_ha])
             
+
+
+def vars_match():
+    """ 
+    A function that matches our variables table to all the other tables!
+
+    Takes about 15 seconds (2/13/13).
+    """
+
+    return orion_tablemate.tablemater( Rice_2013_vars, tables)
