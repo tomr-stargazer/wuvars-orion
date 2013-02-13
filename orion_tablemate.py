@@ -126,7 +126,8 @@ class TableParameters(object):
             elif 'rad' in radec_fmt.lower():
                 self.RA = np.degrees(ra_raw)
                 self.DEC = np.degrees(dec_raw)
-        
+
+        # More complicated: triple-column, sexagesimal format.
         elif 'sex' in radec_fmt.lower():
             if len(ra_cols) == len(dec_cols) == 3:
 
@@ -158,6 +159,8 @@ class TableParameters(object):
                 
                 self.RA = np.array(ra_decimal)
                 self.DEC = np.array(dec_decimal)
+
+# This is if the SIGN (+/-) of the Declination is stored as its own column.
             elif len(dec_cols) == 4:
 
                 print "Case 3.5"
