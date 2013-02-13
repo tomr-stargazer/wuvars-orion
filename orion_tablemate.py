@@ -158,6 +158,38 @@ class TableParameters(object):
                 
                 self.RA = np.array(ra_decimal)
                 self.DEC = np.array(dec_decimal)
+            elif len(dec_cols) == 4:
+
+                print "Case 3.5"
+
+                rhcol, rmcol, rscol = (self.data[ra_cols[0]],
+                                       self.data[ra_cols[1]],
+                                       self.data[ra_cols[2]])
+                sign_col, ddcol, dmcol, dscol = (self.data[dec_cols[0]],
+                                                 self.data[dec_cols[1]],
+                                                 self.data[dec_cols[2]],
+                                                 self.data[dec_cols[3]])
+                
+                ra_decimal = []
+                dec_decimal = []
+                
+                for (rh, rm, rs, sign,
+                     dd, dm, ds) in zip( rhcol, rmcol, rscol, sign_col,
+                                         ddcol, dmcol, dscol ):
+                     coord_string = ("%02d:%02d:%05.2f %s%02d:%02d:%05.2f" %
+                                     (rh, rm, rs, sign, dd, dm, ds) )
+                     print coord_string
+                     coord = coords.Position( coord_string )
+                     print coord.hmsdms()
+                     print coord.dd()
+                     radec_dd = coord.dd()
+                     
+                     ra_decimal.append( radec_dd[0] )
+                     dec_decimal.append( radec_dd[1] )
+                
+                self.RA = np.array(ra_decimal)
+                self.DEC = np.array(dec_decimal)
+
             else:
                 print "I don't yet know how to deal with this."
                     
@@ -288,6 +320,16 @@ def test():
         #name_col
         '2MASS identity')
 
+    megeath = TableParameters(
+        data= atpy.Table(
+            "/home/tom/Dropbox/Bo_Tom/aux_catalogs/Megeath2012_table1.txt", 
+            type='ascii'),
+        alias="Megeath2012",
+        full_name="I'll do this later.",
+        ra_cols = ['RAh', 'RAm', 'RAs'],
+        dec_cols = ['DE-', 'DEd', 'DEm', 'DEs'],
+        radec_fmt='sex-three-four',
+        name_col='Num')
 
     # now that they're defined, match em!
 
@@ -305,4 +347,10 @@ def test():
     # Test 2: harder, cuz a) multiple tables now and b) three-column sex
     test_mate2 = tablemater(wov_avs, [chs, eso_ha])
 
-    return test_mate2
+    # Test 3: even harder, cuz c) three/four-col sex
+
+#    return test_mate2
+
+    test_mate3 = tablemater(wov_avs, [chs, eso_ha, megeath])
+
+    return test_mate3
