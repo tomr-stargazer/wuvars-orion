@@ -57,6 +57,16 @@ Wise = TableParameters(
     name_col = 'designation')
 tables.append(Wise)
 
+GCVS = TableParameters(
+    data = dpath+"GCVS_version2012_Orion_selection.fits",
+    alias = "GCVS",
+    full_name = "General Catalogue of Variable Stars, version 2012-04-15",
+    ra_cols = ["RAJ2000"], dec_cols = ["DEJ2000"],
+    radec_fmt = 'decimal degrees',
+    name_col = 'GCVS')
+tables.append(GCVS)
+    
+
 Carpenter_2001 = TableParameters(
     # data
     data = dpath+"Carpenter2001_table4.fits",
