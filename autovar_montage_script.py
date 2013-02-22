@@ -13,6 +13,7 @@ import atpy
 
 import plot3
 from official_star_counter import *
+from montage_script import conf_subj_periodics
 
 # let's rename these from `path1`... etc because they are unhelpful.
 
@@ -22,11 +23,14 @@ nonper_path = "/home/tom/reu/ORION/DATA/autovar/nonperiodic/"
 hivar_path = "/home/tom/reu/ORION/DATA/autovar/hivar/"
 hivar_per_path = "/home/tom/reu/ORION/DATA/autovar/hivar/per/"
 hivar_per_path_g = "/home/tom/reu/ORION/DATA/autovar/hivar/glued/"
+oncvar_path = "/home/tom/reu/ORION/DATA/oncvar/"
+oncvar_path_ng = "/home/tom/reu/ORION/DATA/oncvar/unglued/"
 
 # Relevant variable names:
 # ==Global==
 # `autovars_true`: all automatically detected variables
 # `autovars_strict`: all pristine auto-variables (a subset of `autovars_true`)
+# `oncvar` : all variables! 
 #==Periodics==
 # `autovars_true_periodics`: subset of `autovars_true` who are periodic
 # `autovars_strict_periodics`: subset of `autovars_strict` who are periodic
@@ -36,6 +40,7 @@ hivar_per_path_g = "/home/tom/reu/ORION/DATA/autovar/hivar/glued/"
 
 data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 
+oncvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ONCvar_spreadsheet.fits")
 
 # Let's make a function that does periods for "high-variables".
 
@@ -240,48 +245,73 @@ def suffix_generator(table, index):
     return suffix
 
 
-
-def gen_conf_periodic_plots(start=0):
+def gen_oncvar_all():
     """ 
-    Makes glued 3-panel plots for all the CONFIRMED subjective periodic variables.
+    Creates all the ONCvar plots in one shot.
+
+    Uses the ONCvar ID as the primary identifier; lists info
+    in the filename distinguishing auto/strict/subj, plus per/nonper
+    I'm thinking: 'a' for autovar, 't' for strict, 'j' for subj,
+    'p' for periodic, 'n' for nonperiodic. Each dude gets two letters.
+
+    if periodic:
+        do the gluedvars stuff
+    else:
+        just a normal lightcurve!
+
     """
 
-    for s in conf_subj_periodics.SOURCEID[start:]:
-        # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
+    for s, id, i in zip(oncvar.SOURCEID, oncvar.ONCvar_ID, range(len(oncvar))):
 
-        plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                        timecolor=True,
-                        outfile=path4+"%s_lc.png"%str(s))
+        # Each plot gets a suffix: ('a'|'t'|'j')+('p'|'n')
+        
+        suffix = suffix_generator(oncvar, i)
 
-        plot3.graded_phase(data, s, timecolor='time', 
-                           period=conf_subj_periodics.best_period[
-                conf_subj_periodics.SOURCEID==s][0], 
-                           color_slope=True, outfile=path4+"%s_phase.png"%str(s))
+        # Periodics first
 
-        try:
-            plot3.lsp_power(data, s, outfile=path4+"%s_pgram.png"%str(s))
-        except Exception, e:
-            print "periodogram failed for %s" % str(s)
-            print e
+        if oncvar.periodic[i] == 1:
+            
+            # Dig up the best period for this dude! 3 main cases.
+
+            if oncvar.autovar[i] == 1:
+                if s in autovars_true_periods.SOURCEID:
+                    t = autovars_true_periods
+                elif s in autovars_true_periods_s1.SOURCEID:
+                    t = autovars_true_periods_s1
+                else:
+                    raise Exception("Something weird happened!")
+            else:
+                t = conf_subj_periodics
+                
+            best_period = t.best_period[t.SOURCEID == s][0]
+
+            # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
+            # print out the names as ID_fs_lc.png
+            plot3.graded_lc(data, s, abridged=True, color_slope=True, 
+                            timecolor=True,
+                            outfile=oncvar_path_ng+"%s_%s_lc.png" %
+                            (str(id), suffix))
+
+            # ID_fs_phase.png
+            plot3.graded_phase(data, s, timecolor='time', color_slope=True,
+                               period=best_period, 
+                               outfile=oncvar_path_ng+"%s_%s_phase.png" % 
+                               (str(id), suffix))
+            # ID_fs_pgram.png
+            try:
+                plot3.lsp_power(data, s, 
+                                outfile=oncvar_path_ng+"%s_%s_pgram.png" %
+                                (str(id), suffix))
+            except Exception, e:
+                print "periodogram failed for %s" % str(s)
+                print e
 
 
-        # now glue em together!
+# now glue em together!
 
-        call(["montage","-mode", "concatenate", "-tile", "2x", 
-             path4+"%s_*.png" % str(s), path5+"%s-glued.png" % str(s) ])
-
-    return
-
-def gen_conf_nonper_lc(start=0):
-    """ Makes lightcurves for CONFIRMED subjective nonperiodic variables. """
-
-    for s in conf_subj_nonpers.SOURCEID[start:]:
-
-        plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                        timecolor=True,
-                        outfile=path6+"%s_lc.png"%str(s))
-
-    return
-
-
-
+            call(["montage","-mode", "concatenate", "-tile", "2x", 
+                  oncvar_path_ng+"%s_%s*.png" % (str(id), suffix), 
+                  oncvar_path+"%s_%s.png" % (str(id), suffix) ])
+                
+        else:
+            print "ONCvar %s isn't periodic." % str(id)
