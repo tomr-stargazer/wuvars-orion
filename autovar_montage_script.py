@@ -196,6 +196,49 @@ def gen_hivar_nonper_lc(start=0):
     return
 
 
+def suffix_generator(table, index):
+    """
+    Builds an ONCvar suffix from the flags on a given source.
+
+    Suffixes look like ('a'|'t'|'j')+('p'|'n'), for
+    'a': autovar
+    't': strict autovar
+    'j': subjective var
+    'p': periodic variable
+    'n': nonperiodic variable
+
+    Parameters
+    -----------
+    table : atpy.Table
+        The statistics table. Must have the `automatic`, `strict`, 
+        and `periodic` columns.
+    index : int
+        Which star in the table to extract? Note this is NOT the ONCvar ID,
+        but is offset from it by one.
+
+    Returns
+    -------
+    suffix : str
+        A string of length two, matching the following pattern:
+        ('a'|'t'|'j')+('p'|'n') (e.g. "ap", "jp", "tn", "jn")
+
+    """
+    
+    if table.autovar == 0:
+        first = 'j'
+    elif table.strict == 1:
+        first = 't'
+    else:
+        first = 'a'
+        
+    if table.periodic == 1:
+        second = 'p'
+    else:
+        second = 'n'
+        
+    suffix = first+second
+    return suffix
+
 
 
 def gen_conf_periodic_plots(start=0):
