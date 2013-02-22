@@ -289,17 +289,23 @@ def gen_oncvar_all():
             # print out the names as ID_fs_lc.png
             plot3.graded_lc(data, s, abridged=True, color_slope=True, 
                             timecolor=True,
+                            name = "%s:  ONCvar %s (%s)" %
+                            (str(s), str(id), suffix),
                             outfile=oncvar_path_ng+"%s_%s_lc.png" %
                             (str(id), suffix))
 
             # ID_fs_phase.png
             plot3.graded_phase(data, s, timecolor='time', color_slope=True,
                                period=best_period, 
+                               name = "%s:  ONCvar %s (%s)" %
+                               (str(s), str(id), suffix),
                                outfile=oncvar_path_ng+"%s_%s_phase.png" % 
                                (str(id), suffix))
             # ID_fs_pgram.png
             try:
                 plot3.lsp_power(data, s, 
+                                name = "%s:  ONCvar %s (%s)" %
+                                (str(s), str(id), suffix),
                                 outfile=oncvar_path_ng+"%s_%s_pgram.png" %
                                 (str(id), suffix))
             except Exception, e:
@@ -314,4 +320,13 @@ def gen_oncvar_all():
                   oncvar_path+"%s_%s.png" % (str(id), suffix) ])
                 
         else:
-            print "ONCvar %s isn't periodic." % str(id)
+            # Just make the lightcurve.
+            
+            plot3.graded_lc(data, s, abridged=True, color_slope=True, 
+                            timecolor=True, 
+                            name = "%s:  ONCvar %s (%s)" %
+                            (str(s), str(id), suffix),
+                            outfile=oncvar_path+"%s_%s.png" % 
+                            (str(id), suffix))
+
+        print "Completed ONCvar %s" % str(id)
