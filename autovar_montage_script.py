@@ -224,14 +224,14 @@ def suffix_generator(table, index):
 
     """
     
-    if table.autovar == 0:
+    if table.autovar[index] == 0:
         first = 'j'
-    elif table.strict == 1:
+    elif table.strict[index] == 1:
         first = 't'
     else:
         first = 'a'
         
-    if table.periodic == 1:
+    if table.periodic[index] == 1:
         second = 'p'
     else:
         second = 'n'
