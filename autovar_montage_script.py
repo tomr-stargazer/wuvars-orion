@@ -245,7 +245,7 @@ def suffix_generator(table, index):
     return suffix
 
 
-def gen_oncvar_all():
+def gen_oncvar_all(start=0, stop=len(oncvar)):
     """ 
     Creates all the ONCvar plots in one shot.
 
@@ -261,7 +261,8 @@ def gen_oncvar_all():
 
     """
 
-    for s, id, i in zip(oncvar.SOURCEID, oncvar.ONCvar_ID, range(len(oncvar))):
+    for s, id, i in zip(oncvar.SOURCEID, oncvar.ONCvar_ID, 
+                        range(len(oncvar)))[start:stop]:
 
         # Each plot gets a suffix: ('a'|'t'|'j')+('p'|'n')
         
@@ -314,10 +315,14 @@ def gen_oncvar_all():
 
 
 # now glue em together!
-
-            call(["montage","-mode", "concatenate", "-tile", "2x", 
-                  oncvar_path_ng+"%s_%s*.png" % (str(id), suffix), 
-                  oncvar_path+"%s_%s.png" % (str(id), suffix) ])
+                
+            try:
+                call(["montage","-mode", "concatenate", "-tile", "2x", 
+                      oncvar_path_ng+"%s_%s*.png" % (str(id), suffix), 
+                      oncvar_path+"%s_%s.png" % (str(id), suffix) ])
+            except Exception, e:
+                print "Why did montage fail?"
+                raise e
                 
         else:
             # Just make the lightcurve.
@@ -330,3 +335,5 @@ def gen_oncvar_all():
                             (str(id), suffix))
 
         print "Completed ONCvar %s" % str(id)
+
+        
