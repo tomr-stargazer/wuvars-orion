@@ -148,10 +148,7 @@ class TableParameters(object):
                                          ddcol, dmcol, dscol ):
                      coord_string = ("%02d:%02d:%05.2f %03d:%02d:%05.2f" %
                                      (rh, rm, rs, dd, dm, ds) )
-                     print coord_string
                      coord = coords.Position( coord_string )
-                     print coord.hmsdms()
-                     print coord.dd()
                      radec_dd = coord.dd()
                      
                      ra_decimal.append( radec_dd[0] )
@@ -181,10 +178,7 @@ class TableParameters(object):
                                          ddcol, dmcol, dscol ):
                      coord_string = ("%02d:%02d:%05.2f %s%02d:%02d:%05.2f" %
                                      (rh, rm, rs, sign, dd, dm, ds) )
-                     print coord_string
                      coord = coords.Position( coord_string )
-                     print coord.hmsdms()
-                     print coord.dd()
                      radec_dd = coord.dd()
                      
                      ra_decimal.append( radec_dd[0] )
