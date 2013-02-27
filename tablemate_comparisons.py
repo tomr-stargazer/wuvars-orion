@@ -12,6 +12,9 @@ and tablemate_script.py.
 
 """
 
+import numpy as np
+
+from tablemate_script import *
 
 # A. How many of our variables are previously known stars?
 # B. How many of our variables are previously known variables?
@@ -30,3 +33,58 @@ and tablemate_script.py.
 # Two: for input tables, access given columns in those tables corresponding
 #   to an input source.
 
+
+# This is a table I made and then attached 
+mated_oncvar = atpy.Table("~/Dropbox/Bo_Tom/aux_tables/matched_table_withSIMBAD_2013_2_25.fits")
+oncvar_spread = atpy.Table("~/DropboxBo_Tom/aux_tables/ONCvar_spreadsheet_withSIMBADnames.fits")
+
+
+# Builds a dict for the source. 
+# the length of the dict corresponds 
+# The desired table aliases are possible keys, added only if there's 
+# a corresponding value in the columns. Value: Possibly a tuple of (name, index).
+# Returns two lists: ONCvar ID, above dict. Then you can 
+# NO the above is silly. JUST TELL US HOW MANY NON-NULL MATCHES IT HAS AMONG THE GIVEN TABLES.
+ 
+def source_tablematch_counter(table, matches='All'):
+    """
+    Counts how many times each source has a match.
+
+    Compares the sources in the primary table to the matched tables
+    that have already been cross-matched using tablemate_script.
+
+    Parameters
+    ----------
+    table : atpy.Table
+        Output of tablemate_script containing desired sources.
+    matches : list of str | 'All', optional
+        Which columns of the mated table do we want to scan?
+        Default is 'All', i.e. any column that ends in _name, _ID, or _index.
+ 
+    Returns
+    -------
+    
+    """
+
+# we'll be scanning table.columns.keys shortly
+
+def how_many_stars_are_new():
+    """
+    Figures out how many stars are unknown in any previous catalog.
+    
+    """
+    pass
+
+def how_many_variables_are_new():
+    """
+    Figures out how many variables were previously unknown as variables.
+
+    """
+    pass
+    
+def source_period_digger():
+    """
+    Extracts literature periods, if they exist, for every star.
+
+    """
+    pass
