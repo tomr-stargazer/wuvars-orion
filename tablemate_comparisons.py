@@ -35,8 +35,8 @@ from tablemate_script import *
 
 
 # This is a table I made and then attached 
-mated_oncvar = atpy.Table("~/Dropbox/Bo_Tom/aux_tables/matched_table_withSIMBAD_2013_2_25.fits")
-oncvar_spread = atpy.Table("~/DropboxBo_Tom/aux_tables/ONCvar_spreadsheet_withSIMBADnames.fits")
+mated_oncvar = atpy.Table("~/Dropbox/Bo_Tom/aux_catalogs/matched_table_withSIMBAD_2013_2_25.fits")
+oncvar_spread = atpy.Table("~/DropboxBo_Tom/aux_catalogs/ONCvar_spreadsheet_withSIMBADnames.fits")
 
 
 # Builds a dict for the source. 
@@ -46,6 +46,9 @@ oncvar_spread = atpy.Table("~/DropboxBo_Tom/aux_tables/ONCvar_spreadsheet_withSI
 # Returns two lists: ONCvar ID, above dict. Then you can 
 # NO the above is silly. JUST TELL US HOW MANY NON-NULL MATCHES IT HAS AMONG THE GIVEN TABLES.
  
+
+
+
 def source_tablematch_counter(table, matches='All'):
     """
     Counts how many times each source has a match.
@@ -68,6 +71,27 @@ def source_tablematch_counter(table, matches='All'):
 
 # we'll be scanning table.columns.keys shortly
 
+    # PSEUDOCODE!
+    # for each row [i] in the mated table:
+    #     for each of the columns we wanna go through:
+    #         if table.column[i] != -1: (OR if '_name' in column, then != '')
+    #             increment this source's counter by one
+
+
+    # if we don't mess with the default parameter, just scan all the eligible
+    # rows straight outta table.columns.keys
+    if matches = 'All':
+
+        # "eligible" means that the column name is an index or name
+        columns_list = [x for x in table.columns.keys if 
+                        '_index' in x or '_name' in x]
+
+        # and if it's a '_name' then a non-match is just an empty string,
+        # otherwise '_index'es check for -1
+
+
+        # Then return a thing that corresponds ONCvar ID to "number of literature matches". Then we can make a histogram or something! And, most importantly, count how many stars in our data are not previously known. Two columns/arrays that correspond to each other.
+
 def how_many_stars_are_new():
     """
     Figures out how many stars are unknown in any previous catalog.
@@ -75,6 +99,8 @@ def how_many_stars_are_new():
     """
     pass
 
+# This one might be a special case of source_tablematch_counter!
+# where we define the input tables as just those that count variables.
 def how_many_variables_are_new():
     """
     Figures out how many variables were previously unknown as variables.
