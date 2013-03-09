@@ -96,6 +96,40 @@ def source_tablematch_counter(table, matches='All'):
 
     return n_matches
 
+def table_tablematch_counter(table):
+    """
+    Counts how many stars are matched to each input table.
+
+    Parameters
+    ----------
+    table : atpy.Table
+        Output of tablemate_script containing desired sources and columns.
+
+    Returns
+    -------
+    match_dict : dict
+        Mapping of table -> how many sources matched to that table.
+
+    """
+
+    match_dict = {}
+    columns_list = [x for x in table.columns.keys if 
+                    '_index' in x or '_name' in x]
+
+    for column_name in columns_list:
+
+        if '_name' in column_name:
+            n_matches = len(table[column_name][table[column_name] != ''])
+
+        else:
+            n_matches = len(table[column_name][table[column_name] != -1])
+
+        table_name = column_name.rstrip('_index').rstrip('_name')
+
+        match_dict[table_name] = n_matches
+
+    return match_dict
+
 
 def how_many_stars_are_new():
     """
@@ -106,6 +140,9 @@ def how_many_stars_are_new():
 
 # This one might be a special case of source_tablematch_counter!
 # where we define the input tables as just those that count variables.
+
+# But that will require scanning all of the tables by eye and seeing
+# which ones are tables of variables, or have columns saying "variable?"
 def how_many_variables_are_new():
     """
     Figures out how many variables were previously unknown as variables.
