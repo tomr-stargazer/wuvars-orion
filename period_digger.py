@@ -23,6 +23,8 @@ from tablemate_script import (GCVS, Carpenter_2001,
 
 Carpenter2001_periods = atpy.Table(dpath+"Carpenter2001_datafile7.txt", 
                                    type='ascii')
+YSOVAR_periods = atpy.Table(dpath+"MoralesCalderon2011_table4.txt",
+                            type='ascii')
 
 def GCVS_period_get(mated_table, primary_index, gcvs_direct=False):
     """ 
@@ -120,9 +122,54 @@ def CHS01_period_get(mated_table, primary_index):
     if chs_period > 0:
         return chs_period
 
-def YSOVAR_period_get():
-    """ Gets a period for an input star from the YSOVAR Orion table."""
-    pass
+def YSOVAR_period_get(mated_table, primary_index):
+    """
+    Gets a period for an input star from the YSOVAR Orion table.
+
+    Parameters
+    ----------
+    mated_table : atpy.Table
+        Output of tablemate_script containing desired sources.
+        Must have YSOVAR index columns - this implies it was matched
+        to the two YSOVAR tables already.
+    primary_index : int
+        The index (starting at zero) of the input star, in the mated_table.
+
+    Returns
+    -------
+    ysovar_period : float or None
+        The YSOVAR-listed Period for the input star.
+        If the star is not in the YSOVAR tables, or does not have
+        a listed period, then None is returned.
+
+    """
+
+    # For this function, it's even more complicated since there are
+    # TWO Ysovar tables, and we're matching by an ID string rather than
+    # an index!
+    # (the period table is Table 7: `YSOVAR_periods` in this script)
+
+    ysovar_yso_ID = mated_table.YSOVAR_OrionYSOs_ID[primary_index]
+    ysovar_noex_ID = mated_table.YSOVAR_OrionNoExcess_ID[primary_index]
+
+    if ysovar_yso_ID != '-1':
+        ysovar_ID = ysovar_yso_ID
+    elif ysovar_noex_ID != '-1':
+        ysovar_ID = ysovar_noex_ID
+    else:
+        return None
+
+    # should be unique, so [0][0] is justified, unless there's no match
+    try:
+        ysovar_p_index = np.where(YSOVAR_periods['Source^a'] == ysovar_ID)[0][0]
+    except IndexError, e:
+        return None
+
+    ysovar_period = YSOVAR_periods['Period (days)'][ysovar_p_index]
+
+    return ysovar_period
+
+
 
 def Herbst_period_get():
     """ Gets a period for an input star from the Herbst 2002 table."""
