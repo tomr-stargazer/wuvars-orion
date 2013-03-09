@@ -21,9 +21,10 @@ from tablemate_script import (GCVS, Carpenter_2001,
 
 # and open up a couple new tables that have actual periods in them
 
-Carpenter2001_periods = atpy.Table(dpath+"Carpenter2001_datafile7.txt")
+Carpenter2001_periods = atpy.Table(dpath+"Carpenter2001_datafile7.txt", 
+                                   type='ascii')
 
-def GCVS_period_get(mated_table, primary_index, gcvs_index=False):
+def GCVS_period_get(mated_table, primary_index, gcvs_direct=False):
     """ 
     Gets a period for an input star from the GCVS table.
 
@@ -35,9 +36,9 @@ def GCVS_period_get(mated_table, primary_index, gcvs_index=False):
         to GCVS already.
     primary_index : int
         The index (starting at zero) of the input star, in the mated_table.
-        Note: if `gcvs_index` == True, then enter the desired star's 
+        Note: if `gcvs_direct` == True, then enter the desired star's 
         GCVS index here instead.
-    gcvs_index : bool, optional (default False)
+    gcvs_direct : bool, optional (default False)
         if True, then `mated_table` is disregarded and `primary_index` 
         is used as an index to the GCVS table directly.
 
@@ -49,7 +50,30 @@ def GCVS_period_get(mated_table, primary_index, gcvs_index=False):
         then None is returned.
 
     """
-    pass
+
+    # fortunately, this one is as simple as asking the table 
+    # for the Period value and returning it (or None, if we are handed a nan).
+
+    if gcvs_direct:
+        gcvs_index = primary_index
+        if gcvs_index >= len(GCVS.data):
+            return None
+    # now we have to check to see if the source even has a GCVS match
+    elif mated_table.GCVS_index[primary_index] == -1:
+#        print "apparently, failure to match"
+        return None
+    else:
+        gcvs_index = mated_table.GCVS_index[primary_index]
+
+    gcvs_period = GCVS.data.Period[gcvs_index]
+
+#    print gcvs_period
+    
+    if np.isnan(gcvs_period):
+        return None
+    else:
+        return gcvs_period
+    
 
 def CHS01_period_get():
     """ Gets a period for an input star from the Carpenter 2001 table."""
