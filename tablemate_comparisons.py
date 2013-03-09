@@ -60,49 +60,39 @@ def source_tablematch_counter(table, matches='All'):
     ----------
     table : atpy.Table
         Output of tablemate_script containing desired sources.
-    matches : list of str | 'All', optional
+    matches : {list of str | 'All'}, optional
         Which columns of the mated table do we want to scan?
         Default is 'All', i.e. any column that ends in _name, _ID, or _index.
  
     Returns
     -------
-    
+    n_matches : np.array
+        Array of "how many matches" per source. Amenable to calling 
+        histograms upon, or for finding how many sources have 
+        'so many' matches, etc.
+
     """
 
-
-
-
-    # if we don't mess with the default parameter, just scan all the eligible
-    # rows straight outta table.columns.keys
+    # by default, just scan all the eligible rows in table.columns.keys
     if matches == 'All':
-
-        # we'll be scanning table.columns.keys shortly
         # "eligible" means that the column name is an index or name
         columns_list = [x for x in table.columns.keys if 
                         '_index' in x or '_name' in x]
+    else:
+        columns_list = matches
 
+    # construct a return array that corresponds to the index of the table
+    n_matches = np.zeros(len(table), dtype=int)
 
-    # construct a return array that corresponds to the primary ID 
-    n_matches = np.zeros(len(table))
-
-    # PSEUDOCODE!
-    # for each row [i] in the mated table:
+    # now start scanning through the rows and columns:
     for i in range(len(table)):
-        
-    #     for each of the columns we wanna go through:
+
         for column in columns_list:
-    #         if table.column[i] != -1: (OR if '_name' in column, then != '')
 
+            # an _index mismatch is -1, a _name mismatch is ''.
             if table[column][i] != -1 and table[column][i] != '':
-    #             increment this source's counter by one
+
                 n_matches[i] += 1
-
-
-        # and if it's a '_name' then a non-match is just an empty string,
-        # otherwise '_index'es check for -1
-
-
-    # Then return a thing that corresponds ONCvar ID to "number of literature matches". Then we can make a histogram or something! And, most importantly, count how many stars in our data are not previously known. Two columns/arrays that correspond to each other.
 
     return n_matches
 
