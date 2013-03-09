@@ -170,10 +170,55 @@ def YSOVAR_period_get(mated_table, primary_index):
     return ysovar_period
 
 
+def Herbst_period_get(mated_table, primary_index, herbst_direct=False):
+    """
+    Gets a period for an input star from the Herbst 2002 table.
 
-def Herbst_period_get():
-    """ Gets a period for an input star from the Herbst 2002 table."""
-    pass
+    Parameters
+    ----------
+    mated_table : atpy.Table
+        Output of tablemate_script containing desired sources.
+        Must have a Herbst index column - this implies it was matched
+        to Herbst already.
+    primary_index : int
+        The index (starting at zero) of the input star, in the mated_table.
+        Note: if `herbst_direct` == True, then enter the desired star's
+        Herbst index here instead.
+    herbst_direct : bool, optional (default False)
+        if True, then `mated_table` is disregarded and `primary_index`
+        is used as an index to the Herbst table directly.
+
+    Returns
+    -------
+    herbst_period : float or None
+        The Herbst2002-listed Period for the input star.
+        If the star is not in the Herbst, or does not have a listed period,
+        then None is returned.
+
+    """
+    # fortunately, this one is as simple as asking the table 
+    # for the Period value and returning it (or None, if we are handed a nan).
+
+    if herbst_direct:
+        herbst_index = primary_index
+        if herbst_index >= len(Herbst2002.data):
+            return None
+    # now we have to check to see if the source even has a Herbst2002 match
+    elif mated_table.Herbst2002_index[primary_index] == -1:
+#        print "apparently, failure to match"
+        return None
+    else:
+        herbst_index = mated_table.Herbst2002_index[primary_index]
+
+    herbst_period = Herbst2002.data.Per[herbst_index]
+
+#    print herbst_period
+    
+    if np.isnan(herbst_period):
+        return None
+    else:
+        return herbst_period
+
 
 def Parihar_period_get():
     """ Gets a period for an input star from the Parihar 2009 table."""
