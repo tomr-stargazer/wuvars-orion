@@ -75,9 +75,50 @@ def GCVS_period_get(mated_table, primary_index, gcvs_direct=False):
         return gcvs_period
     
 
-def CHS01_period_get():
-    """ Gets a period for an input star from the Carpenter 2001 table."""
-    pass
+def CHS01_period_get(mated_table, primary_index):
+    """
+    Gets a period for an input star from the Carpenter 2001 table.
+
+    Parameters
+    ----------
+    mated_table : atpy.Table
+        Output of tablemate_script containing desired sources.
+        Must have a GCVS index column - this implies it was matched
+        to GCVS already.
+    primary_index : int
+        The index (starting at zero) of the input star, in the mated_table.
+
+    Returns
+    -------
+    chs_period : float or None
+        The CHS01-listed Period for the input star.
+        If the star is not in the CHS table, or does not have a listed period,
+        then None is returned.
+
+    """
+
+    # For this function, it's a little more complicated since we have to
+    # leapfrog from the Carpenter table straight to the separate period table
+    # (namely, Table 7: `Carpenter2001_periods` in this script)
+
+    chs_ID = mated_table.CHS2001_ID[primary_index]
+
+    if chs_ID == -1:
+        return None
+
+    # should be unique, so [0][0] is justified, unless there's no match
+    try:
+        chs_p_index = np.where(Carpenter2001_periods.ID == chs_ID)[0][0]
+    except IndexError, e:
+        return None
+
+    # grab the three periods, take the median - will probs be a safe bet
+    chs_period = np.median((Carpenter2001_periods.PerJ[chs_p_index],
+                            Carpenter2001_periods.PerH[chs_p_index],
+                            Carpenter2001_periods.PerK[chs_p_index]))
+
+    if chs_period > 0:
+        return chs_period
 
 def YSOVAR_period_get():
     """ Gets a period for an input star from the YSOVAR Orion table."""
