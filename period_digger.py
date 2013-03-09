@@ -83,8 +83,8 @@ def CHS01_period_get(mated_table, primary_index):
     ----------
     mated_table : atpy.Table
         Output of tablemate_script containing desired sources.
-        Must have a GCVS index column - this implies it was matched
-        to GCVS already.
+        Must have a CHS01 index column - this implies it was matched
+        to CHS01 already.
     primary_index : int
         The index (starting at zero) of the input star, in the mated_table.
 
