@@ -25,6 +25,7 @@ Carpenter2001_periods = atpy.Table(dpath+"Carpenter2001_datafile7.txt",
                                    type='ascii')
 YSOVAR_periods = atpy.Table(dpath+"MoralesCalderon2011_table4.txt",
                             type='ascii')
+Parihar2009_periods = atpy.Table(dpath+"Parihar2009_table5.fits")
 
 def GCVS_period_get(mated_table, primary_index, gcvs_direct=False):
     """ 
@@ -196,7 +197,7 @@ def Herbst_period_get(mated_table, primary_index, herbst_direct=False):
         then None is returned.
 
     """
-    # fortunately, this one is as simple as asking the table 
+    # fortunately, this one is as simple as asking the table
     # for the Period value and returning it (or None, if we are handed a nan).
 
     if herbst_direct:
@@ -213,14 +214,55 @@ def Herbst_period_get(mated_table, primary_index, herbst_direct=False):
     herbst_period = Herbst2002.data.Per[herbst_index]
 
 #    print herbst_period
-    
+
     if np.isnan(herbst_period):
         return None
     else:
         return herbst_period
 
 
-def Parihar_period_get():
-    """ Gets a period for an input star from the Parihar 2009 table."""
-    pass
+def Parihar_period_get(mated_table, primary_index):
+    """
+    Gets a period for an input star from the Parihar 2009 table.
+
+    Parameters
+    ----------
+    mated_table : atpy.Table
+        Output of tablemate_script containing desired sources.
+        Must have a Parihar09 index column - this implies it was matched
+        to Parihar09 already.
+    primary_index : int
+        The index (starting at zero) of the input star, in the mated_table.
+
+    Returns
+    -------
+    par_period : float or None
+        The Parihar09-listed Period for the input star.
+        If the star is not in the Par09 table, or does not have a listed period,
+        then None is returned.
+
+    """
+
+    # For this function, it's a little more complicated since we have to
+    # leapfrog from the Parihar table straight to the separate period table
+    # (namely, Table 5: `Parihar2009_periods` in this script)
+
+    par_ID = mated_table.Parihar2009_ID[primary_index]
+
+    if par_ID == -1:
+        return None
+
+    # should be unique, so [0][0] is justified, unless there's no match
+    try:
+        par_p_index = np.where(Parihar2009_periods.Seq == par_ID)[0][0]
+    except IndexError, e:
+        return None
+
+    # grab the three periods, take the median - will probs be a safe bet
+    par_period = Parihar2009_periods.Per[par_p_index]
+
+#    print par_period
+
+    return par_period
+
 
