@@ -214,6 +214,16 @@ Megeath2012 = TableParameters(
     name_col = 'Num')
 tables.append(Megeath2012)
 
+Stassun1999 = TableParameters(
+    data = dpath+"Stassun1999_table1.fits",
+    alias = "Stassun1999",
+    full_name = "'Table 1: Data for Rotator Sample', from 'The Rotation Period Distribution of Pre-Main-Sequence Stars in and around the Orion Nebula' by Stassun et al., 1999.",
+    ra_cols = ['RAJ2000'],
+    dec_cols = ['DEJ2000'],
+    radec_fmt = 'decimal degrees',
+    name_col = '__SMM99_')
+#tables.append(Stassun1999)
+
     
 # Here's our first function, that we'll use just to get things rolling
 def test():
