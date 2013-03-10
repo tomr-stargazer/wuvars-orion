@@ -47,24 +47,24 @@ def GCVS_period_get(mated_table, primary_index, gcvs_direct=False):
 
     Returns
     -------
-    gcvs_period : float or None
+    gcvs_period : float or np.NaN
         The GCVS-listed Period for the input star.
         If the star is not in the GCVS, or does not have a listed period,
-        then None is returned.
+        then np.NaN is returned.
 
     """
 
     # fortunately, this one is as simple as asking the table 
-    # for the Period value and returning it (or None, if we are handed a nan).
+    # for the Period value and returning it (or np.NaN, if we are handed a nan).
 
     if gcvs_direct:
         gcvs_index = primary_index
         if gcvs_index >= len(GCVS.data):
-            return None
+            return np.NaN
     # now we have to check to see if the source even has a GCVS match
     elif mated_table.GCVS_index[primary_index] == -1:
 #        print "apparently, failure to match"
-        return None
+        return np.NaN
     else:
         gcvs_index = mated_table.GCVS_index[primary_index]
 
@@ -73,7 +73,7 @@ def GCVS_period_get(mated_table, primary_index, gcvs_direct=False):
 #    print gcvs_period
     
     if np.isnan(gcvs_period):
-        return None
+        return np.NaN
     else:
         return gcvs_period
     
@@ -93,10 +93,10 @@ def CHS01_period_get(mated_table, primary_index):
 
     Returns
     -------
-    chs_period : float or None
+    chs_period : float or np.NaN
         The CHS01-listed Period for the input star.
         If the star is not in the CHS table, or does not have a listed period,
-        then None is returned.
+        then np.NaN is returned.
 
     """
 
@@ -107,13 +107,13 @@ def CHS01_period_get(mated_table, primary_index):
     chs_ID = mated_table.CHS2001_ID[primary_index]
 
     if chs_ID == -1:
-        return None
+        return np.NaN
 
     # should be unique, so [0][0] is justified, unless there's no match
     try:
         chs_p_index = np.where(Carpenter2001_periods.ID == chs_ID)[0][0]
     except IndexError, e:
-        return None
+        return np.NaN
 
     # grab the three periods, take the median - will probs be a safe bet
     chs_period = np.median((Carpenter2001_periods.PerJ[chs_p_index],
@@ -138,10 +138,10 @@ def YSOVAR_period_get(mated_table, primary_index):
 
     Returns
     -------
-    ysovar_period : float or None
+    ysovar_period : float or np.NaN
         The YSOVAR-listed Period for the input star.
         If the star is not in the YSOVAR tables, or does not have
-        a listed period, then None is returned.
+        a listed period, then np.NaN is returned.
 
     """
 
@@ -158,13 +158,13 @@ def YSOVAR_period_get(mated_table, primary_index):
     elif ysovar_noex_ID != '-1':
         ysovar_ID = ysovar_noex_ID
     else:
-        return None
+        return np.NaN
 
     # should be unique, so [0][0] is justified, unless there's no match
     try:
         ysovar_p_index = np.where(YSOVAR_periods['Source^a'] == ysovar_ID)[0][0]
     except IndexError, e:
-        return None
+        return np.NaN
 
     ysovar_period = YSOVAR_periods['Period (days)'][ysovar_p_index]
 
@@ -191,23 +191,23 @@ def Herbst_period_get(mated_table, primary_index, herbst_direct=False):
 
     Returns
     -------
-    herbst_period : float or None
+    herbst_period : float or np.NaN
         The Herbst2002-listed Period for the input star.
         If the star is not in the Herbst, or does not have a listed period,
-        then None is returned.
+        then np.NaN is returned.
 
     """
     # fortunately, this one is as simple as asking the table
-    # for the Period value and returning it (or None, if we are handed a nan).
+    # for the Period value and returning it (or np.NaN, if we are handed a nan).
 
     if herbst_direct:
         herbst_index = primary_index
         if herbst_index >= len(Herbst2002.data):
-            return None
+            return np.NaN
     # now we have to check to see if the source even has a Herbst2002 match
     elif mated_table.Herbst2002_index[primary_index] == -1:
 #        print "apparently, failure to match"
-        return None
+        return np.NaN
     else:
         herbst_index = mated_table.Herbst2002_index[primary_index]
 
@@ -216,7 +216,7 @@ def Herbst_period_get(mated_table, primary_index, herbst_direct=False):
 #    print herbst_period
 
     if np.isnan(herbst_period):
-        return None
+        return np.NaN
     else:
         return herbst_period
 
@@ -236,10 +236,10 @@ def Parihar_period_get(mated_table, primary_index):
 
     Returns
     -------
-    par_period : float or None
+    par_period : float or np.NaN
         The Parihar09-listed Period for the input star.
         If the star is not in the Par09 table, or does not have a listed period,
-        then None is returned.
+        then np.NaN is returned.
 
     """
 
@@ -250,13 +250,13 @@ def Parihar_period_get(mated_table, primary_index):
     par_ID = mated_table.Parihar2009_ID[primary_index]
 
     if par_ID == -1:
-        return None
+        return np.NaN
 
     # should be unique, so [0][0] is justified, unless there's no match
     try:
         par_p_index = np.where(Parihar2009_periods.Seq == par_ID)[0][0]
     except IndexError, e:
-        return None
+        return np.NaN
 
     # grab the three periods, take the median - will probs be a safe bet
     par_period = Parihar2009_periods.Per[par_p_index]
