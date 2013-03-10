@@ -266,3 +266,5 @@ def Parihar_period_get(mated_table, primary_index):
     return par_period
 
 
+period_funcs = [GCVS_period_get, CHS01_period_get, YSOVAR_period_get,
+                Herbst_period_get, Parihar_period_get]
