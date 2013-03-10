@@ -15,6 +15,7 @@ and tablemate_script.py.
 import numpy as np
 
 from tablemate_script import *
+from period_digger import period_funcs
 
 # A. How many of our variables are previously known stars?
 # B. How many of our variables are previously known variables?
@@ -134,6 +135,8 @@ def table_tablematch_counter(table):
 def how_many_stars_are_new():
     """
     Figures out how many stars are unknown in any previous catalog.
+
+    Also returns who they are.
     
     """
     pass
@@ -150,9 +153,53 @@ def how_many_variables_are_new():
     """
     pass
     
-def source_period_digger():
+def source_period_digger(table):
     """
     Extracts literature periods, if they exist, for every star.
 
+    Returns a new table of ONCvars ID, WFCAM sourceid, and periods from
+    each of the following: GCVS, Carpenter 2001, YSOVAR, Herbst 2002, 
+    and Parihar 2009.
+
+    Parameters
+    ----------
+    table : atpy.Table
+        Output of tablemate_script containing desired sources.
+        Must be matched to the above period-containing catalogs.
+
+    Returns
+    -------
+    period_table : atpy.Table
+        Table matching sources to periods from each of the 5 
+        input catalogs.
+
     """
-    pass
+
+    period_table = atpy.Table()
+
+    gcvs_pers = np.zeros(len(table))
+    chs01_pers = np.zeros(len(table))
+    ysovar_pers = np.zeros(len(table))
+    herbst_pers = np.zeros(len(table))
+    parihar_pers = np.zeros(len(table))
+    
+    period_columns = [gcvs_pers, chs01_pers, ysovar_pers, 
+                      herbst_pers, parihar_pers]
+    
+    for i in range(len(table)):
+        for period_get, period_col in zip(period_funcs, period_columns):
+            per = period_get(table, i)
+            period_col[i] = per
+
+    
+    # build and return the table
+    for j in range(3):
+        period_table.add_column(table.columns.keys[j], 
+                                table[table.columns.keys[j]])
+    period_table.add_column("GCVS_period", gcvs_pers)
+    period_table.add_column("CHS01_period", chs01_pers)
+    period_table.add_column("YSOVAR_period", ysovar_pers)
+    period_table.add_column("Herbst2002_period", herbst_pers)
+    period_table.add_column("Parihar2009_period", parihar_pers)
+
+    return period_table
