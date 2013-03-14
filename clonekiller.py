@@ -61,3 +61,38 @@ def clone_flagger(table, max_offset=0.1):
     flagged_table = ft
     
     return flagged_table
+
+
+def clone_killer(flagged_table, invert=False):
+    """
+    Removes clones in a clone-flagged table. (or removes non-clones)
+
+    A simple function.
+
+    Parameters
+    ----------
+    flagged_table : atpy.Table
+        Spreadsheet output of `clone_flagger()`, sorted by RA 
+        and with a `clone` column.
+    invert : bool, optional
+        If True, return a table containing _only_ clones, rather than
+        removing all clones.
+
+    Returns
+    -------
+    decloned_table : atpy.Table
+        Copy of `flagged_table` that lacks clones. (Or has only clones,
+        if `invert` is True.)
+
+    """
+
+    condition = flagged_table.clone == 0
+    
+    if invert: 
+        condition = ~condition
+    
+    decloned_table = flagged_table.where(condition)
+
+    return decloned_table
+    
+    
