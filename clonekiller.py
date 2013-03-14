@@ -96,3 +96,31 @@ def clone_killer(flagged_table, invert=False):
     return decloned_table
     
     
+def clone_hunterkiller(table, max_offset=0.1, invert=False):
+    """
+    Combines `clone_flagger()` and `clone_killer()` in one stroke.
+
+    Parameters
+    ----------
+    table : atpy.Table
+        Spreadsheet of info on WFCAM sources. One WFCAM-detected source
+        per row. Must have RA, DEC columns in radians.
+    max_offset : float, optional
+        Maximum separation, in arcseconds, between two sources to be 
+        considered "clones". Default 0.1.
+    invert : bool, optional
+        If True, return a table containing _only_ clones, rather than
+        removing all clones.
+
+    Returns
+    -------
+    decloned_table : atpy.Table
+        Copy of `table` that lacks clones. (Or has only clones,
+        if `invert` is True.)
+
+    """
+    
+    ft = clone_flagger(table, max_offset)
+    decloned_table = clone_killer(ft)
+
+    return decloned_table
