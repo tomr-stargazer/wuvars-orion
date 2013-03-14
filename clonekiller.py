@@ -44,24 +44,16 @@ def clone_flagger(table, max_offset=0.1):
 
     clone = np.zeros(len(ft),dtype=np.int64)
 
-    q = 0
-
     for i in range(1,len(ft)):
 
         # compare Dec to the previous source
         if np.abs(ft.DEC[i] - ft.DEC[i-1]) < max_offsetr:
-            print np.degrees(np.abs(ft.DEC[i] - ft.DEC[i-1]))*3600
-            print ("I think sources %s and %s are clones!" % 
-                   (ft.SOURCEID[i-1], ft.SOURCEID[i]) ) 
-            print ("(that's ONCvar %s and ONCvar %s)" %  
-                   (ft.ONCvar_ID[i-1], ft.ONCvar_ID[i]))
 
             # if it's a clone, check if the previous guy was a clone
             if clone[i-1] != 0:
                 clone[i] = clone[i-1]
             else:
                 clone[i] = ft.SOURCEID[i-1]
-
 
     # now add the clone column
     ft.add_column("clone", clone)
