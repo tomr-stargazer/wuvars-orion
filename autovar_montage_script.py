@@ -25,12 +25,15 @@ hivar_per_path = "/home/tom/reu/ORION/DATA/autovar/hivar/per/"
 hivar_per_path_g = "/home/tom/reu/ORION/DATA/autovar/hivar/glued/"
 oncvar_path = "/home/tom/reu/ORION/DATA/oncvar/"
 oncvar_path_ng = "/home/tom/reu/ORION/DATA/oncvar/unglued/"
+ukvar_path = "/home/tom/reu/ORION/DATA/ukvar/"
+ukvar_path_ng = "/home/tom/reu/ORION/DATA/ukvar/unglued/"
 
 # Relevant variable names:
 # ==Global==
 # `autovars_true`: all automatically detected variables
 # `autovars_strict`: all pristine auto-variables (a subset of `autovars_true`)
 # `oncvar` : all variables! 
+# `ukvar` : all variables minus clones! 
 #==Periodics==
 # `autovars_true_periodics`: subset of `autovars_true` who are periodic
 # `autovars_strict_periodics`: subset of `autovars_strict` who are periodic
@@ -41,6 +44,7 @@ oncvar_path_ng = "/home/tom/reu/ORION/DATA/oncvar/unglued/"
 data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 
 oncvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ONCvar_spreadsheet.fits")
+ukvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames.fits")
 
 # Let's make a function that does periods for "high-variables".
 
@@ -203,7 +207,7 @@ def gen_hivar_nonper_lc(start=0):
 
 def suffix_generator(table, index):
     """
-    Builds an ONCvar suffix from the flags on a given source.
+    Builds an ONCvar/UKvar suffix from the flags on a given source.
 
     Suffixes look like ('a'|'t'|'j')+('p'|'n'), for
     'a': autovar
@@ -218,8 +222,8 @@ def suffix_generator(table, index):
         The statistics table. Must have the `automatic`, `strict`, 
         and `periodic` columns.
     index : int
-        Which star in the table to extract? Note this is NOT the ONCvar ID,
-        but is offset from it by one.
+        Which star in the table to extract? Note this is NOT the 
+        ONCvar/UKvar ID, but is offset from it by one.
 
     Returns
     -------
@@ -335,5 +339,97 @@ def gen_oncvar_all(start=0, stop=len(oncvar)):
                             (str(id), suffix))
 
         print "Completed ONCvar %s" % str(id)
+
+# This is, unashamedly, a pure find-and-replace clone of `gen_oncvar_all()`.
+def gen_ukvar_all(start=0, stop=len(ukvar)):
+    """ 
+    Creates all the UKvar plots in one shot.
+
+    Uses the UKvar ID as the primary identifier; lists info
+    in the filename distinguishing auto/strict/subj, plus per/nonper
+    I'm thinking: 'a' for autovar, 't' for strict, 'j' for subj,
+    'p' for periodic, 'n' for nonperiodic. Each dude gets two letters.
+
+    if periodic:
+        do the gluedvars stuff
+    else:
+        just a normal lightcurve!
+
+    """
+
+    for s, id, i in zip(ukvar.SOURCEID, ukvar.UKvar_ID, 
+                        range(len(ukvar)))[start:stop]:
+
+        # Each plot gets a suffix: ('a'|'t'|'j')+('p'|'n')
+        
+        suffix = suffix_generator(ukvar, i)
+
+        # Periodics first
+
+        if ukvar.periodic[i] == 1:
+            
+            # Dig up the best period for this dude! 3 main cases.
+
+            if ukvar.autovar[i] == 1:
+                if s in autovars_true_periods.SOURCEID:
+                    t = autovars_true_periods
+                elif s in autovars_true_periods_s1.SOURCEID:
+                    t = autovars_true_periods_s1
+                else:
+                    raise Exception("Something weird happened!")
+            else:
+                t = conf_subj_periodics
+                
+            best_period = t.best_period[t.SOURCEID == s][0]
+
+            # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
+            # print out the names as ID_fs_lc.png
+            plot3.graded_lc(data, s, abridged=True, color_slope=True, 
+                            timecolor=True,
+                            name = "%s:  UKvar %s (%s)" %
+                            (str(s), str(id), suffix),
+                            outfile=ukvar_path_ng+"%s_%s_lc.png" %
+                            (str(id), suffix))
+
+            # ID_fs_phase.png
+            plot3.graded_phase(data, s, timecolor='time', color_slope=True,
+                               period=best_period, 
+                               name = "%s:  UKvar %s (%s)" %
+                               (str(s), str(id), suffix),
+                               outfile=ukvar_path_ng+"%s_%s_phase.png" % 
+                               (str(id), suffix))
+            # ID_fs_pgram.png
+            try:
+                plot3.lsp_power(data, s, 
+                                name = "%s:  UKvar %s (%s)" %
+                                (str(s), str(id), suffix),
+                                outfile=ukvar_path_ng+"%s_%s_pgram.png" %
+                                (str(id), suffix))
+            except Exception, e:
+                print "periodogram failed for %s" % str(s)
+                print e
+
+
+# now glue em together!
+                
+            try:
+                call(["montage","-mode", "concatenate", "-tile", "2x", 
+                      ukvar_path_ng+"%s_%s*.png" % (str(id), suffix), 
+                      ukvar_path+"%s_%s.png" % (str(id), suffix) ])
+            except Exception, e:
+                print "Why did montage fail?"
+                raise e
+                
+        else:
+            # Just make the lightcurve.
+            
+            plot3.graded_lc(data, s, abridged=True, color_slope=True, 
+                            timecolor=True, 
+                            name = "%s:  UKvar %s (%s)" %
+                            (str(s), str(id), suffix),
+                            outfile=ukvar_path+"%s_%s.png" % 
+                            (str(id), suffix))
+
+        print "Completed UKvar %s" % str(id)
 
         
