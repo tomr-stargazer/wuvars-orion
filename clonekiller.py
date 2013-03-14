@@ -34,28 +34,38 @@ def clone_flagger(table, max_offset=0.1):
 
     """
 
-    # crude copy
-    flagged_table = table.where(table.RA > 0)
+    # crude copy: `ft` is `flagged_table` 
+    ft = table.where(table.RA > 0)
     
-    flagged_table.sort('RA')
+    ft.sort('RA')
 
     # convert max_offset to radians
     max_offsetr = np.radians(max_offset / 3600)
 
-    clone = np.zeros(len(flagged_table),dtype=np.int64)
+    clone = np.zeros(len(ft),dtype=np.int64)
 
-    for i in range(1,len(flagged_table)):
+    q = 0
 
-        # compare Dec and RA to the previous source
-        print np.degrees(np.abs(flagged_table.DEC[i] - flagged_table.DEC[i-1]))*3600
-        if np.abs(flagged_table.DEC[i] - flagged_table.DEC[i-1]) < max_offsetr:
+    for i in range(1,len(ft)):
+
+        # compare Dec to the previous source
+        if np.abs(ft.DEC[i] - ft.DEC[i-1]) < max_offsetr:
+            print np.degrees(np.abs(ft.DEC[i] - ft.DEC[i-1]))*3600
             print ("I think sources %s and %s are clones!" % 
-                   (flagged_table.SOURCEID[i], flagged_table.SOURCEID[i-1]) ) 
+                   (ft.SOURCEID[i-1], ft.SOURCEID[i]) ) 
+            print ("(that's ONCvar %s and ONCvar %s)" %  
+                   (ft.ONCvar_ID[i-1], ft.ONCvar_ID[i]))
 
-        # if it's a clone, check if the previous guy was a clone
+            # if it's a clone, check if the previous guy was a clone
+            if clone[i-1] != 0:
+                clone[i] = clone[i-1]
+            else:
+                clone[i] = ft.SOURCEID[i-1]
 
-        # if that was the case, follow that back further
-        
-        # else, the first guy back was the clone we're assigning
-        
-        if i > 20: break
+
+    # now add the clone column
+    ft.add_column("clone", clone)
+
+    flagged_table = ft
+    
+    return flagged_table
