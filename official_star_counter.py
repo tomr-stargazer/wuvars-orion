@@ -78,6 +78,7 @@ maxvars = sp.where( (sp.Stetson > 1) & (
         (sp.N_h >= 50) ) )
 c_print( "Maximum possible number of variables: %d" % len(maxvars) )
 
+
 autovars_old = sp.where( 
     (sp.Stetson > 1) & ( (
         (sp.N_j >= 50) & (sp.N_j <= 125) &    # J band criteria
@@ -315,3 +316,71 @@ new_subjectives_per_s1 = periodics_s1.where(
 if len(new_subjectives_per_s1) == 0:
     new_subjectives_per = ps.best_period(new_subjectives_per_s123)
 #    print "assigned best periods"
+
+
+##### Now let's talk about LOW VARIABLES.
+
+# Low variables.
+low_maxvars = sp.where( (sp.Stetson <= 1.0) & (sp.Stetson > 0.55) &(
+        (sp.N_j >= 50) |
+        (sp.N_k >= 50) |
+        (sp.N_h >= 50) ) )
+c_print( "Maximum possible number of LOW-variables: %d" % len(low_maxvars) )
+
+# Low variability criterion has two cases:
+# 1. All 3 bands are quality, and 1.0 > S > 0.55, or
+# 2. 1 or 2 bands is quality and has reduced chisq > 1, and 1 > S > 0.55 still.
+
+# "Quality" is as defined above.
+
+# Constructing these as two separate arrays for ease of reading/editing.
+# Case 1: all 3 bands are quality; S > 1. Note "&"s uniform throughout.
+low_case1 = ( (sp.Stetson > 0.55) & (sp.Stetson <= 1.0) &
+              (sp.pstar_median > 0.75) &
+              (
+        (sp.N_j >= 50) & (sp.N_j <= 125) &    # J band criteria
+        (sp.j_mean > 11) & (sp.j_mean < 17) & 
+        (sp.N_j_info == 0) 
+        ) &
+              (
+        (sp.N_h >= 50) & (sp.N_h <= 125) &    # H band criteria
+        (sp.h_mean > 11) & (sp.h_mean < 16) & 
+        (sp.N_h_info == 0) 
+        ) &
+              (
+        (sp.N_k >= 50) & (sp.N_k <= 125) &    # K band criteria
+        (sp.k_mean > 11) & (sp.k_mean < 16) & 
+        (sp.N_k_info == 0)
+        ) )
+
+# Case 2: at least one band quality and rchi^2 > 1; S > 1. Note mixed "&"s 
+# and "|"s, as well as another layer of parentheses around the complex of "|"
+# criteria.
+low_case2 = ( ((sp.Stetson > 0.55) & (sp.Stetson <= 1.0) & 
+               (sp.pstar_median > 0.75)) & (
+        (
+            (sp.N_j >= 50) & (sp.N_j <= 125) &    # J band criteria
+            (sp.j_mean > 11) & (sp.j_mean < 17) & 
+            (sp.N_j_info == 0) & (sp.j_rchi2 > 1) 
+            ) |
+        (
+            (sp.N_h >= 50) & (sp.N_h <= 125) &    # H band criteria
+            (sp.h_mean > 11) & (sp.h_mean < 16) & 
+            (sp.N_h_info == 0) & (sp.h_rchi2 > 1) 
+            ) |
+        (
+            (sp.N_k >= 50) & (sp.N_k <= 125) &    # K band criteria
+            (sp.k_mean > 11) & (sp.k_mean < 16) & 
+            (sp.N_k_info == 0) & (sp.k_rchi2 > 1) 
+            ) ) ) 
+
+low_autovars = sp.where( low_case1 | low_case2 )
+
+low_autovars_strict = sp.where( low_case1 )
+
+
+# Now, to count how many stars have quality that meets "autovars_true".
+# Done above. See "autocan_true" and "autocan_strict".
+
+c_print( "Number of stars automatically classed as LOW variables: %d" % len(low_autovars) )
+c_print( "Number of stars that have the data quality for auto-classification: %d" % len(autocan_true) )
