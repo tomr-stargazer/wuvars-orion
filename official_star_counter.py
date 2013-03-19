@@ -384,3 +384,13 @@ low_autovars_strict = sp.where( low_case1 )
 
 c_print( "Number of stars automatically classed as LOW variables: %d" % len(low_autovars) )
 c_print( "Number of stars that have the data quality for auto-classification: %d" % len(autocan_true) )
+
+
+low_maxvars_spread = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/low_maxvars_data_spread.fits")
+low_periodics = ps.best_period(ps.periodic_selector(low_maxvars_spread))
+
+low_strict_periodics = low_periodics.where(
+    np.in1d(low_periodics.SOURCEID, low_autovars_strict.SOURCEID))
+
+c_print( "Number of LOW strict variables: %d" % len(low_autovars_strict) )
+c_print( "Number of LOW periodic-strict stars: %d" % len(low_strict_periodics))
