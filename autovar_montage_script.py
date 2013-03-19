@@ -27,6 +27,9 @@ oncvar_path = "/home/tom/reu/ORION/DATA/oncvar/"
 oncvar_path_ng = "/home/tom/reu/ORION/DATA/oncvar/unglued/"
 ukvar_path = "/home/tom/reu/ORION/DATA/ukvar/"
 ukvar_path_ng = "/home/tom/reu/ORION/DATA/ukvar/unglued/"
+lowvar_path = "/home/tom/reu/ORION/DATA/lowvar/"
+lowvar_per_path = "/home/tom/reu/ORION/DATA/lowvar/periodic/"
+lowvar_per_path_g = "/home/tom/reu/ORION/DATA/lowvar/periodic/glued/"
 
 # Relevant variable names:
 # ==Global==
@@ -433,3 +436,79 @@ def gen_ukvar_all(start=0, stop=len(ukvar)):
         print "Completed UKvar %s" % str(id)
 
         
+def gen_lowvar_periodic_plots(start=0, stop=len(low_strict_periodics)):
+    """
+    Creates all the lowvar-strict plots in one shot.
+
+    """
+    
+    counter = 1
+    c_max = len(low_strict_periodics)
+
+#    tables_of_periodics = [autovars_true_periods, autovars_true_periods_s1]
+
+    print 'lol'
+#    for t in tables_of_periodics:
+#    print 'lol2'
+        # first, the s123 periodics (more than 95% of them)
+    for s in low_strict_periodics.SOURCEID[start:]:
+        # If this is a strict autovar, we give it special stuff.
+#        if s not in hivar.SOURCEID: continue
+        # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
+        plot3.graded_lc(data, s, abridged=True, color_slope=True, 
+                        timecolor=True, name=str(s),
+                        outfile=lowvar_per_path+"%s_lc.png"%str(s))
+        
+        
+        plot3.graded_phase(data, s, timecolor='time', 
+                           name=str(s),
+                           period=low_strict_periodics.best_period[
+                low_strict_periodics.SOURCEID==s], 
+                           color_slope=True, 
+                           outfile=lowvar_per_path+"%s_phase.png"%str(s))
+        
+        try:
+            plot3.lsp_power(data, s, 
+                            outfile=lowvar_per_path+"%s_pgram.png"%str(s))
+        except Exception, e:
+            print "periodogram failed for %s" % str(s)
+            print e
+            
+            
+        # now glue em together!
+        call(["montage","-mode", "concatenate", "-tile", "2x", 
+              lowvar_per_path+"%s_*.png" % str(s), 
+              lowvar_per_path_g+"%s-glued.png" % str(s) ])
+        
+        
+        print "Completed plot %d of %d" % (counter, c_max)
+        counter += 1
+        
+    return
+
+def gen_lowvar_nonper_lc(start=0):
+    """ Makes lightcurves for nonperiodic lowvars. """
+
+    counter = 1
+    c_max = len(low_strict_nonpers)
+
+    for s in low_strict_nonpers.SOURCEID[start:]:
+
+#        if s not in hivar.SOURCEID: continue
+        # If this is a strict autovar, we give it special stuff.
+#        if s in autovars_strict.SOURCEID:
+#            flag = "s_"
+#        else:
+#            flag = ""
+
+        plot3.graded_lc(data, s, abridged=True, color_slope=True, 
+                        timecolor=True, name=str(s),
+                        outfile=lowvar_path+"%s_lc.png"%str(s))
+
+        print "Completed plot %d of %d" % (counter, c_max)
+        counter += 1
+
+    return
+
+
+

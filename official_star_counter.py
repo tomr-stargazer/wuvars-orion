@@ -392,5 +392,9 @@ low_periodics = ps.best_period(ps.periodic_selector(low_maxvars_spread))
 low_strict_periodics = low_periodics.where(
     np.in1d(low_periodics.SOURCEID, low_autovars_strict.SOURCEID))
 
+low_strict_nonpers = low_autovars_strict.where(
+    ~np.in1d(low_autovars_strict.SOURCEID, low_strict_periodics.SOURCEID))
+
+
 c_print( "Number of LOW strict variables: %d" % len(low_autovars_strict) )
 c_print( "Number of LOW periodic-strict stars: %d" % len(low_strict_periodics))
