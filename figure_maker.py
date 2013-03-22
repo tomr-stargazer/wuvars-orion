@@ -32,7 +32,7 @@ from official_star_counter import *
 from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
                                    hk_empty, hk_filled)
 from tablemate_comparisons import (mated_oncvar, oncvar_spread, 
-                                   source_period_digger)
+                                   oncvar_periods, source_period_digger)
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
@@ -322,25 +322,6 @@ def f_colorslope_threepanel(title=False):
 
 
 # Attaching periods to oncvar_spread
-
-oncvar_periods = np.zeros((len(oncvar_spread)))
-
-for s, i in zip(oncvar_spread.SOURCEID, range(len(oncvar_spread))):
-    
-    if s in conf_subj_periodics.SOURCEID:
-        s_per = conf_subj_periodics.best_period[
-            conf_subj_periodics.SOURCEID == s]
-    elif s in autovars_true_periods.SOURCEID:
-        s_per = autovars_true_periods.best_period[
-            autovars_true_periods.SOURCEID == s]
-    elif s in autovars_true_periods_s1.SOURCEID:
-        s_per = autovars_true_periods_s1.best_period[
-            autovars_true_periods_s1.SOURCEID == s]
-    else:
-        s_per = np.NaN
-
-    oncvar_periods[i] = s_per
-
 
 
 def f_period_lit_comparisons():

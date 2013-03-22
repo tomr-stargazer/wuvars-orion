@@ -39,6 +39,23 @@ from period_digger import period_funcs
 mated_oncvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/matched_table_withSIMBAD_2013_2_25.fits")
 oncvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ONCvar_spreadsheet_withSIMBADnames.fits")
 
+oncvar_periods = np.zeros((len(oncvar_spread)))
+
+for s, i in zip(oncvar_spread.SOURCEID, range(len(oncvar_spread))):
+    
+    if s in conf_subj_periodics.SOURCEID:
+        s_per = conf_subj_periodics.best_period[
+            conf_subj_periodics.SOURCEID == s]
+    elif s in autovars_true_periods.SOURCEID:
+        s_per = autovars_true_periods.best_period[
+            autovars_true_periods.SOURCEID == s]
+    elif s in autovars_true_periods_s1.SOURCEID:
+        s_per = autovars_true_periods_s1.best_period[
+            autovars_true_periods_s1.SOURCEID == s]
+    else:
+        s_per = np.NaN
+
+    oncvar_periods[i] = s_per
 
 # Builds a dict for the source. 
 # the length of the dict corresponds 
