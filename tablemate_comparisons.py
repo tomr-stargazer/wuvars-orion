@@ -16,6 +16,9 @@ import numpy as np
 
 from tablemate_script import *
 from period_digger import period_funcs
+from official_star_counter import *
+from montage_script import conf_subj_periodics, conf_subj_nonpers
+
 
 # A. How many of our variables are previously known stars?
 # B. How many of our variables are previously known variables?
@@ -220,3 +223,44 @@ def source_period_digger(table):
     period_table.add_column("Parihar2009_period", parihar_pers)
 
     return period_table
+
+def how_many_periods_are_new():
+    """
+    Figures out how many periods are new in our dataset.
+
+    Depends on the output of source_period_digger().
+
+    """
+    
+    period_table = source_period_digger(mated_oncvar)
+    pt = period_table
+    # so, basically, we're scanning spd for blank rows? and counting them?
+    
+    # for each star in oncvars, (a) check if we found a period for it,
+    # if so, (b) check how many literature periods we have for it.
+    # store the results.
+    
+    n_new = 0
+    n_old = 0
+    
+    for i in range(len(oncvar_spread)):
+        
+        # did we think it was periodic?
+        if not np.isnan(oncvar_periods[i]):
+            
+            # did anyone else? 
+            if (np.isnan(pt.GCVS_period[i]) and 
+                np.isnan(pt.CHS01_period[i]) and
+                np.isnan(pt.YSOVAR_period[i]) and 
+                np.isnan(pt.Herbst2002_period[i]) and
+                np.isnan(pt.Parihar2009_period[i]) ):
+                
+                n_new += 1
+
+            else:
+                n_old += 1
+
+    print n_new, n_old
+            
+            
+    
