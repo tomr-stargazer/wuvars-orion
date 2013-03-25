@@ -228,6 +228,7 @@ def how_many_periods_are_new():
     """
     Figures out how many periods are new in our dataset.
 
+    Also counts how many of our variables we missed as periodic.
     Depends on the output of source_period_digger().
 
     """
@@ -242,6 +243,7 @@ def how_many_periods_are_new():
     
     n_new = 0
     n_old = 0
+    n_missed = 0
     
     for i in range(len(oncvar_spread)):
         
@@ -260,7 +262,20 @@ def how_many_periods_are_new():
             else:
                 n_old += 1
 
-    print n_new, n_old
+        # If we didn't think it was periodic...
+        else:
+            
+            # did anyone else? 
+            if not (np.isnan(pt.GCVS_period[i]) and 
+                    np.isnan(pt.CHS01_period[i]) and
+                    np.isnan(pt.YSOVAR_period[i]) and 
+                    np.isnan(pt.Herbst2002_period[i]) and
+                    np.isnan(pt.Parihar2009_period[i]) ):
+                
+                n_missed += 1
+            
+
+    print n_new, n_old, n_missed
             
             
     
