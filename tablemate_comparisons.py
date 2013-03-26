@@ -12,7 +12,10 @@ and tablemate_script.py.
 
 """
 
+from __future__ import division
+
 import numpy as np
+import matplotlib.pyplot as plt
 
 from tablemate_script import *
 from period_digger import period_funcs
@@ -276,6 +279,53 @@ def how_many_periods_are_new():
             
 
     print n_new, n_old, n_missed
-            
-            
+
+period_table = source_period_digger(mated_oncvar)
+pt = period_table
+
+# let's use oncvar_periods and pt
+
+GCVS_period_ratio = oncvar_periods / pt.GCVS_period
+CHS01_period_ratio = oncvar_periods / pt.CHS01_period
+YSOVAR_period_ratio = oncvar_periods / pt.YSOVAR_period
+Herbst2002_period_ratio = oncvar_periods / pt.Herbst2002_period
+Parihar2009_period_ratio = oncvar_periods / pt.Parihar2009_period
+
+
+def how_do_our_periods_compare():
+    """
+    Makes five histograms
+    """
+
+    fig = plt.figure()
+    colors = ['b', 'g', 'r', 'c', 'm']
+
+    names = ["GCVS", "CHS01", 
+             "YSOVAR", "Herbst2002", 
+             "Parihar2009"]
+
+    for ratio, n, c, name in zip([GCVS_period_ratio, CHS01_period_ratio, 
+                                  YSOVAR_period_ratio, Herbst2002_period_ratio, 
+                                  Parihar2009_period_ratio], np.arange(5)+1,
+                                 colors, names):
+
+        sub = fig.add_subplot(5, 1, n)
+
+        defined_ratio = ratio[~np.isnan(ratio)]
+
+        sub.hist(ratio[~np.isnan(ratio)], range=(0,5), bins=50, color=c, 
+                 label=name)
+        sub.legend()
+
+        # How many of our periods are within 10% of literature?
+        print (len(defined_ratio[np.abs(defined_ratio-1) < .1])/
+               len(defined_ratio)), "of", len(defined_ratio)
+        
+    plt.xlabel("ratio: 'our period / literature period'")
+
+    plt.show()
+    return fig
+
     
+    
+            
