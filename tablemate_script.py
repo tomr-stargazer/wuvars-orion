@@ -12,7 +12,7 @@ We are asking three broad questions:
 
 """
 
-
+import numpy as np
 
 import orion_tablemate
 from orion_tablemate import TableParameters, atpy
@@ -38,6 +38,14 @@ Rice_ONCvars = TableParameters(
     ra_cols = ['RA'], dec_cols=['DEC'],
     radec_fmt = 'decimal-radians',
     name_col = 'ONCvar_ID')
+
+Rice_UKvars =  TableParameters(
+    data = dpath+"UKvar_spreadsheet_withSIMBADnames.fits",
+    alias= "Rice2013_UKvars",
+    full_name = "'Master spreadsheet for 1225 ONC variables', from 'High-amplitude and Periodic Near-Infrared Variables in the Orion Nebula Cluster', Rice, Reipurth, Vaz, Wolk, Cross, Guimaraes 2013.",
+    ra_cols = ['RA'], dec_cols=['DEC'],
+    radec_fmt = 'decimal-radians',
+    name_col = 'UKvar_ID')
 
 
 Rice_2013_all = TableParameters(
@@ -223,6 +231,19 @@ Stassun1999 = TableParameters(
     radec_fmt = 'decimal degrees',
     name_col = '__SMM99_')
 #tables.append(Stassun1999)
+
+xmm_north_data = atpy.Table(dpath+"matches_xmm_spitzer_north2.txt", 
+                            type='ascii')
+xmm_north_data.add_column('Index', np.arange(len(xmm_north_data)))
+
+XMM_north = TableParameters(
+    data = xmm_north_data,
+    alias = "XMMnorth",
+    full_name = "Mysterious XMM north table from Ignazio",
+    ra_cols = ['ra'],
+    dec_cols = ['dec'],
+    radec_fmt = 'decimal degrees',
+    name_col = 'Index')
 
     
 # Here's our first function, that we'll use just to get things rolling
