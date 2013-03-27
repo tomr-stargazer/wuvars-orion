@@ -44,24 +44,50 @@ from montage_script import conf_subj_periodics, conf_subj_nonpers
 # This is a table I made and then attached 
 mated_oncvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/matched_table_withSIMBAD_2013_2_25.fits")
 oncvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ONCvar_spreadsheet_withSIMBADnames.fits")
+ukvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames.fits")
 
-oncvar_periods = np.zeros((len(oncvar_spread)))
 
-for s, i in zip(oncvar_spread.SOURCEID, range(len(oncvar_spread))):
-    
-    if s in conf_subj_periodics.SOURCEID:
-        s_per = conf_subj_periodics.best_period[
-            conf_subj_periodics.SOURCEID == s]
-    elif s in autovars_true_periods.SOURCEID:
-        s_per = autovars_true_periods.best_period[
-            autovars_true_periods.SOURCEID == s]
-    elif s in autovars_true_periods_s1.SOURCEID:
-        s_per = autovars_true_periods_s1.best_period[
-            autovars_true_periods_s1.SOURCEID == s]
-    else:
-        s_per = np.NaN
+def period_array_maker(spread):
+    """ 
+    Extracts periods from our own data (subjectives, autovars, etc).
 
-    oncvar_periods[i] = s_per
+    Parameters
+    ----------
+    spread : atpy.Table
+        Table that contains the variables you want.
+
+    Returns
+    -------
+    spread_periods : np.ndarray
+        Array of periods or np.nan for each star.
+        Can be glued as a new column to `spread` - it's ordered 
+        like that.
+
+    """
+
+    spread_periods = np.zeros((len(spread)))
+
+    for s, i in zip(spread.SOURCEID, range(len(spread))):
+
+        if s in conf_subj_periodics.SOURCEID:
+            s_per = conf_subj_periodics.best_period[
+                conf_subj_periodics.SOURCEID == s]
+        elif s in autovars_true_periods.SOURCEID:
+            s_per = autovars_true_periods.best_period[
+                autovars_true_periods.SOURCEID == s]
+        elif s in autovars_true_periods_s1.SOURCEID:
+            s_per = autovars_true_periods_s1.best_period[
+                autovars_true_periods_s1.SOURCEID == s]
+        else:
+            s_per = np.NaN
+
+        spread_periods[i] = s_per
+
+    return spread_periods
+
+oncvar_periods = period_array_maker(oncvar_spread)
+ukvar_periods = period_array_maker(ukvar_spread)
+
 
 # Builds a dict for the source. 
 # the length of the dict corresponds 
