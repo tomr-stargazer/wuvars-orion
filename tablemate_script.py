@@ -232,6 +232,16 @@ Stassun1999 = TableParameters(
     name_col = '__SMM99_')
 #tables.append(Stassun1999)
 
+RodriguezLedesma2009 = TableParameters(
+    data = dpath+"RodriguezLedesma2009_table1.fits",
+    alias = "RL2009",
+    full_name = "'Table 1: Sample of the photometric catalogue,' from 'Rotational studies in the Orion Nebula Cluster: from solar mass stars to brown dwarfs' by Rodriguez-Ledesma et al., 2009. 2009A&A...502..883R",
+    ra_cols = ['RAJ2000'],
+    dec_cols = ['DEJ2000'],
+    radec_fmt = 'decimal degrees',
+    name_col = '__H97b_')
+tables.append(RodriguezLedesma2009)
+
 xmm_north_data = atpy.Table(dpath+"matches_xmm_spitzer_north2.txt", 
                             type='ascii')
 xmm_north_data.add_column('Index', np.arange(len(xmm_north_data)))
@@ -288,3 +298,4 @@ def ONCvars_match():
     """
 
     return orion_tablemate.tablemater( Rice_ONCvars, tables)
+
