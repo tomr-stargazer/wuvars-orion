@@ -27,6 +27,8 @@ YSOVAR_periods = atpy.Table(dpath+"MoralesCalderon2011_table4.txt",
                             type='ascii')
 Parihar2009_periods = atpy.Table(dpath+"Parihar2009_table5.fits")
 
+RL2009_periods = atpy.Table(dpath+"RodriguezLedesma2009_table2.fits")
+
 def GCVS_period_get(mated_table, primary_index, gcvs_direct=False):
     """ 
     Gets a period for an input star from the GCVS table.
@@ -265,6 +267,50 @@ def Parihar_period_get(mated_table, primary_index):
 
     return par_period
 
+def RL_period_get(mated_table, primary_index):
+    """
+    Gets a period for an input star from the Rodriguez-Ledesma 2009 table.
+
+    Parameters
+    ----------
+    mated_table : atpy.Table
+        Output of tablemate_script containing desired sources.
+        Must have a Rodriguez-Ledesma09 index column - this implies it 
+        was matched to Rodriguez-Ledesma 09 already.
+    primary_index : int
+        The index (starting at zero) of the input star, in the mated_table.
+
+    Returns
+    -------
+    RL_period : float or np.NaN
+        The Rodriguez-Ledesma 09-listed Period for the input star.
+        If the star is not in the RL09 table, or does not have a listed period,
+        then np.NaN is returned.
+
+    """
+
+    # For this function, it's a little more complicated since we have to
+    # leapfrog from the Rodriguez-Ledesma table straight to the separate period table
+    # (namely, Table 2: `RL2009_periods` in this script)
+
+    RL_ID = mated_table.RL2009_ID[primary_index]
+
+    if RL_ID == -1:
+        return np.NaN
+
+    # should be unique, so [0][0] is justified, unless there's no match
+    try:
+        RL_p_index = np.where(RL2009_periods.__H97b_ == RL_ID)[0][0]
+    except IndexError, e:
+        return np.NaN
+
+    RL_period = RL2009_periods.Per[RL_p_index]
+
+    print RL_period
+
+    return RL_period
+
 
 period_funcs = [GCVS_period_get, CHS01_period_get, YSOVAR_period_get,
-                Herbst_period_get, Parihar_period_get]
+                Herbst_period_get, Parihar_period_get, RL_period_get]
+
