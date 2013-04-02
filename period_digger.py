@@ -306,7 +306,7 @@ def RL_period_get(mated_table, primary_index):
 
     RL_period = RL2009_periods.Per[RL_p_index]
 
-    print RL_period
+#    print RL_period
 
     return RL_period
 

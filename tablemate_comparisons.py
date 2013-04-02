@@ -207,7 +207,7 @@ def source_period_digger(table):
     """
     Extracts literature periods, if they exist, for every star.
 
-    Returns a new table of ONCvars ID, WFCAM sourceid, and periods from
+    Returns a new table of UKvars ID, WFCAM sourceid, and periods from
     each of the following: GCVS, Carpenter 2001, YSOVAR, Herbst 2002, 
     and Parihar 2009.
 
@@ -232,9 +232,10 @@ def source_period_digger(table):
     ysovar_pers = np.zeros(len(table))
     herbst_pers = np.zeros(len(table))
     parihar_pers = np.zeros(len(table))
+    rl09_pers = np.zeros(len(table))
     
     period_columns = [gcvs_pers, chs01_pers, ysovar_pers, 
-                      herbst_pers, parihar_pers]
+                      herbst_pers, parihar_pers, rl09_pers]
     
     for i in range(len(table)):
         for period_get, period_col in zip(period_funcs, period_columns):
@@ -251,6 +252,7 @@ def source_period_digger(table):
     period_table.add_column("YSOVAR_period", ysovar_pers)
     period_table.add_column("Herbst2002_period", herbst_pers)
     period_table.add_column("Parihar2009_period", parihar_pers)
+    period_table.add_column("RodriguezLedesma2009_period", rl09_pers)
 
     return period_table
 
@@ -263,11 +265,11 @@ def how_many_periods_are_new():
 
     """
     
-    period_table = source_period_digger(mated_oncvar)
+    period_table = source_period_digger(mated_ukvar)
     pt = period_table
     # so, basically, we're scanning spd for blank rows? and counting them?
     
-    # for each star in oncvars, (a) check if we found a period for it,
+    # for each star in ukvars, (a) check if we found a period for it,
     # if so, (b) check how many literature periods we have for it.
     # store the results.
     
@@ -275,17 +277,18 @@ def how_many_periods_are_new():
     n_old = 0
     n_missed = 0
     
-    for i in range(len(oncvar_spread)):
+    for i in range(len(ukvar_spread)):
         
         # did we think it was periodic?
-        if not np.isnan(oncvar_periods[i]):
+        if not np.isnan(ukvar_periods[i]):
             
             # did anyone else? 
             if (np.isnan(pt.GCVS_period[i]) and 
                 np.isnan(pt.CHS01_period[i]) and
                 np.isnan(pt.YSOVAR_period[i]) and 
                 np.isnan(pt.Herbst2002_period[i]) and
-                np.isnan(pt.Parihar2009_period[i]) ):
+                np.isnan(pt.Parihar2009_period[i]) and 
+                np.isnan(pt.RodriguezLedesma2009_period[i])):
                 
                 n_new += 1
 
@@ -300,43 +303,46 @@ def how_many_periods_are_new():
                     np.isnan(pt.CHS01_period[i]) and
                     np.isnan(pt.YSOVAR_period[i]) and 
                     np.isnan(pt.Herbst2002_period[i]) and
-                    np.isnan(pt.Parihar2009_period[i]) ):
+                    np.isnan(pt.Parihar2009_period[i]) and 
+                    np.isnan(pt.RodriguezLedesma2009_period[i])):
                 
                 n_missed += 1
             
 
     print n_new, n_old, n_missed
 
-period_table = source_period_digger(mated_oncvar)
+period_table = source_period_digger(mated_ukvar)
 pt = period_table
 
-# let's use oncvar_periods and pt
+# let's use ukvar_periods and pt
 
-GCVS_period_ratio = oncvar_periods / pt.GCVS_period
-CHS01_period_ratio = oncvar_periods / pt.CHS01_period
-YSOVAR_period_ratio = oncvar_periods / pt.YSOVAR_period
-Herbst2002_period_ratio = oncvar_periods / pt.Herbst2002_period
-Parihar2009_period_ratio = oncvar_periods / pt.Parihar2009_period
+GCVS_period_ratio = ukvar_periods / pt.GCVS_period
+CHS01_period_ratio = ukvar_periods / pt.CHS01_period
+YSOVAR_period_ratio = ukvar_periods / pt.YSOVAR_period
+Herbst2002_period_ratio = ukvar_periods / pt.Herbst2002_period
+Parihar2009_period_ratio = ukvar_periods / pt.Parihar2009_period
+RL2009_period_ratio = ukvar_periods / pt.RodriguezLedesma2009_period
 
 
 def how_do_our_periods_compare():
     """
-    Makes five histograms
+    Makes six histograms
     """
 
     fig = plt.figure()
-    colors = ['b', 'g', 'r', 'c', 'm']
+    colors = ['b', 'g', 'r', 'c', 'm', 'y']
 
     names = ["GCVS", "CHS01", 
              "YSOVAR", "Herbst2002", 
-             "Parihar2009"]
+             "Parihar2009", "Rodriguez-Ledesma2009"]
 
     for ratio, n, c, name in zip([GCVS_period_ratio, CHS01_period_ratio, 
                                   YSOVAR_period_ratio, Herbst2002_period_ratio, 
-                                  Parihar2009_period_ratio], np.arange(5)+1,
+                                  Parihar2009_period_ratio, 
+                                  RL2009_period_ratio], np.arange(6)+1,
                                  colors, names):
 
-        sub = fig.add_subplot(5, 1, n)
+        sub = fig.add_subplot(6, 1, n)
 
         defined_ratio = ratio[~np.isnan(ratio)]
 
