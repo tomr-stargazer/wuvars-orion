@@ -58,10 +58,38 @@ def match_xmm_to_ukirt():
     mated_c2 =  tablemater(XMM_north_c2, ukirt_list)
     mated_c3 =  tablemater(XMM_north_c3, ukirt_list)
 
-    # Let's commit at this point.
+    mated_list = [mated_xmm, mated_c1, mated_c2, mated_c3]
+
     # What kinds of plots do we want?
 
-    
+    # Histogram of S, for each xray category (incl. "all")
+
+    # Let's start with strict-autovars.
+    fig = plt.figure()
+
+    uks_i = 'UKIRT_autocan_strict_allstars_index'
+    uks_d = autocan_strict
+
+    s1 = plt.subplot(4,1,1)
+    s2 = plt.subplot(4,1,2)
+    s3 = plt.subplot(4,1,3)
+    s4 = plt.subplot(4,1,4)
+
+    subplot_list = [s1, s2, s3, s4]
+
+    for s, m in zip(subplot_list, mated_list):
+        # in approximate english: "the stats table, where you take the row 
+        # handed to you by the mated table, but only where there's a match"
+        try:
+            s.hist( 
+                uks_d.Stetson[ 
+                    m.where(m[uks_i] != -1)[uks_i] 
+                    ], 
+                range=[0,5], bins=20
+                )
+        except: pass
+
+    plt.show()
 
     return mated_xmm, mated_c1, mated_c2, mated_c3
 
