@@ -17,6 +17,53 @@ import matplotlib.pyplot as plt
 from tablemate_comparisons import ukvar_spread as ukvar_s
 from tablemate_comparisons import ukvar_periods
 from plot2 import plot_trajectory_vanilla
+from tablemate_script import (XMM_north, XMM_north_c1, 
+                              XMM_north_c2, XMM_north_c3)
+from orion_tablemate import tablemater, TableParameters
+from official_star_counter import autocan_strict, autocan_true
+
+
+Ukirt_autocan_strict = TableParameters(
+    data = autocan_strict,
+    alias = "UKIRT_autocan_strict_allstars",
+    full_name = "Master spreadsheet for 2436 stars in the UKIRT data that have 'pristine' data quality in all 3 bands.",
+    ra_cols = ['RA'], dec_cols=['DEC'],
+    radec_fmt = 'decimal-radians',
+    name_col = 'SOURCEID')
+    
+Ukirt_autocan_true = TableParameters(
+    data = autocan_true,
+    alias = "UKIRT_autocan_true_allstars",
+    full_name = "Master spreadsheet for 3705 stars in the UKIRT data that have 'pristine' data quality in at least 1 band.",
+    ra_cols = ['RA'], dec_cols=['DEC'],
+    radec_fmt = 'decimal-radians',
+    name_col = 'SOURCEID')
+
+ukirt_list = [Ukirt_autocan_strict, Ukirt_autocan_true]
+
+# I'll wanna include UKvars at some point, too.
+
+# Now let's do question one.
+
+def match_xmm_to_ukirt():
+    """ 
+    A function that performs an "inverse" cross-match between 
+    X-ray selected sources from XMM, and our UKIRT stars.
+
+    """
+
+    mated_xmm = tablemater(XMM_north, ukirt_list)
+    
+    mated_c1 =  tablemater(XMM_north_c1, ukirt_list)
+    mated_c2 =  tablemater(XMM_north_c2, ukirt_list)
+    mated_c3 =  tablemater(XMM_north_c3, ukirt_list)
+
+    # Let's commit at this point.
+    # What kinds of plots do we want?
+
+    
+
+    return mated_xmm, mated_c1, mated_c2, mated_c3
 
 # crude copy
 ukvar_spread = ukvar_s.where(ukvar_s.SOURCEID > 0)

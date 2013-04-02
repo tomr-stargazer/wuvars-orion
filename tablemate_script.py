@@ -255,6 +255,37 @@ XMM_north = TableParameters(
     radec_fmt = 'decimal degrees',
     name_col = 'Index')
 
+# Just the class one sources
+XMM_north_c1 = TableParameters(
+    data = xmm_north_data.where(xmm_north_data.proto == 1),
+    alias = "XMMnorth_c1",
+    full_name = "XMM north table: Class I ('proto')",
+    ra_cols = ['ra'],
+    dec_cols = ['dec'],
+    radec_fmt = 'decimal degrees',
+    name_col = 'Index')
+
+# Just the class two sources
+XMM_north_c2 = TableParameters(
+    data = xmm_north_data.where(xmm_north_data.disks ==1),
+    alias = "XMMnorth_c2",
+    full_name = "XMM north table: Class II ('disks')",
+    ra_cols = ['ra'],
+    dec_cols = ['dec'],
+    radec_fmt = 'decimal degrees',
+    name_col = 'Index')
+
+# Just the class three sources
+XMM_north_c3 = TableParameters(
+    data = xmm_north_data.where(xmm_north_data.c3cnd =="1"),
+    alias = "XMMnorth_c3",
+    full_name = "XMM north table: Class III ('c3cnd')",
+    ra_cols = ['ra'],
+    dec_cols = ['dec'],
+    radec_fmt = 'decimal degrees',
+    name_col = 'Index')
+
+
     
 # Here's our first function, that we'll use just to get things rolling
 def test():
