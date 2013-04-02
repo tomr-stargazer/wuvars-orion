@@ -240,6 +240,9 @@ def tablemater(primary_table, secondary_table_list):
 
     pt = primary_table
 
+    if type(secondary_table_list) is not list:
+        secondary_table_list = [secondary_table_list]
+
     for st in secondary_table_list:
         
         # We are appending two columns to mated_table:
