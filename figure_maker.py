@@ -31,8 +31,8 @@ import matplotlib.pyplot as plt
 from official_star_counter import *
 from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
                                    hk_empty, hk_filled)
-from tablemate_comparisons import (mated_oncvar, oncvar_spread, 
-                                   oncvar_periods, source_period_digger)
+from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
+                                   ukvar_periods, source_period_digger)
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
@@ -321,7 +321,7 @@ def f_colorslope_threepanel(title=False):
     plt.show()
 
 
-# Attaching periods to oncvar_spread
+# Attaching periods to ukvar_spread
 
 
 def f_period_lit_comparisons():
@@ -329,10 +329,10 @@ def f_period_lit_comparisons():
     A figure plotting the periods that we derive in our study
     against literature periods.
     """
-    lit_periods = source_period_digger(mated_oncvar)
+    lit_periods = source_period_digger(mated_ukvar)
 
     # what we REALLY need is a table that does ONCvars and best periods...
-    # problem solved! `oncvar_periods`
+    # problem solved! `ukvar_periods`
     
     fig = plt.figure()
 
@@ -342,16 +342,19 @@ def f_period_lit_comparisons():
     plt.plot([0,80],[0,40], 'g:')
     
     # 
-    plt.plot(oncvar_periods, lit_periods.GCVS_period, 'o', 
+    plt.plot(ukvar_periods, lit_periods.GCVS_period, 'o', 
              label='GCVS periods')
-    plt.plot(oncvar_periods, lit_periods.CHS01_period, 'o', 
+    plt.plot(ukvar_periods, lit_periods.CHS01_period, 'o', 
              label='CHS01 periods')
-    plt.plot(oncvar_periods, lit_periods.YSOVAR_period, 'o', 
+    plt.plot(ukvar_periods, lit_periods.YSOVAR_period, 'o', 
              label='YSOVAR periods')
-    plt.plot(oncvar_periods, lit_periods.Herbst2002_period, 'o', 
+    plt.plot(ukvar_periods, lit_periods.Herbst2002_period, 'o', 
              label='Herbst2002 periods')
-    plt.plot(oncvar_periods, lit_periods.Parihar2009_period, 'o', 
+    plt.plot(ukvar_periods, lit_periods.Parihar2009_period, 'o', 
              label='Parihar2009 periods')
+    plt.plot(ukvar_periods, lit_periods.RodriguezLedesma2009_period, 'o', 
+             label='RodriguezLedesma2009 periods')
+
     
     plt.legend()
 
