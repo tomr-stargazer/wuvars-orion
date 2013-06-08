@@ -17,3 +17,12 @@ ukvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadshe
 # ID of UKvar 1226
 uk1226_id = 44199508514050
 
+uk1226 = low_periodics.where(low_periodics.SOURCEID == uk1226_id)
+
+# now make uk1226 conform to ukvar_spread's 
+unwanted_columns = [x in uk1226.columns.keys 
+                    if x not in ukvar_spread.columns.keys]
+
+print unwanted_columns
+
+#uk1226.remove_columns(
