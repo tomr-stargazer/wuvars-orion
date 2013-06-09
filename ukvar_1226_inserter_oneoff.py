@@ -7,7 +7,10 @@ This is a one-off script to insert a single row into ukvar_spread.
 
 import numpy as np
 
+import atpy
+
 from official_star_counter import low_periodics
+from simbad_namer import simbad_namer
 
 ukvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames.fits")
 
@@ -20,9 +23,32 @@ uk1226_id = 44199508514050
 uk1226 = low_periodics.where(low_periodics.SOURCEID == uk1226_id)
 
 # now make uk1226 conform to ukvar_spread's 
-unwanted_columns = [x in uk1226.columns.keys 
-                    if x not in ukvar_spread.columns.keys]
+unwanted_columns = [x for x in uk1226.columns.keys 
+                    if (x not in ukvar_spread.columns.keys)]
 
 print unwanted_columns
 
-#uk1226.remove_columns(
+uk1226.remove_columns(unwanted_columns)
+
+wanted_columns = [x for x in ukvar_spread.columns.keys 
+                    if (x not in uk1226.columns.keys)]
+
+print wanted_columns
+
+missing_data = {'autovar' : 0, # not automatic
+               'strict' : 0, # not strict
+               'periodic' : 1, # periodic!
+               'ONCvar_ID' : np.nan, # not an ONCvar -- unique among UKvars
+               'SIMBAD_name' : simbad_namer(uk1226), # 'V* V2033 Ori'
+               'clone' : 0, # not a clone! I hope!
+               'UKvar_ID' : 1226}
+
+# table.add_column(name (str), data (array))
+#uk1226.add_column
+for (column, value) in missing_data.items():
+    uk1226.add_column(column, np.array([value]))
+
+# now let's do the appending
+
+ukvar_spread_w1226 = ukvar_spread.where(ukvar_spread.SOURCEID > 0)
+ukvar_spread_w1226.append(uk1226)
