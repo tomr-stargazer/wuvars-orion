@@ -61,27 +61,19 @@ conf_subj_periodics.remove_columns(
     ['stats', "CONFIRMED PERIODIC", "CONFIRMED VARIABLE"])
 new_conf_subj_periodics.remove_columns(
     ["CONFIRMED_PERIODIC", "CONFIRMED_VARIABLE"])
-conf_subj_periodics.append( new_conf_subj_periodics )
 
+# This little bit about temp_table is some magic to get the column types to
+# line up between uk1226 and conf_subj_periodics.
 temp_table = atpy.Table()
-
 for column in conf_subj_periodics.columns.keys:
-    if conf_subj_periodics[column].dtype != uk1226[column].dtype:
-        print (column, ": ", conf_subj_periodics[column].dtype.type, 
-               uk1226[column].dtype.type)
     temp_table.add_column(
         column, 
-        np.array([uk1226[column][0]]).astype(conf_subj_periodics[column].dtype.descr[0][1]),
+        np.array([uk1226[column][0]]).astype(
+            conf_subj_periodics[column].dtype.descr[0][1]),
         dtype=conf_subj_periodics[column].dtype)
-    if conf_subj_periodics[column].dtype != temp_table[column].dtype:
-        print (column, ": ", conf_subj_periodics[column].dtype.type, 
-               temp_table[column].dtype.type)
-        print (column, ": ", conf_subj_periodics[column].dtype, 
-               temp_table[column].dtype)
 
-
+conf_subj_periodics.append( new_conf_subj_periodics )
 conf_subj_periodics.append( temp_table )
-#conf_subj_periodics.append( uk1226 )
 
 new_conf_subj_nonpers.remove_columns(
     ['pstar_mean', 'pstar_median', 'pstar_rms'])
