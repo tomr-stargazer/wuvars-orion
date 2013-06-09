@@ -71,10 +71,16 @@ for column in conf_subj_periodics.columns.keys:
                uk1226[column].dtype.type)
     temp_table.add_column(
         column, 
-        uk1226[column].astype(conf_subj_periodics[column].dtype.descr[0][1]), 
-        dtype=conf_subj_periodics[column].dtype.type)
+        np.array([uk1226[column][0]]).astype(conf_subj_periodics[column].dtype.descr[0][1]),
+        dtype=conf_subj_periodics[column].dtype)
+    if conf_subj_periodics[column].dtype != temp_table[column].dtype:
+        print (column, ": ", conf_subj_periodics[column].dtype.type, 
+               temp_table[column].dtype.type)
+        print (column, ": ", conf_subj_periodics[column].dtype, 
+               temp_table[column].dtype)
 
-conf_subj_periodics.append( low_periodics )
+
+conf_subj_periodics.append( temp_table )
 #conf_subj_periodics.append( uk1226 )
 
 new_conf_subj_nonpers.remove_columns(
