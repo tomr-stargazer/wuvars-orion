@@ -35,20 +35,38 @@ wanted_columns = [x for x in ukvar_spread.columns.keys
 
 print wanted_columns
 
-missing_data = {'autovar' : 0, # not automatic
-               'strict' : 0, # not strict
-               'periodic' : 1, # periodic!
-               'ONCvar_ID' : np.nan, # not an ONCvar -- unique among UKvars
-               'SIMBAD_name' : simbad_namer(uk1226), # 'V* V2033 Ori'
-               'clone' : 0, # not a clone! I hope!
-               'UKvar_ID' : 1226}
+missing_cols = ['autovar',
+                'strict',
+                'periodic',
+                'ONCvar_ID',
+                'SIMBAD_name',
+                'clone',
+                'UKvar_ID']
+
+missing_vals =  [0., # not automatic
+                 0., # not strict
+                 1., # periodic!
+                 -1, # not an ONCvar -- unique among UKvars
+                 simbad_namer(uk1226)[0], # 'V* V2033 Ori'
+                 0, # not a clone! I hope!
+                 1226] # 1225 existing UKvars.
+
+#missing_types = [None, None, None, None, '|S29', None, None]
 
 # table.add_column(name (str), data (array))
 #uk1226.add_column
-for (column, value) in missing_data.items():
+for (column, value) in zip(missing_cols, missing_vals):
     uk1226.add_column(column, np.array([value]))
 
+for column in ukvar_spread.columns.keys:
+    if ukvar_spread[column].dtype.type != uk1226[column].dtype.type:
+        print (column, ": ", ukvar_spread[column].dtype.type, 
+               uk1226[column].dtype.type)
+
 # now let's do the appending
+
+print ukvar_spread.shape
+print uk1226.shape
 
 ukvar_spread_w1226 = ukvar_spread.where(ukvar_spread.SOURCEID > 0)
 ukvar_spread_w1226.append(uk1226)
