@@ -51,17 +51,19 @@ missing_vals =  [0., # not automatic
                  0, # not a clone! I hope!
                  1226] # 1225 existing UKvars.
 
-#missing_types = [None, None, None, None, '|S29', None, None]
+missing_types = ['>f8', '>f8', '>f8', '>i8', '|S29', '>i8', '>i8']
 
 # table.add_column(name (str), data (array))
 #uk1226.add_column
-for (column, value) in zip(missing_cols, missing_vals):
-    uk1226.add_column(column, np.array([value]))
+
+
+for (column, value, dtype) in zip(missing_cols, missing_vals, missing_types):
+    uk1226.add_column(column, np.array([value]), dtype=dtype)
 
 for column in ukvar_spread.columns.keys:
-    if ukvar_spread[column].dtype.type != uk1226[column].dtype.type:
-        print (column, ": ", ukvar_spread[column].dtype.type, 
-               uk1226[column].dtype.type)
+    if ukvar_spread[column].dtype != uk1226[column].dtype:
+        print (column, ": ", ukvar_spread[column].dtype, 
+               uk1226[column].dtype)
 
 # now let's do the appending
 
