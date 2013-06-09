@@ -79,4 +79,4 @@ print uk1226.shape
 ukvar_spread_w1226 = ukvar_spread.where(ukvar_spread.SOURCEID > 0)
 ukvar_spread_w1226.append(uk1226)
 
-ukvar_spread_w1226.write("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames.fits")
+ukvar_spread_w1226.write("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames_w1226.fits")
