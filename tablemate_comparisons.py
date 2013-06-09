@@ -46,7 +46,7 @@ mated_oncvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/matched_table_w
 oncvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ONCvar_spreadsheet_withSIMBADnames.fits")
 
 mated_ukvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ukvar_matched_table_withSIMBAD_2013_3_30.fits")
-ukvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames.fits")
+ukvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames_w1226.fits")
 
 def period_array_maker(spread):
     """ 
