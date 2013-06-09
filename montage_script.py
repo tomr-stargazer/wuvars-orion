@@ -42,7 +42,17 @@ new_subjective_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_s
 
 new_subjective_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_nonperiod_candidate_spreadsheet.fits")
 
+low_periodics = atpy.Table("/home/tom/reu/ORION//DATA/low_periodics.fits")
+
 data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
+
+# for UKvar 1226
+uk1226_id = 44199508514050
+uk1226 = low_periodics.where(low_periodics.SOURCEID == uk1226_id)
+
+uk1226_unwanted_columns = [x for x in uk1226.columns.keys 
+                           if (x not in conf_subj_periodics.columns.keys)]
+uk1226.remove_columns(uk1226_unwanted_columns)
 
 
 ### This is where we conjoin the "new" guys to the "old" guys.
@@ -52,6 +62,20 @@ conf_subj_periodics.remove_columns(
 new_conf_subj_periodics.remove_columns(
     ["CONFIRMED_PERIODIC", "CONFIRMED_VARIABLE"])
 conf_subj_periodics.append( new_conf_subj_periodics )
+
+temp_table = atpy.Table()
+
+for column in conf_subj_periodics.columns.keys:
+    if conf_subj_periodics[column].dtype != uk1226[column].dtype:
+        print (column, ": ", conf_subj_periodics[column].dtype.type, 
+               uk1226[column].dtype.type)
+    temp_table.add_column(
+        column, 
+        uk1226[column].astype(conf_subj_periodics[column].dtype.descr[0][1]), 
+        dtype=conf_subj_periodics[column].dtype.type)
+
+conf_subj_periodics.append( low_periodics )
+#conf_subj_periodics.append( uk1226 )
 
 new_conf_subj_nonpers.remove_columns(
     ['pstar_mean', 'pstar_median', 'pstar_rms'])
