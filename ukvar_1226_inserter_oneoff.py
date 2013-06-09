@@ -1,7 +1,13 @@
 """
 Inserts UKvar #1226 into ukvar_spread.
 
-This is a one-off script to insert a single row into ukvar_spread.
+This is a one-off script to insert a single row into ukvar_spread. 
+It does some fancy things to (a) make sure all the values are correct, 
+especially the SIMBAD name; and (b) make sure the appending process goes 
+properly.
+
+I've noticed that sometimes, when I run this multiple times in pylab, 
+it'll segfault. Just a note.
 
 """
 
@@ -72,3 +78,5 @@ print uk1226.shape
 
 ukvar_spread_w1226 = ukvar_spread.where(ukvar_spread.SOURCEID > 0)
 ukvar_spread_w1226.append(uk1226)
+
+ukvar_spread_w1226.write("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames.fits")
