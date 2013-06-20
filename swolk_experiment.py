@@ -96,9 +96,46 @@ def match_xmm_to_ukirt():
         # annotate each subplot so they're readable
         s.text(0.6, 0.75, name, transform=s.transAxes)
 
-    s1.set_title("Histogram: Stetson indices of X-ray-selected stars in ONC")
+    s1.set_title("Histogram: Stetson indices of X-ray-selected stars ('strict') in ONC")
     s4.set_xlabel("Stetson Index")
     plt.show()
+
+    # Now, less-strict autovars.
+    fig = plt.figure()
+
+    uka_i = 'UKIRT_autocan_true_allstars_index'
+    uka_d = autocan_true
+
+    s1 = plt.subplot(4,1,1)
+    s2 = plt.subplot(4,1,2)
+    s3 = plt.subplot(4,1,3)
+    s4 = plt.subplot(4,1,4)
+
+    subplot_list = [s1, s2, s3, s4]
+    name_list = ["all XMM sources",
+                 "Class 1 XMM sources",
+                 "Class 2 XMM sources",
+                 "Class 3 XMM sources"]
+
+    for s, m, name in zip(subplot_list, mated_list, name_list):
+        # in approximate english: "the stats table, where you take the row 
+        # handed to you by the mated table, but only where there's a match"
+        try:
+            s.hist( 
+                uka_d.Stetson[ 
+                    m.where(m[uka_i] != -1)[uka_i] 
+                    ], 
+                range=[0,5], bins=20
+                )
+        except: pass
+
+        # annotate each subplot so they're readable
+        s.text(0.6, 0.75, name, transform=s.transAxes)
+
+    s1.set_title("Histogram: Stetson indices of X-ray-selected stars ('auto') in ONC")
+    s4.set_xlabel("Stetson Index")
+    plt.show()
+
 
     return mated_xmm, mated_c1, mated_c2, mated_c3
 
