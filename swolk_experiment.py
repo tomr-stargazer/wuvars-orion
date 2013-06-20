@@ -22,7 +22,7 @@ from tablemate_script import (XMM_north, XMM_north_c1,
 from orion_tablemate import tablemater, TableParameters
 from official_star_counter import autocan_strict, autocan_true
 
-
+# We'll be "mating" these tables to the XMM data.
 Ukirt_autocan_strict = TableParameters(
     data = autocan_strict,
     alias = "UKIRT_autocan_strict_allstars",
@@ -42,7 +42,6 @@ Ukirt_autocan_true = TableParameters(
 ukirt_list = [Ukirt_autocan_strict, Ukirt_autocan_true]
 
 # I'll wanna include UKvars at some point, too.
-
 # Now let's do question one.
 
 def match_xmm_to_ukirt():
@@ -52,6 +51,7 @@ def match_xmm_to_ukirt():
 
     """
 
+    # Produces a table of cross-match IDs and indices.
     mated_xmm = tablemater(XMM_north, ukirt_list)
     
     mated_c1 =  tablemater(XMM_north_c1, ukirt_list)
@@ -76,8 +76,12 @@ def match_xmm_to_ukirt():
     s4 = plt.subplot(4,1,4)
 
     subplot_list = [s1, s2, s3, s4]
+    name_list = ["all XMM sources",
+                 "Class 1 XMM sources",
+                 "Class 2 XMM sources",
+                 "Class 3 XMM sources"]
 
-    for s, m in zip(subplot_list, mated_list):
+    for s, m, name in zip(subplot_list, mated_list, name_list):
         # in approximate english: "the stats table, where you take the row 
         # handed to you by the mated table, but only where there's a match"
         try:
@@ -89,6 +93,11 @@ def match_xmm_to_ukirt():
                 )
         except: pass
 
+        # annotate each subplot so they're readable
+        s.text(0.6, 0.75, name, transform=s.transAxes)
+
+    s1.set_title("Histogram: Stetson indices of X-ray-selected stars in ONC")
+    s4.set_xlabel("Stetson Index")
     plt.show()
 
     return mated_xmm, mated_c1, mated_c2, mated_c3
