@@ -61,10 +61,7 @@ def match_xmm_to_ukirt():
     mated_list = [mated_xmm, mated_c1, mated_c2, mated_c3]
 
     # What kinds of plots do we want?
-
     # Histogram of S, for each xray category (incl. "all")
-
-    # Let's start with strict-autovars.
     fig = plt.figure()
 
     uks_i = 'UKIRT_autocan_strict_allstars_index'
@@ -117,6 +114,26 @@ def match_xmm_to_ukirt():
     s1.legend()
     s4.set_xlabel("Stetson Index")
     plt.show()
+
+
+    # Now, I want to print out some stats relevant to what we want.
+    # Think of how "official_star_counter" works.
+
+    # For each group, print the stuff.
+
+    for s, m, name in zip(subplot_list, mated_list, name_list):
+        # Mean S and Variance?
+        auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
+        strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
+
+        print (u"%s Mean Stetson for auto-stars: %.3f +- %.2f" % 
+               (name, auto_stetson.mean(), auto_stetson.std()))
+        print (u"%s Mean Stetson for strict-stars: %.3f +- %.2f" % 
+               (name, strict_stetson.mean(), strict_stetson.std()))
+        
+#    for s, m, name in zip(subplot_list, mated_list, name_list):
+        # Mean Delta Mag (and sigmas)?
+        # What fraction have good periods?
 
 
     return mated_xmm, mated_c1, mated_c2, mated_c3
