@@ -159,7 +159,6 @@ def match_spitzer_to_ukirt():
     print "HEY STOP YOU FORGOT TO UPDATE THIS CODE!"
     mated_P =  tablemater(XMM_north_c1, ukirt_list)
     mated_D =  tablemater(XMM_north_c2, ukirt_list)
-#    mated_c3 =  tablemater(XMM_north_c3, ukirt_list)
 
     mated_list = [mated_spitzer, mated_P, mated_D]
 
