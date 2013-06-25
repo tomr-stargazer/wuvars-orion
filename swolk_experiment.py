@@ -140,10 +140,110 @@ def match_xmm_to_ukirt():
                (name, strict_delta.mean(), strict_delta.std()))
 
 
-        # What fraction have good periods?
-
+        # What fraction have good periods? Not answerable right now.
 
     return mated_xmm, mated_c1, mated_c2, mated_c3
+
+def match_spitzer_to_ukirt():
+    """ 
+    A function that performs an "inverse" cross-match between 
+    X-ray selected sources from SPITZER, and our UKIRT stars.
+
+    """
+
+    # Produces a table of cross-match IDs and indices.
+    mated_spitzer = tablemater(XMM_north, ukirt_list)
+    
+    mated_c1 =  tablemater(XMM_north_c1, ukirt_list)
+    mated_c2 =  tablemater(XMM_north_c2, ukirt_list)
+    mated_c3 =  tablemater(XMM_north_c3, ukirt_list)
+
+    mated_list = [mated_xmm, mated_c1, mated_c2, mated_c3]
+
+    # What kinds of plots do we want?
+    # Histogram of S, for each xray category (incl. "all")
+    fig = plt.figure()
+
+    uks_i = 'UKIRT_autocan_strict_allstars_index'
+    uks_d = autocan_strict
+
+    uka_i = 'UKIRT_autocan_true_allstars_index'
+    uka_d = autocan_true
+
+    s1 = plt.subplot(4,1,1)
+    s2 = plt.subplot(4,1,2)
+    s3 = plt.subplot(4,1,3)
+    s4 = plt.subplot(4,1,4)
+
+    subplot_list = [s1, s2, s3, s4]
+    name_list = ["all XMM sources",
+                 "Class 1 XMM sources",
+                 "Class 2 XMM sources",
+                 "Class 3 XMM sources"]
+
+    for s, m, name in zip(subplot_list, mated_list, name_list):
+        # in approximate english: "the stats table, where you take the row 
+        # handed to you by the mated table, but only where there's a match"
+        try:
+            # AUTO
+            s.hist( 
+                uka_d.Stetson[ 
+                    m.where(m[uka_i] != -1)[uka_i] 
+                    ], 
+                range=[0,5], bins=20, color='b', label="1-band pristine"
+                )
+        except: pass
+        try:
+            # STRICT
+            s.hist( 
+                uks_d.Stetson[ 
+                    m.where(m[uks_i] != -1)[uks_i] 
+                    ], 
+                range=[0,5], bins=20, color='r', label="3-band pristine"
+                )
+        except: pass
+
+        # annotate each subplot so they're readable
+        if s == s1:
+            s.text(0.35, 0.75, name, transform=s.transAxes)
+        else:
+            s.text(0.65, 0.75, name, transform=s.transAxes)
+        
+
+    s1.set_title("Histogram: Stetson indices of X-ray-selected stars in ONC")
+    s1.legend()
+    s4.set_xlabel("Stetson Index")
+    plt.show()
+
+
+    # Now, I want to print out some stats relevant to what we want.
+    # Think of how "official_star_counter" works.
+
+    # For each group, print the stuff.
+
+    for s, m, name in zip(subplot_list, mated_list, name_list):
+        # Mean S and Variance?
+        auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
+        strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
+
+        print ("%s Mean Stetson for auto-stars: %.3f +- %.2f" % 
+               (name, auto_stetson.mean(), auto_stetson.std()))
+        print ("%s Mean Stetson for strict-stars: %.3f +- %.2f" % 
+               (name, strict_stetson.mean(), strict_stetson.std()))
+        
+    for s, m, name in zip(subplot_list, mated_list, name_list):
+        # Mean Delta Mag (and sigmas)?
+#        auto_delta = uka_d.[m.where(m[uka_i] != -1)[uka_i]]# doesn't quite work
+        strict_delta = uks_d.k_range[m.where(m[uks_i] != -1)[uks_i]]
+
+        print ("%s Mean delta-K (max-min) for strict-stars: %.3f +- %.2f" % 
+               (name, strict_delta.mean(), strict_delta.std()))
+
+
+        # What fraction have good periods? Not answerable right now.
+
+    return mated_spitzer, mated_c1, mated_c2, mated_c3
+
 
 # crude copy
 ukvar_spread = ukvar_s.where(ukvar_s.SOURCEID > 0)
