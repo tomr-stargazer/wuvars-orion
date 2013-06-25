@@ -147,21 +147,24 @@ def match_xmm_to_ukirt():
 def match_spitzer_to_ukirt():
     """ 
     A function that performs an "inverse" cross-match between 
-    X-ray selected sources from SPITZER, and our UKIRT stars.
+    mid-IR selected sources from Spitzer/Megeath2012, and our UKIRT stars.
 
     """
 
     # Produces a table of cross-match IDs and indices.
-    mated_spitzer = tablemater(XMM_north, ukirt_list)
+    mated_spitzer = tablemater(Megeath2012, ukirt_list)
     
-    mated_c1 =  tablemater(XMM_north_c1, ukirt_list)
-    mated_c2 =  tablemater(XMM_north_c2, ukirt_list)
-    mated_c3 =  tablemater(XMM_north_c3, ukirt_list)
+    # Clearly, we need to update this to use slices of the Megeath table
+    # filtered on Class.
+    print "HEY STOP YOU FORGOT TO UPDATE THIS CODE!"
+    mated_P =  tablemater(XMM_north_c1, ukirt_list)
+    mated_D =  tablemater(XMM_north_c2, ukirt_list)
+#    mated_c3 =  tablemater(XMM_north_c3, ukirt_list)
 
-    mated_list = [mated_xmm, mated_c1, mated_c2, mated_c3]
+    mated_list = [mated_spitzer, mated_P, mated_D]
 
     # What kinds of plots do we want?
-    # Histogram of S, for each xray category (incl. "all")
+    # Histogram of S, for each IR category (incl. "all")
     fig = plt.figure()
 
     uks_i = 'UKIRT_autocan_strict_allstars_index'
@@ -170,16 +173,14 @@ def match_spitzer_to_ukirt():
     uka_i = 'UKIRT_autocan_true_allstars_index'
     uka_d = autocan_true
 
-    s1 = plt.subplot(4,1,1)
-    s2 = plt.subplot(4,1,2)
-    s3 = plt.subplot(4,1,3)
-    s4 = plt.subplot(4,1,4)
+    s1 = plt.subplot(3,1,1)
+    s2 = plt.subplot(3,1,2)
+    s3 = plt.subplot(3,1,3)
 
-    subplot_list = [s1, s2, s3, s4]
-    name_list = ["all XMM sources",
-                 "Class 1 XMM sources",
-                 "Class 2 XMM sources",
-                 "Class 3 XMM sources"]
+    subplot_list = [s1, s2, s3]
+    name_list = ["all Spitzer YSO sources",
+                 "Spitzer Protostars",
+                 "Spitzer Disked sources"]
 
     for s, m, name in zip(subplot_list, mated_list, name_list):
         # in approximate english: "the stats table, where you take the row 
