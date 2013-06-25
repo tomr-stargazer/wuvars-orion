@@ -126,13 +126,20 @@ def match_xmm_to_ukirt():
         auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
         strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
 
-        print (u"%s Mean Stetson for auto-stars: %.3f +- %.2f" % 
+        print ("%s Mean Stetson for auto-stars: %.3f +- %.2f" % 
                (name, auto_stetson.mean(), auto_stetson.std()))
-        print (u"%s Mean Stetson for strict-stars: %.3f +- %.2f" % 
+        print ("%s Mean Stetson for strict-stars: %.3f +- %.2f" % 
                (name, strict_stetson.mean(), strict_stetson.std()))
         
-#    for s, m, name in zip(subplot_list, mated_list, name_list):
+    for s, m, name in zip(subplot_list, mated_list, name_list):
         # Mean Delta Mag (and sigmas)?
+#        auto_delta = uka_d.[m.where(m[uka_i] != -1)[uka_i]]# doesn't quite work
+        strict_delta = uks_d.k_range[m.where(m[uks_i] != -1)[uks_i]]
+
+        print ("%s Mean delta-K (max-min) for strict-stars: %.3f +- %.2f" % 
+               (name, strict_delta.mean(), strict_delta.std()))
+
+
         # What fraction have good periods?
 
 
