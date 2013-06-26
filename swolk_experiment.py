@@ -242,6 +242,37 @@ def match_spitzer_to_ukirt():
 
         # What fraction have good periods? Not answerable right now.
 
+    # Finally, let's make a plot of S vs alpha_irac.
+    fig2 = plt.figure()
+
+    # define the Stetson column and the alpha_irac column
+    m = mated_spitzer
+
+    meg_i = 'Megeath2012_index'
+    meg_d = Megeath2012.data
+
+    auto_alpha_irac = meg_d.alpha[m.where(
+            m[uka_i] != -1)[meg_i] ]
+    strict_alpha_irac = meg_d.alpha[m.where(
+            m[uks_i] != -1)[meg_i] ]
+
+    auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
+    strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
+
+    plt.plot( auto_alpha_irac, auto_stetson, 'bo', label="1-band pristine")
+    plt.plot( strict_alpha_irac, strict_stetson, 'ro', label="3-band pristine")
+        
+    plt.legend()
+
+    plt.xlabel(r"Spectral index $\alpha_{IRAC}$", fontsize=18)
+    plt.ylabel("Stetson Index", fontsize=18)
+
+    plt.title(r"Stetson vs $\alpha$ for Spitzer-selected sources")
+
+    plt.show()
+
+    print auto_alpha_irac
+
     return mated_spitzer, mated_P, mated_D
 
 
