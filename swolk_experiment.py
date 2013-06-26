@@ -271,8 +271,6 @@ def match_spitzer_to_ukirt():
 
     plt.show()
 
-    print auto_alpha_irac
-
     return mated_spitzer, mated_P, mated_D
 
 
