@@ -285,6 +285,27 @@ XMM_north_c3 = TableParameters(
     radec_fmt = 'decimal degrees',
     name_col = 'Index')
 
+Megeath_P = TableParameters(
+    data = (Megeath2012.data.
+            where(Megeath2012.data.Class == 'P') ),
+    alias = "Megeath2012_P",
+    full_name = "Protostar ('P' only) Selection from 'Table 1: Spitzer-identified YSOs: IRAC, MIPS, and 2MASS Magnitudes', from 'The Spitzer Space Telescope Survey of the Orion A & B Molecular Clouds - Part I: A Census of Dusty Young Stellar Objects and a Study of their Mid-IR Variability' by Megeath et al., 2012.",
+    ra_cols = ["RAh", "RAm", "RAs"],
+    dec_cols = ["DE-", "DEd", "DEm", "DEs"],
+    radec_fmt = 'sex-three-four',
+    name_col = 'Num')
+
+Megeath_D = TableParameters(
+    data = (Megeath2012.data.
+            where(Megeath2012.data.Class == 'D')),
+    alias = "Megeath2012_D",
+    full_name = "Disk Selection from 'Table 1: Spitzer-identified YSOs: IRAC, MIPS, and 2MASS Magnitudes', from 'The Spitzer Space Telescope Survey of the Orion A & B Molecular Clouds - Part I: A Census of Dusty Young Stellar Objects and a Study of their Mid-IR Variability' by Megeath et al., 2012.",
+    ra_cols = ["RAh", "RAm", "RAs"],
+    dec_cols = ["DE-", "DEd", "DEm", "DEs"],
+    radec_fmt = 'sex-three-four',
+    name_col = 'Num')
+
+
 
     
 # Here's our first function, that we'll use just to get things rolling

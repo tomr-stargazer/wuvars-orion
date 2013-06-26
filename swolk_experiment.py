@@ -18,7 +18,8 @@ from tablemate_comparisons import ukvar_spread as ukvar_s
 from tablemate_comparisons import ukvar_periods
 from plot2 import plot_trajectory_vanilla
 from tablemate_script import (XMM_north, XMM_north_c1, 
-                              XMM_north_c2, XMM_north_c3)
+                              XMM_north_c2, XMM_north_c3,
+                              Megeath2012, Megeath_P, Megeath_D)
 from orion_tablemate import tablemater, TableParameters
 from official_star_counter import autocan_strict, autocan_true
 
@@ -156,9 +157,8 @@ def match_spitzer_to_ukirt():
     
     # Clearly, we need to update this to use slices of the Megeath table
     # filtered on Class.
-    print "HEY STOP YOU FORGOT TO UPDATE THIS CODE!"
-    mated_P =  tablemater(XMM_north_c1, ukirt_list)
-    mated_D =  tablemater(XMM_north_c2, ukirt_list)
+    mated_P =  tablemater(Megeath_P, ukirt_list)
+    mated_D =  tablemater(Megeath_D, ukirt_list)
 
     mated_list = [mated_spitzer, mated_P, mated_D]
 
@@ -205,14 +205,14 @@ def match_spitzer_to_ukirt():
 
         # annotate each subplot so they're readable
         if s == s1:
-            s.text(0.35, 0.75, name, transform=s.transAxes)
+            s.text(0.25, 0.75, name, transform=s.transAxes)
         else:
             s.text(0.65, 0.75, name, transform=s.transAxes)
         
 
-    s1.set_title("Histogram: Stetson indices of X-ray-selected stars in ONC")
+    s1.set_title("Histogram: Stetson indices of Spitzer-selected stars in ONC")
     s1.legend()
-    s4.set_xlabel("Stetson Index")
+    s3.set_xlabel("Stetson Index")
     plt.show()
 
 
@@ -242,7 +242,7 @@ def match_spitzer_to_ukirt():
 
         # What fraction have good periods? Not answerable right now.
 
-    return mated_spitzer, mated_c1, mated_c2, mated_c3
+    return mated_spitzer, mated_P, mated_D
 
 
 # crude copy
