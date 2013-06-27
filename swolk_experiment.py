@@ -269,6 +269,8 @@ def match_spitzer_to_ukirt():
 
     plt.title(r"Stetson vs $\alpha$ for Spitzer-selected sources")
 
+    plt.semilogy()
+
     plt.show()
 
     return mated_spitzer, mated_P, mated_D
