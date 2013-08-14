@@ -47,7 +47,7 @@ lowvar_per_path_g = "/home/tom/reu/ORION/DATA/lowvar/periodic/glued/"
 data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 
 oncvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ONCvar_spreadsheet.fits")
-ukvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames_w1226.fits")
+ukvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties.fits")
 
 # Let's make a function that does periods for "high-variables".
 
