@@ -147,9 +147,13 @@ case2 = ( ((sp.Stetson > 1) & (sp.pstar_median > 0.75)) & (
         (sp.N_k_info == 0) & (sp.k_rchi2 > 1) 
         ) ) )
 
-autovars_true = sp.where( case1 | case2 )
+# Adding a location-based conditional to autovars, since there were issues
+# with stars on the easternmost edge of the field.
+case3 = np.degrees(sp.RA) <= 84.2514
 
-autovars_strict = sp.where( case1 )
+autovars_true = sp.where( (case1 | case2) & case3 )
+
+autovars_strict = sp.where( case1 & case3)
 
 
 # Now, to count how many stars have quality that meets "autovars_true".
@@ -192,9 +196,9 @@ cand_case2 = ( (sp.pstar_median > 0.75) & (
         ) ) )
 
 
-autocan_true = sp.where( cand_case1 | cand_case2 )
+autocan_true = sp.where( (cand_case1 | cand_case2) & case3 )
 
-autocan_strict = sp.where( cand_case1 )
+autocan_strict = sp.where( cand_case1 & case3)
 
 c_print( "Number of stars automatically classed as variables: %d" % len(autovars_true) )
 c_print( "Number of stars that have the data quality for auto-classification: %d" % len(autocan_true) )
