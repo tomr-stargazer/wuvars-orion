@@ -431,13 +431,14 @@ def f_periods_by_megeath_class(title=False):
     fig = plt.figure()
 
     sub1 = plt.subplot(3,1,1)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], range=[0,20], bins=30, color='r')
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], range=[0,20], bins=30, color='c')
 
     sub2 = plt.subplot(3,1,2, sharex=sub1)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], range=[0,20], bins=30, color='g')
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], range=[0,20], bins=30, color='r')
 
     sub3 = plt.subplot(3,1,3, sharex=sub1)
-    plt.hist(periodic_nonmegeath_stars_period, range=[0,20], bins=30)
+    plt.hist(periodic_nonmegeath_stars_period, range=[0,20], bins=30, 
+             color='b')
     
     sub3.set_xlabel("Period (days)")
 
@@ -449,7 +450,7 @@ def f_periods_by_megeath_class(title=False):
 
     plt.show()
 
-                                                                  
+    return fig
 
 def f_period_lit_comparisons():
     """
