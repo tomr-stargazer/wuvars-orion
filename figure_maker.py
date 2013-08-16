@@ -33,6 +33,7 @@ from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
                                    hk_empty, hk_filled)
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
+from tablemate_script import Megeath2012
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
@@ -323,6 +324,37 @@ def f_colorslope_threepanel(title=False):
 
 # Attaching periods to ukvar_spread
 
+def f_periods_by_megeath_class(title=False):
+    """
+    A histogram of periods for stars that have Megeath classes.
+
+    """ 
+    # we're using: mated_ukvar AND ukvar_periods.
+    # We'll also have to import Megeath2012 from tablemate_script.
+
+    # Okay, so we want to do something sensitive:
+    # figure out the intersection between UKvar stars that have PERIODS
+    # and Ukvar stars that are mated to Megeath2012 sources.
+
+    # These are the indices (in the UKvar system) of such overlapped stars.
+    periodic_megeath_stars_indices = (mated_ukvar.Megeath2012_ID != -1) & (~np.isnan(ukvar_periods))
+
+    # This is an array of their Spitzer Classes. I hope.
+    periodic_megeath_stars_megeath_class = Megeath2012.data.Class[mated_ukvar.Megeath2012_index[periodic_megeath_stars_indices]]
+
+    # This is an array of their periods. I hope.
+    periodic_megeath_stars_period = ukvar_periods[periodic_megeath_stars_indices]
+    # Make a dumb histogram
+    fig = plt.figure()
+
+    plt.subplot(2,1,1)
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'])
+    plt.subplot(2,1,2)
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'])
+
+    plt.show()
+
+                                                                  
 
 def f_period_lit_comparisons():
     """
