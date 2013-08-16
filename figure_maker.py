@@ -33,7 +33,7 @@ from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
                                    hk_empty, hk_filled)
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
-from tablemate_script import Megeath2012
+from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
@@ -323,6 +323,83 @@ def f_colorslope_threepanel(title=False):
 
 
 # Attaching periods to ukvar_spread
+
+def f_cc_by_megeath_class(sample='all'):
+    """
+    A color-color diagram where stars are colored by Megeath class.
+    
+    """
+
+    # Nonperiodic stars only
+    if 'non' in sample.lower():
+        sample_boolean_criterion = np.isnan(ukvar_periods)
+        sample_name = "Non-periodic"
+    elif 'per' in sample.lower():
+        sample_boolean_criterion = ~np.isnan(ukvar_periods)
+        sample_name = "Periodic"
+    else:
+        sample_boolean_criterion = (np.zeros_like(ukvar_periods) == 0) #all true
+        sample_name = "All"
+
+    # Now we want the rows in ukvar_spread that correspond to certain
+    # Megeath subsamples.
+
+    disk_indices = (
+        # it's got a Megeath2012 counterpart
+        (mated_ukvar.Megeath2012_ID != -1) & 
+        # whose Class is 'D'
+        (Megeath2012.data.Class[mated_ukvar.Megeath2012_index] == 'D') &
+        # and it matches our 'periodic/nonperiodic/all' cut.
+         sample_boolean_criterion)
+
+    protostar_indices = (
+        # it's got a Megeath2012 counterpart
+        (mated_ukvar.Megeath2012_ID != -1) & 
+        # whose Class is 'P', 'FP', or 'RP'
+        ((Megeath2012.data.Class[mated_ukvar.Megeath2012_index] == 'P') |
+         (Megeath2012.data.Class[mated_ukvar.Megeath2012_index] == 'FP') |
+         (Megeath2012.data.Class[mated_ukvar.Megeath2012_index] == 'RP')) &
+        # and it matches our 'periodic/nonperiodic/all' cut.
+         sample_boolean_criterion)
+
+    nonmegeath_indices = (
+        # it doesn't have a Megeath2012 counterpart
+        (mated_ukvar.Megeath2012_ID == -1) & 
+        # and it matches our 'periodic/nonperiodic/all' cut.
+        sample_boolean_criterion)
+    
+        
+    fig = plt.figure()
+    ax = plt.gca()
+
+    plot_trajectory_vanilla(ax)
+
+    plt.plot(ukvar_spread.hmk_median[nonmegeath_indices], 
+             ukvar_spread.jmh_median[nonmegeath_indices], 
+             'bo', ms=4, label="No Megeath Match")
+    plt.plot(ukvar_spread.hmk_median[disk_indices], 
+             ukvar_spread.jmh_median[disk_indices], 
+             'ro', ms=4, label="Megeath Disks")
+    plt.plot(ukvar_spread.hmk_median[protostar_indices], 
+             ukvar_spread.jmh_median[protostar_indices], 
+             'c*', ms=8, label="Megeath Protostars")
+
+    plt.xlabel(r"median $H-K$")
+    plt.ylabel(r"median $J-H$")
+
+    plt.xlim(-0.1,2.5)
+    plt.ylim(-0.2, 2.8)
+    
+    plt.title(sample_name + " variables, colored by Megeath 2012 class")
+
+    plt.legend()
+    
+    plt.show()
+
+    return fig
+
+
+    
 
 def f_periods_by_megeath_class(title=False):
     """
