@@ -324,7 +324,7 @@ def f_colorslope_threepanel(title=False):
 
 # Attaching periods to ukvar_spread
 
-def f_cc_by_megeath_class(sample='all'):
+def f_cc_and_map_by_megeath_class(sample='all'):
     """
     A color-color diagram where stars are colored by Megeath class.
     
@@ -382,7 +382,7 @@ def f_cc_by_megeath_class(sample='all'):
              'ro', ms=4, label="Megeath Disks")
     plt.plot(ukvar_spread.hmk_median[protostar_indices], 
              ukvar_spread.jmh_median[protostar_indices], 
-             'c*', ms=8, label="Megeath Protostars")
+             'c*', ms=10, label="Megeath Protostars")
 
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $J-H$")
@@ -392,11 +392,28 @@ def f_cc_by_megeath_class(sample='all'):
     
     plt.title(sample_name + " variables, colored by Megeath 2012 class")
 
-    plt.legend()
+    plt.legend(loc='lower right')
     
     plt.show()
 
-    return fig
+    fig2 = plt.figure()
+
+    plt.plot(np.degrees(ukvar_spread.RA)[nonmegeath_indices], 
+             np.degrees(ukvar_spread.DEC)[nonmegeath_indices], 
+             'bo', ms=4, label="No Megeath Match")
+    plt.plot(np.degrees(ukvar_spread.RA)[disk_indices], 
+             np.degrees(ukvar_spread.DEC)[disk_indices], 
+             'ro', ms=4, label="Megeath Disks")
+    plt.plot(np.degrees(ukvar_spread.RA)[protostar_indices], 
+             np.degrees(ukvar_spread.DEC)[protostar_indices], 
+             'c*', ms=10, label="Megeath Protostars")
+
+    plt.legend()
+    plt.gca().invert_xaxis()
+
+    plt.show()
+
+    return (fig, fig2)
 
 
     
