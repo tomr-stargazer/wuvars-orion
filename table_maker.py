@@ -59,6 +59,7 @@ def t_table1_radec_xref_jhk_rms_minmax_irac():
       UKvar ID : int  ## note: will likely be migrated to "ONCvar ID" in paper
       RA : float, degrees
       DEC : float, degrees # note: we could probably have an optional sexg. format for these
+      X-ref : string # Using SIMBAD names for now.
       Median J, H, K, with error bars : six floats
       RMS J, H, K : three floats
       robust range J, H, K : three floats
@@ -66,5 +67,34 @@ def t_table1_radec_xref_jhk_rms_minmax_irac():
 
     """
 
-    
+    table = atpy.Table()
+    table.table_name = "Table 1"
+
+    addc = table.add_column
+
+    addc('UKvar ID', ukvar_spread.UKvar_ID)
+    addc('R.A. (deg)', np.degrees(ukvar_spread.RA))
+    addc('Decl. (deg)', np.degrees(ukvar_spread.DEC))
+    addc('Cross-reference', ukvar_spread.SIMBAD_name)
+    addc('Median J mag', ukvar_spread.j_median)
+    addc('Median J mag error', ukvar_spread.j_err_median)
+    addc('Median H mag', ukvar_spread.h_median)
+    addc('Median H mag error', ukvar_spread.h_err_median)
+    addc('Median K mag', ukvar_spread.k_median)
+    addc('Median K mag error', ukvar_spread.k_err_median)
+    addc('Observed J RMS', ukvar_spread.j_rms)
+    addc('Observed H RMS', ukvar_spread.h_rms)
+    addc('Observed K RMS', ukvar_spread.k_rms)
+    addc('Outlier-proof J range', ukvar_spread.j_ranger)    
+    addc('Outlier-proof H range', ukvar_spread.h_ranger)
+    addc('Outlier-proof K range', ukvar_spread.k_ranger)
+
+    # This writing convention is not sustainable.
+    try:
+        table.write(output_directory+"Table_1.txt", type='ascii')
+    except Exception, e: print e
+    try:
+        table.write(output_directory+"Table_1.fits")
+    except Exception, e: print e
+
       
