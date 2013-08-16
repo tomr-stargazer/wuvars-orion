@@ -31,6 +31,25 @@ from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 
+output_directory = "/home/tom/Dropbox/Bo_Tom/paper/publication_tables/"
+
+# Let's grab IRAC colors from Megeath.
+#ukvar_irac = atpy.Table('UKvar IRAC')
+
+# Test case: 3.6um.
+# Where there's a valid match, grab the Megeath data; else put nan.
+
+irac1 = np.zeros(len(ukvar_spread))
+irac1_e = np.zeros(len(ukvar_spread))
+
+for i in range(len(mated_ukvar)):
+    if mated_ukvar.Megeath2012_ID[i] != -1:
+        irac1[i] = Megeath2012.data['3.6mag'][mated_ukvar.Megeath2012_index[i]]
+    else:
+        irac1[i] = np.nan
+
+print irac1
+
 
 def t_table1_radec_xref_jhk_rms_minmax_irac():
     """
