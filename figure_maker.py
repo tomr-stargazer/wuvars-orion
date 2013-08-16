@@ -345,19 +345,30 @@ def f_periods_by_megeath_class(title=False):
     # This is an array of their periods. I hope.
     periodic_megeath_stars_period = ukvar_periods[periodic_megeath_stars_indices]
 
+    # These are the periodic stars without Megeath correspondence.
+    periodic_nonmegeath_stars_indices = ~periodic_megeath_stars_indices
+    # and their periods
+    periodic_nonmegeath_stars_period = ukvar_periods[periodic_nonmegeath_stars_indices]
+
+
     fig = plt.figure()
 
-    sub1 = plt.subplot(2,1,1)
+    sub1 = plt.subplot(3,1,1)
     plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], range=[0,20], bins=30, color='r')
 
-    sub2 = plt.subplot(2,1,2, sharex=sub1)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], range=[0,20], bins=30)
-    sub2.set_xlabel("Period (days)")
+    sub2 = plt.subplot(3,1,2, sharex=sub1)
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], range=[0,20], bins=30, color='g')
+
+    sub3 = plt.subplot(3,1,3, sharex=sub1)
+    plt.hist(periodic_nonmegeath_stars_period, range=[0,20], bins=30)
+    
+    sub3.set_xlabel("Period (days)")
 
     sub1.text(10, 1, "Megeath Periodic Protostar sample")
     sub2.text(10,20, "Megeath Periodic Disk sample")
+    sub3.text(10,30, "Periodic UKvars that did not \ncorrespond to Megeath objects")
 
-    sub1.set_title("Stars identified by Spitzer in Megeath 2012, by class")
+    sub1.set_title("Periodic UKvar stars, with class from Megeath 2012")
 
     plt.show()
 
