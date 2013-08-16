@@ -30,3 +30,22 @@ from tablemate_comparisons import (mated_ukvar, ukvar_spread,
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
+
+
+def t_table1_radec_xref_jhk_rms_minmax_irac():
+    """
+    Generates Table 1.
+
+    Current columns:
+      UKvar ID : int  ## note: will likely be migrated to "ONCvar ID" in paper
+      RA : float, degrees
+      DEC : float, degrees # note: we could probably have an optional sexg. format for these
+      Median J, H, K, with error bars : six floats
+      RMS J, H, K : three floats
+      robust range J, H, K : three floats
+      IRAC colors from Megeath, and errors : eight floats
+
+    """
+
+    
+      
