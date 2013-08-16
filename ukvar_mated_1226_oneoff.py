@@ -29,4 +29,7 @@ for (col, name) in zip(missing_cols, missing_colnames):
 
 mated_ukvar.table_name = "Mated UKvar"
 
-mated_ukvar.write("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_8_13.fits")
+# Don't write the file if it doesn't conform to what we expect it to look like!
+assert len(mated_ukvar) == 1202, "Mated UKvar does not have 1202 rows!"
+
+mated_ukvar.write("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_8_15.fits")
