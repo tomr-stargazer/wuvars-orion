@@ -339,18 +339,25 @@ def f_periods_by_megeath_class(title=False):
     # These are the indices (in the UKvar system) of such overlapped stars.
     periodic_megeath_stars_indices = (mated_ukvar.Megeath2012_ID != -1) & (~np.isnan(ukvar_periods))
 
-    # This is an array of their Spitzer Classes. I hope.
+    # This is an array of their Spitzer Classes. 
     periodic_megeath_stars_megeath_class = Megeath2012.data.Class[mated_ukvar.Megeath2012_index[periodic_megeath_stars_indices]]
 
     # This is an array of their periods. I hope.
     periodic_megeath_stars_period = ukvar_periods[periodic_megeath_stars_indices]
-    # Make a dumb histogram
+
     fig = plt.figure()
 
-    plt.subplot(2,1,1)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'])
-    plt.subplot(2,1,2)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'])
+    sub1 = plt.subplot(2,1,1)
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], range=[0,20], bins=30, color='r')
+
+    sub2 = plt.subplot(2,1,2, sharex=sub1)
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], range=[0,20], bins=30)
+    sub2.set_xlabel("Period (days)")
+
+    sub1.text(10, 1, "Megeath Periodic Protostar sample")
+    sub2.text(10,20, "Megeath Periodic Disk sample")
+
+    sub1.set_title("Stars identified by Spitzer in Megeath 2012, by class")
 
     plt.show()
 
