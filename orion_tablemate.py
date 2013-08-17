@@ -264,6 +264,59 @@ def tablemater(primary_table, secondary_table_list):
         mated_table.add_column(st.alias+"_index", mated_indices)
 
     return mated_table
+
+
+def index_secondary_by_primary(mated_table, secondary_table):
+    """
+    Indexes a secondary table by primary table IDs.
+
+    Returns it as a new table; rows of the primary table that 
+    did not match to the secondary table are present, filled 
+    with np.nan, so that the columns from the returned table
+    could be (in principle) appended directly to the primary
+    table or used in some derivative product, such as a 
+    publication table.
+
+    Parameters
+    ----------
+    mated_table : atpy.Table
+        Output of tablemater(). The first two columns of
+        this table will be used as the "primary" index/ID.
+    secondary_table : TableParameters instance
+        Must be one of the secondary tables used to create
+        mated_table.
+
+    Returns
+    -------
+    secondary_indexed_by_primary : atpy.Table
+        
+    """
+
+    # make an empty table
+    secondary_indexed_by_primary = atpy.Table()
+
+    # seed it
+    first_column_name = mated_table.columns.keys[0]
+    second_column_name = mated_table.columns.keys[1]
+
+    # primary ID
+    secondary_indexed_by_primary.add_column(
+        first_column_name,
+        mated_table[first_column_name] )
+    # index in primary table
+    secondary_indexed_by_primary.add_column(
+        second_column_name,
+        mated_table[second_column_name] )
+
+    # do I want to do this column-by-column, or row-by-row? 
+    # I think I prefer column-by-column, where I loop through
+    # column names in the secondary
+
+    for column_name in secondary_table.data.columns.keys:
+
+        column_indexed_by_primary = 
+
+   
         
 
 def test():
