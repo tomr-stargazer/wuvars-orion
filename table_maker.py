@@ -28,28 +28,14 @@ from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
+from orion_tablemate import index_secondary_by_primary
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 
 output_directory = "/home/tom/Dropbox/Bo_Tom/paper/publication_tables/"
 
 # Let's grab IRAC colors from Megeath.
-#ukvar_irac = atpy.Table('UKvar IRAC')
-
-# Test case: 3.6um.
-# Where there's a valid match, grab the Megeath data; else put nan.
-
-irac1 = np.zeros(len(ukvar_spread))
-irac1_e = np.zeros(len(ukvar_spread))
-
-for i in range(len(mated_ukvar)):
-    if mated_ukvar.Megeath2012_ID[i] != -1:
-        irac1[i] = Megeath2012.data['3.6mag'][mated_ukvar.Megeath2012_index[i]]
-    else:
-        irac1[i] = np.nan
-
-print irac1
-
+megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
 
 def t_table1_radec_xref_jhk_rms_minmax_irac():
     """
@@ -61,9 +47,12 @@ def t_table1_radec_xref_jhk_rms_minmax_irac():
       DEC : float, degrees # note: we could probably have an optional sexg. format for these
       X-ref : string # Using SIMBAD names for now.
       Median J, H, K, with error bars : six floats
-      RMS J, H, K : three floats
-      robust range J, H, K : three floats
       IRAC colors from Megeath, and errors : eight floats
+
+    Returns
+    -------
+    table : atpy.Table
+        Table 1.
 
     """
 
@@ -75,19 +64,21 @@ def t_table1_radec_xref_jhk_rms_minmax_irac():
     addc('UKvar ID', ukvar_spread.UKvar_ID)
     addc('R.A. (deg)', np.degrees(ukvar_spread.RA))
     addc('Decl. (deg)', np.degrees(ukvar_spread.DEC))
-    addc('Cross-reference', ukvar_spread.SIMBAD_name)
+    addc('SIMBAD Cross-reference', ukvar_spread.SIMBAD_name)
     addc('Median J mag', ukvar_spread.j_median)
     addc('Median J mag error', ukvar_spread.j_err_median)
     addc('Median H mag', ukvar_spread.h_median)
     addc('Median H mag error', ukvar_spread.h_err_median)
     addc('Median K mag', ukvar_spread.k_median)
     addc('Median K mag error', ukvar_spread.k_err_median)
-    addc('Observed J RMS', ukvar_spread.j_rms)
-    addc('Observed H RMS', ukvar_spread.h_rms)
-    addc('Observed K RMS', ukvar_spread.k_rms)
-    addc('Outlier-proof J range', ukvar_spread.j_ranger)    
-    addc('Outlier-proof H range', ukvar_spread.h_ranger)
-    addc('Outlier-proof K range', ukvar_spread.k_ranger)
+    addc('Spitzer [3.6] mag', megeath2012_by_ukvar['3.6mag'])
+    addc('Spitzer [3.6] mag error', megeath2012_by_ukvar['e_3.6mag'])
+    addc('Spitzer [4.5] mag', megeath2012_by_ukvar['4.5mag'])
+    addc('Spitzer [4.5] mag error', megeath2012_by_ukvar['e_4.5mag'])
+    addc('Spitzer [5.8] mag', megeath2012_by_ukvar['5.8mag'])
+    addc('Spitzer [5.8] mag error', megeath2012_by_ukvar['e_5.8mag'])
+    addc('Spitzer [8.0] mag', megeath2012_by_ukvar['8.0mag'])
+    addc('Spitzer [8.0] mag error', megeath2012_by_ukvar['e_8.0mag'])
 
     # This writing convention is not sustainable.
     try:
@@ -97,4 +88,15 @@ def t_table1_radec_xref_jhk_rms_minmax_irac():
         table.write(output_directory+"Table_1.fits")
     except Exception, e: print e
 
-      
+    return table
+
+
+# for table 2, or some other table:
+"""
+    addc('Observed J RMS', ukvar_spread.j_rms)
+    addc('Observed H RMS', ukvar_spread.h_rms)
+    addc('Observed K RMS', ukvar_spread.k_rms)
+    addc('Outlier-proof J range', ukvar_spread.j_ranger)    
+    addc('Outlier-proof H range', ukvar_spread.h_ranger)
+    addc('Outlier-proof K range', ukvar_spread.k_ranger)
+"""
