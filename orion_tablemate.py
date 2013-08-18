@@ -308,15 +308,31 @@ def index_secondary_by_primary(mated_table, secondary_table):
         second_column_name,
         mated_table[second_column_name] )
 
+    # name of secondary table in mated table
+    secondary_alias = secondary_table.alias
+    
+    # index in secondary table
+    secondary_indices_of_primary_rows = mated_table.data[secondary_alias+"_index"]
+    # note that there are gonna be a lot of -1s in there.
+
     # do I want to do this column-by-column, or row-by-row? 
     # I think I prefer column-by-column, where I loop through
     # column names in the secondary
 
     for column_name in secondary_table.data.columns.keys:
 
-        column_indexed_by_primary = 
+        target_column = secondary_table.data[column_name]
+        # so, two-step process for each column.
+        # first, do a naive indexing
+        column_indexed_by_primary = target_column[secondary_indices_of_primary_rows]
+        # second, set all the [-1]s to nan
+        column_indexed_by_primary[secondary_indices_of_primary_rows == -1] = np.nan
+        # then add the column by name to our new table
+        secondary_indexed_by_primary.add_column(column_name,
+                                                column_indexed_by_primary)
 
-   
+    # let's see if this works!
+    return secondary_indexed_by_primary
         
 
 def test():
