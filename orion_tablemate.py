@@ -325,8 +325,11 @@ def index_secondary_by_primary(mated_table, secondary_table):
         # so, two-step process for each column.
         # first, do a naive indexing
         column_indexed_by_primary = target_column[secondary_indices_of_primary_rows]
-        # second, set all the [-1]s to nan
-        column_indexed_by_primary[secondary_indices_of_primary_rows == -1] = np.nan
+        # second, set all the [-1]s to nan or -9999 
+        if issubclass(target_column.dtype.type, np.integer):
+            column_indexed_by_primary[secondary_indices_of_primary_rows == -1] = -9999
+        else:
+            column_indexed_by_primary[secondary_indices_of_primary_rows == -1] = np.nan
         # then add the column by name to our new table
         secondary_indexed_by_primary.add_column(column_name,
                                                 column_indexed_by_primary)
