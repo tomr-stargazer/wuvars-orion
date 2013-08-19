@@ -448,20 +448,20 @@ def f_periods_by_megeath_class(title=False):
     fig = plt.figure()
 
     sub1 = plt.subplot(3,1,1)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], range=[0,20], bins=30, color='c')
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], range=[0,20], bins=40, color='c')
 
     sub2 = plt.subplot(3,1,2, sharex=sub1)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], range=[0,20], bins=30, color='r')
+    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], range=[0,20], bins=40, color='r')
 
     sub3 = plt.subplot(3,1,3, sharex=sub1)
-    plt.hist(periodic_nonmegeath_stars_period, range=[0,20], bins=30, 
+    plt.hist(periodic_nonmegeath_stars_period, range=[0,20], bins=40, 
              color='b')
     
     sub3.set_xlabel("Period (days)")
 
     sub1.text(10, 1, "Megeath Periodic Protostar sample")
-    sub2.text(10,20, "Megeath Periodic Disk sample")
-    sub3.text(10,30, "Periodic UKvars that did not \ncorrespond to Megeath objects")
+    sub2.text(10,15, "Megeath Periodic Disk sample")
+    sub3.text(10,25, "Periodic UKvars that did not \ncorrespond to Megeath objects")
 
     sub1.set_title("Periodic UKvar stars, with class from Megeath 2012")
 
