@@ -20,6 +20,7 @@ Guide to variable names:
 
 """
 
+import os
 # All of these imports are meant to mirror those from figure_maker.
 
 from official_star_counter import *
@@ -37,7 +38,18 @@ output_directory = "/home/tom/Dropbox/Bo_Tom/paper/publication_tables/"
 # Let's grab IRAC colors from Megeath.
 megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
 
-def t_table1_radec_xref_jhk_rms_minmax_irac():
+def clobber_table_write(table, filename, **kwargs):
+    """ Writes a table, even if it has to clobber an older one. """
+
+    try:
+        table.write(filename, **kwargs)
+    except Exception, e: 
+        print e
+        print "Overwriting file."
+        os.remove(filename)
+        table.write(filename, **kwargs)
+        
+def t_table1_radec_xref_jhk_irac():
     """
     Generates Table 1.
 
@@ -81,12 +93,17 @@ def t_table1_radec_xref_jhk_rms_minmax_irac():
     addc('Spitzer [8.0] mag error', megeath2012_by_ukvar['e_8.0mag'])
 
     # This writing convention is not sustainable.
-    try:
-        table.write(output_directory+"Table_1.txt", type='ascii')
-    except Exception, e: print e
-    try:
-        table.write(output_directory+"Table_1.fits")
-    except Exception, e: print e
+
+    clobber_table_write(table,output_directory+"Table_1.txt", type='ascii')
+    # try:
+    #     table.write()
+    # except Exception, e: 
+    #     print e
+    #     print "Overwriting file."
+    #     os.remove(output_directory+"Table_1.txt")
+    #     table.write(output_directory+"Table_1.txt", type='ascii')
+        
+    clobber_table_write(table, output_directory+"Table_1.fits")
 
     return table
 
