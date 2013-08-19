@@ -91,18 +91,12 @@ def t_table1_radec_xref_jhk_irac():
     addc('Spitzer [5.8] mag error', megeath2012_by_ukvar['e_5.8mag'])
     addc('Spitzer [8.0] mag', megeath2012_by_ukvar['8.0mag'])
     addc('Spitzer [8.0] mag error', megeath2012_by_ukvar['e_8.0mag'])
+    addc('Class (from Megeath et al. 2012)', megeath2012_by_ukvar.Class)
 
     # This writing convention is not sustainable.
 
     clobber_table_write(table,output_directory+"Table_1.txt", type='ascii')
-    # try:
-    #     table.write()
-    # except Exception, e: 
-    #     print e
-    #     print "Overwriting file."
-    #     os.remove(output_directory+"Table_1.txt")
-    #     table.write(output_directory+"Table_1.txt", type='ascii')
-        
+    clobber_table_write(table,output_directory+"Table_1.tbl", type='ipac')
     clobber_table_write(table, output_directory+"Table_1.fits")
 
     return table
