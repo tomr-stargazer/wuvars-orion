@@ -418,7 +418,7 @@ def f_cc_and_map_by_megeath_class(sample='all'):
 
     
 
-def f_periods_by_megeath_class(title=False):
+def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Megeath 2012"):
     """
     A histogram of periods for stars that have Megeath classes.
 
@@ -463,7 +463,8 @@ def f_periods_by_megeath_class(title=False):
     sub2.text(10,15, "Megeath Periodic Disk sample")
     sub3.text(10,25, "Periodic UKvars that did not \ncorrespond to Megeath objects")
 
-    sub1.set_title("Periodic UKvar stars, with class from Megeath 2012")
+    if title:
+        sub1.set_title(title)
 
     plt.show()
 
