@@ -322,6 +322,17 @@ def f_colorslope_threepanel(title=False):
     plt.show()
 
 
+def f_color_slopes_and_periods():
+    """
+    Generates two figures relating K, H-K color slopes with periods.
+    
+    a) two-panel histogram (purple/yellow) of color slopes for periodic 
+       vs nonperiodic stars.
+    b) Scatter plot of color slope versus period, for stars with 
+       well-defined color-slopes and periods.
+
+    """
+
 # Attaching periods to ukvar_spread
 
 def f_cc_and_map_by_megeath_class(sample='all'):
