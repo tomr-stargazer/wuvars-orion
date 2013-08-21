@@ -123,6 +123,7 @@ def t_table2_variability_periods_periodics_bymegeathclass():
           J, H, or K data, respectively
 
     Current columns:
+      N_j, N_h, N_k : three integers
       Delta-J, H, K: three floats
       Delta-J-H, J-K, H-K: three floats
       Color slopes (JH, HK, JHK): three floats
@@ -152,6 +153,9 @@ def t_table2_variability_periods_periodics_bymegeathclass():
     khk_slope_column[~np.in1d(periodics.SOURCEID, hk_filled.SOURCEID)] = np.nan
 
     addc('UKvar ID', periodics.UKvar_ID)
+    addc('N_J', periodics.N_j)
+    addc('N_H', periodics.N_h)
+    addc('N_K', periodics.N_k)
     addc('J mag range (robust)', periodics.j_ranger)
     addc('H mag range (robust)', periodics.h_ranger)
     addc('K mag range (robust)', periodics.k_ranger)
@@ -181,5 +185,6 @@ def t_table2_variability_periods_periodics_bymegeathclass():
     clobber_table_write(t2_disks, output_directory+"Table_2b.txt", type='ascii')
     clobber_table_write(t2_nomegeath, output_directory+"Table_2c.txt", type='ascii')
 
+    
     
          
