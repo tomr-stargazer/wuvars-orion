@@ -60,6 +60,7 @@ def t_table1_radec_xref_jhk_irac():
       X-ref : string # Using SIMBAD names for now.
       Median J, H, K, with error bars : six floats
       IRAC colors from Megeath, and errors : eight floats
+      Class from Megeath : string
 
     Returns
     -------
@@ -111,3 +112,72 @@ def t_table1_radec_xref_jhk_irac():
     addc('Outlier-proof H range', ukvar_spread.h_ranger)
     addc('Outlier-proof K range', ukvar_spread.k_ranger)
 """
+
+def t_table2_variability_periods_periodics_bymegeathclass():
+    """
+    Generates Table 2, which comes in three pieces.
+
+    Note that we're only using periodic stars here!
+
+    TODO: add in flags for whether a given star has valid
+          J, H, or K data, respectively
+
+    Current columns:
+      Delta-J, H, K: three floats
+      Delta-J-H, J-K, H-K: three floats
+      Color slopes (JH, HK, JHK): three floats
+      Stetson : one float
+      Stetson_choice : one string
+      Period : one float
+      
+    """
+
+    table = atpy.Table()
+    table.table_name = "Table 2"
+
+    addc = table.add_column
+
+    periodics = ukvar_spread.where(ukvar_spread.periodic != 0)
+    periodic_periods = ukvar_periods[ukvar_spread.periodic != 0]
+    megeath_by_periodics = megeath2012_by_ukvar.where(ukvar_spread.periodic != 0)
+
+    # Do some stuff where we blank out color slopes that are no good
+    jhk_slope_column = periodics.jhk_slope
+    jhk_slope_column[~np.in1d(periodics.SOURCEID, jhk_filled.SOURCEID)] = np.nan
+
+    jjh_slope_column = periodics.jh_slope
+    jjh_slope_column[~np.in1d(periodics.SOURCEID, jh_filled.SOURCEID)] = np.nan
+
+    khk_slope_column = periodics.hk_slope
+    khk_slope_column[~np.in1d(periodics.SOURCEID, hk_filled.SOURCEID)] = np.nan
+
+    addc('UKvar ID', periodics.UKvar_ID)
+    addc('J mag range (robust)', periodics.j_ranger)
+    addc('H mag range (robust)', periodics.h_ranger)
+    addc('K mag range (robust)', periodics.k_ranger)
+    addc('J-H range (robust)', periodics.jmh_ranger)
+    addc('H-K range (robust)', periodics.hmk_ranger)
+    addc('(J-H), (H-K) color slope', jhk_slope_column)
+    addc('J, (J-H) color slope', jjh_slope_column)
+    addc('K, (H-K) color slope', khk_slope_column)
+    addc('Stetson Variability Index', periodics.Stetson)
+    addc('Bands used to compute Stetson', periodics.Stetson_choice)
+    addc('Best-fit period', periodic_periods)
+
+    # Now split it into three pieces and compute medians!
+    
+    t2_proto = table.where((megeath_by_periodics.Class == 'P') |
+                           (megeath_by_periodics.Class == 'FP')|
+                           (megeath_by_periodics.Class == 'RP'))
+
+    t2_disks = table.where(megeath_by_periodics.Class == 'D')
+
+    t2_nomegeath = table.where(megeath_by_periodics.Class == 'na')
+
+    assert(len(t2_proto) + len(t2_disks) + len(t2_nomegeath) == len(table), 
+           "Tables don't add up to the right length!")
+
+    
+    
+    
+         
