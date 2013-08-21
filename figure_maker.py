@@ -422,6 +422,25 @@ def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Mege
     """
     A histogram of periods for stars that have Megeath classes.
 
+    Returns
+    -------
+    fig : plt.figure
+    three np.ndarrays 
+        These arrays contain the distribution of periods for 
+        (a) protostars,
+        (b) disked stars, and
+        (c) non-disked stars
+        (on the basis of Megeath2012 membership/Class). Use these
+        for K-S tests if you gotta (see example)
+
+    Example:
+    In [15]: foo = f_periods_by_megeath_class()
+    In [16]: red = foo[2]
+    In [17]: blue = foo[3]
+    
+    In [18]: scipy.stats.ks_2samp(red, blue)
+    Out[18]: (0.6880829015544041, 5.6089548452427115e-78)
+
     """ 
     # we're using: mated_ukvar AND ukvar_periods.
     # We'll also have to import Megeath2012 from tablemate_script.
@@ -468,7 +487,7 @@ def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Mege
 
     plt.show()
 
-    return fig
+    return fig, periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], periodic_nonmegeath_stars_period
 
 def f_period_lit_comparisons():
     """
