@@ -145,10 +145,10 @@ def t_table2_variability_periods_periodics_bymegeathclass():
     jhk_slope_column = periodics.jhk_slope
     jhk_slope_column[~np.in1d(periodics.SOURCEID, jhk_filled.SOURCEID)] = np.nan
 
-    jjh_slope_column = periodics.jh_slope
+    jjh_slope_column = periodics.jjh_slope
     jjh_slope_column[~np.in1d(periodics.SOURCEID, jh_filled.SOURCEID)] = np.nan
 
-    khk_slope_column = periodics.hk_slope
+    khk_slope_column = periodics.khk_slope
     khk_slope_column[~np.in1d(periodics.SOURCEID, hk_filled.SOURCEID)] = np.nan
 
     addc('UKvar ID', periodics.UKvar_ID)
@@ -174,10 +174,12 @@ def t_table2_variability_periods_periodics_bymegeathclass():
 
     t2_nomegeath = table.where(megeath_by_periodics.Class == 'na')
 
-    assert(len(t2_proto) + len(t2_disks) + len(t2_nomegeath) == len(table), 
-           "Tables don't add up to the right length!")
+    assert len(t2_proto) + len(t2_disks) + len(t2_nomegeath) == len(table), \
+           "Tables don't add up to the right length!"
 
-    
-    
+    clobber_table_write(t2_proto, output_directory+"Table_2a.txt", type='ascii')
+    clobber_table_write(t2_disks, output_directory+"Table_2b.txt", type='ascii')
+    clobber_table_write(t2_nomegeath, output_directory+"Table_2c.txt", type='ascii')
+
     
          
