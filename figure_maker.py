@@ -333,6 +333,10 @@ def f_color_slopes_and_periods():
 
     """
 
+    pass
+
+#    ukvar_spread
+
 # Attaching periods to ukvar_spread
 
 def f_cc_and_map_by_megeath_class(sample='all'):
