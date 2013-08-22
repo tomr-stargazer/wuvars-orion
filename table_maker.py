@@ -259,3 +259,23 @@ def t_table3_variability_nonperiodics_bymegeathclass():
     return table
     
          
+def t_table0_crossref():
+    """
+    Generates Table 'zero', which probably won't go in the print paper,
+    but enumerates how our sources match up (positionally) against 
+    18 different datasets from the published literature on the ONC.
+
+    Yes, 18 different datasets. I'll have to make sure that the 
+    document describing where they exactly came from is made available,
+    so that my indexing system is clear.
+
+    """
+    
+    table = mated_ukvar.where(mated_ukvar.WFCAM_SOURCEID > 0)
+    table.table_name = "Table 0"
+
+    clobber_table_write(table, output_directory+"Table_0.txt", type='ascii')
+    clobber_table_write(table, output_directory+"Table_0.fits")
+
+    
+    
