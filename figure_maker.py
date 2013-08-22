@@ -322,7 +322,8 @@ def f_colorslope_threepanel(title=False):
     plt.show()
 
 
-def f_color_slopes_and_periods():
+def f_color_slopes_and_periods(title1="K, H-K color slope distributions: "
+                               "Periodic vs Non-Periodic"):
     """
     Generates two figures relating K, H-K color slopes with periods.
     
@@ -333,9 +334,37 @@ def f_color_slopes_and_periods():
 
     """
 
-    pass
+    selection = np.in1d(ukvar_spread.SOURCEID, hk_filled.SOURCEID)
 
-#    ukvar_spread
+    color_periodics = ukvar_spread.where(selection & 
+                                         (ukvar_spread.periodic > 0))
+
+    color_nonperiodics = ukvar_spread.where(selection & 
+                                            (ukvar_spread.periodic == 0))
+
+    fig1 = plt.figure()
+    sub1 = plt.subplot(2,1,1)
+
+    sub1.hist(np.degrees(np.arctan(color_periodics.khk_slope)), 
+              range=[-90, 90], bins=36, color='m')
+    plt.text(-45,4, "K, H-K color slopes for Periodic stars")
+    sub1.set_title(title1)
+
+    sub2 = plt.subplot(2,1,2, sharex=sub1)
+
+    sub2.hist(np.degrees(np.arctan(color_nonperiodics.khk_slope)), 
+              range=[-90, 90], bins=36, color='y')
+    plt.text(-45,4, "K, H-K color slopes for Non-Periodic stars")
+    
+    sub2.set_xlabel("K, H-K color slope (degrees)")
+    sub2.set_xlim(-90,90)
+    sub2.set_xticks([-90,-45,0,45,90])
+
+    plt.show()
+
+    return fig1
+
+    
 
 # Attaching periods to ukvar_spread
 
