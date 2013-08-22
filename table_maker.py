@@ -58,6 +58,8 @@ def t_table1_radec_xref_jhk_irac():
       RA : float, degrees
       DEC : float, degrees # note: we could probably have an optional sexg. format for these
       X-ref : string # Using SIMBAD names for now.
+      Data quality : int (0, 1, 2) corresponding to subjective/auto/strict
+      Periodic : int (0, 1)
       Median J, H, K, with error bars : six floats
       IRAC colors from Megeath, and errors : eight floats
       Class from Megeath : string
@@ -78,6 +80,8 @@ def t_table1_radec_xref_jhk_irac():
     addc('R.A. (deg)', np.degrees(ukvar_spread.RA))
     addc('Decl. (deg)', np.degrees(ukvar_spread.DEC))
     addc('SIMBAD Cross-reference', ukvar_spread.SIMBAD_name)
+    addc('Data quality flag', ukvar_spread.autovar + ukvar_spread.strict)
+    addc('Periodic flag', ukvar_spread.periodic)
     addc('Median J mag', ukvar_spread.j_median)
     addc('Median J mag error', ukvar_spread.j_err_median)
     addc('Median H mag', ukvar_spread.h_median)
