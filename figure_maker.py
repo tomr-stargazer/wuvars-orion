@@ -624,27 +624,34 @@ def f_magnitude_hists_by_class():
 
     # Let's test the J mag aspect of this, and then define some dicts or forloops to iterate through all "5" bands.
 
-    j_fig = plt.figure()
+    names = ['J mag', 'H mag', 'K mag', 'J-H color', 'H-K color']
+    bands = ['j', 'h', 'k', 'jmh', 'hmk']
+
+    figs = []
 
     hist_kwargs = {'range':(0,2), 'bins':20}
 
-    jsub1 = plt.subplot(3,1,1)
-    jsub1.hist(strict_protostars.j_ranger, color='c', **hist_kwargs)
-    jsub1.text(0.7, 0.75, "Megeath protostars",
-               transform = jsub1.transAxes)
+    for b, n in zip(bands, names):
 
-    jsub2 = plt.subplot(3,1,2)
-    jsub2.hist(strict_disks.j_ranger, color='r', **hist_kwargs)
-    jsub2.text(0.7, 0.75, "Megeath disks",
-               transform = jsub2.transAxes)
+        j_fig = plt.figure()
 
-    jsub3 = plt.subplot(3,1,3)
-    jsub3.hist(strict_nomegeath.j_ranger, color='b', **hist_kwargs)
-    jsub3.text(0.7, 0.75, "no Megeath match",
-               transform = jsub3.transAxes)
+        jsub1 = plt.subplot(3,1,1)
+        jsub1.hist(strict_protostars['%s_ranger' % b], color='c', **hist_kwargs)
+        jsub1.text(0.7, 0.75, "Megeath protostars",
+                   transform = jsub1.transAxes)
 
-    jsub1.set_title("J magnitude range (robust) for pristine-data stars")
-    jsub3.set_xlabel(r"$\Delta J$ mag (outlier-proof)")
+        jsub2 = plt.subplot(3,1,2)
+        jsub2.hist(strict_disks['%s_ranger' % b], color='r', **hist_kwargs)
+        jsub2.text(0.7, 0.75, "Megeath disks",
+                   transform = jsub2.transAxes)
+
+        jsub3 = plt.subplot(3,1,3)
+        jsub3.hist(strict_nomegeath['%s_ranger' % b], color='b', **hist_kwargs)
+        jsub3.text(0.7, 0.75, "no Megeath match",
+                   transform = jsub3.transAxes)
+
+        jsub1.set_title("%s range (robust) for pristine-data stars" % n)
+        jsub3.set_xlabel(r"$\Delta %s (outlier-proof)" % n.replace(' ', '$ '))
 
     plt.show()
 
