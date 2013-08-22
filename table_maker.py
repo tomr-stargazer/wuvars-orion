@@ -185,6 +185,69 @@ def t_table2_variability_periods_periodics_bymegeathclass():
     clobber_table_write(t2_disks, output_directory+"Table_2b.txt", type='ascii')
     clobber_table_write(t2_nomegeath, output_directory+"Table_2c.txt", type='ascii')
 
-    
+def t_table3_variability_nonperiodics_bymegeathclass():
+    """
+    Generates Table 3, which also comes in three pieces.
+
+    Only non-periodic stars; has many of the same columns as Table 2.
+
+    Current columns:
+      N_j, N_h, N_k : three integers
+      Delta-J, H, K: three floats
+      Delta-J-H, J-K, H-K: three floats
+      Color slopes (JH, HK, JHK): three floats
+      Stetson : one float
+      Stetson_choice : one string
+
+    """
+
+    table = atpy.Table()
+    table.table_name = "Table 3"
+
+    addc = table.add_column
+
+    nonperiodics = ukvar_spread.where(ukvar_spread.periodic == 0)
+    megeath_by_nonperiodics = megeath2012_by_ukvar.where(ukvar_spread.periodic == 0)
+
+    # Do some stuff where we blank out color slopes that are no good
+    jhk_slope_column = nonperiodics.jhk_slope
+    jhk_slope_column[~np.in1d(nonperiodics.SOURCEID, jhk_filled.SOURCEID)] = np.nan
+
+    jjh_slope_column = nonperiodics.jjh_slope
+    jjh_slope_column[~np.in1d(nonperiodics.SOURCEID, jh_filled.SOURCEID)] = np.nan
+
+    khk_slope_column = nonperiodics.khk_slope
+    khk_slope_column[~np.in1d(nonperiodics.SOURCEID, hk_filled.SOURCEID)] = np.nan
+
+    addc('UKvar ID', nonperiodics.UKvar_ID)
+    addc('N_J', nonperiodics.N_j)
+    addc('N_H', nonperiodics.N_h)
+    addc('N_K', nonperiodics.N_k)
+    addc('J mag range (robust)', nonperiodics.j_ranger)
+    addc('H mag range (robust)', nonperiodics.h_ranger)
+    addc('K mag range (robust)', nonperiodics.k_ranger)
+    addc('J-H range (robust)', nonperiodics.jmh_ranger)
+    addc('H-K range (robust)', nonperiodics.hmk_ranger)
+    addc('(J-H), (H-K) color slope', jhk_slope_column)
+    addc('J, (J-H) color slope', jjh_slope_column)
+    addc('K, (H-K) color slope', khk_slope_column)
+    addc('Stetson Variability Index', nonperiodics.Stetson)
+    addc('Bands used to compute Stetson', nonperiodics.Stetson_choice)
+
+    # Now split it into three pieces and compute medians!
+    t3_proto = table.where((megeath_by_nonperiodics.Class == 'P') |
+                           (megeath_by_nonperiodics.Class == 'FP')|
+                           (megeath_by_nonperiodics.Class == 'RP'))
+
+    t3_disks = table.where(megeath_by_nonperiodics.Class == 'D')
+
+    t3_nomegeath = table.where(megeath_by_nonperiodics.Class == 'na')
+
+    assert len(t3_proto) + len(t3_disks) + len(t3_nomegeath) == len(table), \
+           "Tables don't add up to the right length!"
+
+    clobber_table_write(t3_proto, output_directory+"Table_3a.txt", type='ascii')
+    clobber_table_write(t3_disks, output_directory+"Table_3b.txt", type='ascii')
+    clobber_table_write(t3_nomegeath, output_directory+"Table_3c.txt", type='ascii')
     
          
