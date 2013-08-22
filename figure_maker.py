@@ -34,10 +34,13 @@ from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
+from orion_tablemate import index_secondary_by_primary
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
 
+# Let's grab IRAC colors from Megeath.
+megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
 
 # As a test, let's make a histogram of periods.
 
@@ -595,6 +598,57 @@ def f_period_lit_comparisons():
     plt.gca().set_aspect('equal')
 
     plt.show()
+
+
+def f_magnitude_hists_by_class():
+    """
+    Makes a series of multipanel histograms of variability.
+    Uses "strict" sources only for these.
+    
+    """
+    
+    # The selections we want:
+    # All sources that are "strict"
+    strict_sources = ukvar_spread.strict == 1
+    
+    strict_protostars = ukvar_spread.where(
+        strict_sources & ( (megeath2012_by_ukvar.Class == 'P') |
+                           (megeath2012_by_ukvar.Class == 'FP')| 
+                           (megeath2012_by_ukvar.Class == 'RP')) )
+
+    strict_disks = ukvar_spread.where(
+        strict_sources & (megeath2012_by_ukvar.Class == 'D'))
+
+    strict_nomegeath = ukvar_spread.where(
+        strict_sources & (megeath2012_by_ukvar.Class == 'na'))
+
+    # Let's test the J mag aspect of this, and then define some dicts or forloops to iterate through all "5" bands.
+
+    j_fig = plt.figure()
+
+    hist_kwargs = {'range':(0,2), 'bins':20}
+
+    jsub1 = plt.subplot(3,1,1)
+    jsub1.hist(strict_protostars.j_ranger, color='c', **hist_kwargs)
+    jsub1.text(0.7, 0.75, "Megeath protostars",
+               transform = jsub1.transAxes)
+
+    jsub2 = plt.subplot(3,1,2)
+    jsub2.hist(strict_disks.j_ranger, color='r', **hist_kwargs)
+    jsub2.text(0.7, 0.75, "Megeath disks",
+               transform = jsub2.transAxes)
+
+    jsub3 = plt.subplot(3,1,3)
+    jsub3.hist(strict_nomegeath.j_ranger, color='b', **hist_kwargs)
+    jsub3.text(0.7, 0.75, "no Megeath match",
+               transform = jsub3.transAxes)
+
+    jsub1.set_title("J magnitude range (robust) for pristine-data stars")
+    jsub3.set_xlabel(r"$\Delta J$ mag (outlier-proof)")
+
+    plt.show()
+
+
 
 
 f_list = [f_hist_periods, 
