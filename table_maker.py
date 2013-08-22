@@ -127,7 +127,7 @@ def t_table2_variability_periods_periodics_bymegeathclass():
           J, H, or K data, respectively
 
     Current columns:
-      N_j, N_h, N_k : three integers
+    N_j, N_h, N_k : three integers
       Delta-J, H, K: three floats
       Delta-J-H, J-K, H-K: three floats
       Color slopes (JH, HK, JHK): three floats
@@ -188,6 +188,8 @@ def t_table2_variability_periods_periodics_bymegeathclass():
     clobber_table_write(t2_proto, output_directory+"Table_2a.txt", type='ascii')
     clobber_table_write(t2_disks, output_directory+"Table_2b.txt", type='ascii')
     clobber_table_write(t2_nomegeath, output_directory+"Table_2c.txt", type='ascii')
+
+    return table
 
 def t_table3_variability_nonperiodics_bymegeathclass():
     """
@@ -253,5 +255,7 @@ def t_table3_variability_nonperiodics_bymegeathclass():
     clobber_table_write(t3_proto, output_directory+"Table_3a.txt", type='ascii')
     clobber_table_write(t3_disks, output_directory+"Table_3b.txt", type='ascii')
     clobber_table_write(t3_nomegeath, output_directory+"Table_3c.txt", type='ascii')
+
+    return table
     
          
