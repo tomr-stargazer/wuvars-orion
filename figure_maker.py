@@ -323,7 +323,9 @@ def f_colorslope_threepanel(title=False):
 
 
 def f_color_slopes_and_periods(title1="K, H-K color slope distributions: "
-                               "Periodic vs Non-Periodic"):
+                               "Periodic vs Non-Periodic",
+                               title2="Color slopes versus periods, "
+                               "for periodic stars"):
     """
     Generates two figures relating K, H-K color slopes with periods.
     
@@ -338,10 +340,12 @@ def f_color_slopes_and_periods(title1="K, H-K color slope distributions: "
 
     color_periodics = ukvar_spread.where(selection & 
                                          (ukvar_spread.periodic > 0))
+    color_periods = ukvar_periods[selection & (ukvar_spread.periodic > 0)]
 
     color_nonperiodics = ukvar_spread.where(selection & 
                                             (ukvar_spread.periodic == 0))
 
+    # Fig 1 is the double histogram.
     fig1 = plt.figure()
     sub1 = plt.subplot(2,1,1)
 
@@ -360,9 +364,27 @@ def f_color_slopes_and_periods(title1="K, H-K color slope distributions: "
     sub2.set_xlim(-90,90)
     sub2.set_xticks([-90,-45,0,45,90])
 
+    # Fig 2 is the scatterplot.
+    fig2 = plt.figure()
+
+    plt.plot(color_periods, 
+              np.degrees(np.arctan(color_periodics.khk_slope)), 'ko')
+
+    plt.xlabel("Period, days")
+    plt.ylabel("K, H-K color slope (degrees)")
+
+    plt.ylim(-90, 90)
+    plt.yticks([-90, -45, 0, 45, 90])
+    plt.gca().set_yticks(np.arange(-90, 90, 15), minor=True)
+
+    plt.text(30,-60, "Disk activity")
+    plt.text(30,60, "Dust (A_V)")
+
+    plt.title(title2)
+
     plt.show()
 
-    return fig1
+    return fig1, fig2
 
     
 
