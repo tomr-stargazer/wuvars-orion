@@ -600,7 +600,7 @@ def f_period_lit_comparisons():
     plt.show()
 
 
-def f_magnitude_hists_by_class():
+def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
     """
     Makes a series of multipanel histograms of variability.
     Uses "strict" sources only for these.
@@ -631,36 +631,38 @@ def f_magnitude_hists_by_class():
 
     hist_kwargs = {'range':(0,2), 'bins':20}
 
-    for b, n in zip(bands, names):
+    if threepanels:
+        for b, n in zip(bands, names):
 
-        j_fig = plt.figure()
+            j_fig = plt.figure()
 
-        jsub1 = plt.subplot(3,1,1)
-        jsub1.hist(strict_protostars['%s_ranger' % b], color='c', **hist_kwargs)
-        jsub1.text(0.5, 0.65, "Megeath protostars \n"
-                   r"median $\Delta %s: %.2f" % (
-                n.replace(' ', '$ '), 
-                np.median(strict_protostars['%s_ranger' % b])),
-                   transform = jsub1.transAxes)
+            jsub1 = plt.subplot(3,1,1)
+            jsub1.hist(strict_protostars['%s_ranger' % b], color='c', **hist_kwargs)
+            jsub1.text(0.5, 0.65, "Megeath protostars \n"
+                       r"median $\Delta %s: %.2f" % (
+                    n.replace(' ', '$ '), 
+                    np.median(strict_protostars['%s_ranger' % b])),
+                       transform = jsub1.transAxes)
 
-        jsub2 = plt.subplot(3,1,2)
-        jsub2.hist(strict_disks['%s_ranger' % b], color='r', **hist_kwargs)
-        jsub2.text(0.5, 0.65, "Megeath disks \n"
-                   r"median $\Delta %s: %.2f" % (
-                n.replace(' ', '$ '), 
-                np.median(strict_disks['%s_ranger' % b])),
-                   transform = jsub2.transAxes)
+            jsub2 = plt.subplot(3,1,2)
+            jsub2.hist(strict_disks['%s_ranger' % b], color='r', **hist_kwargs)
+            jsub2.text(0.5, 0.65, "Megeath disks \n"
+                       r"median $\Delta %s: %.2f" % (
+                    n.replace(' ', '$ '), 
+                    np.median(strict_disks['%s_ranger' % b])),
+                       transform = jsub2.transAxes)
 
-        jsub3 = plt.subplot(3,1,3)
-        jsub3.hist(strict_nomegeath['%s_ranger' % b], color='b', **hist_kwargs)
-        jsub3.text(0.5, 0.65, "no Megeath match \n"
-                   r"median $\Delta %s: %.2f" % (
-                n.replace(' ', '$ '), 
-                np.median(strict_nomegeath['%s_ranger' % b])),
-                   transform = jsub3.transAxes)
+            jsub3 = plt.subplot(3,1,3)
+            jsub3.hist(strict_nomegeath['%s_ranger' % b], color='b', **hist_kwargs)
+            jsub3.text(0.5, 0.65, "no Megeath match \n"
+                       r"median $\Delta %s: %.2f" % (
+                    n.replace(' ', '$ '), 
+                    np.median(strict_nomegeath['%s_ranger' % b])),
+                       transform = jsub3.transAxes)
 
-        jsub1.set_title("%s range (robust) for pristine-data stars" % n)
-        jsub3.set_xlabel(r"$\Delta %s (outlier-proof)" % n.replace(' ', '$ '))
+            jsub1.set_title("%s range (robust) for pristine-data stars" % n)
+            jsub3.set_xlabel(r"$\Delta %s (outlier-proof)" % n.replace(' ', '$ '))
+
 
     plt.show()
 
