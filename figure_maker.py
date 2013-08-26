@@ -672,11 +672,16 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
                  color='b', hatch='/', label='no Megeath match',
                  **hist_kwargs)
         plt.hist(strict_disks['k_ranger'], 
-                 color='r', alpha=0.5, hatch='-', label='Megeath Disks',
+                 color='r', alpha=0.5, hatch='\\', label='Megeath Disks',
                  **hist_kwargs)
         plt.hist(strict_protostars['k_ranger'], 
-                 color='c', hatch='\\', label='Megeath Protostars',
+                 color='c', hatch='--', label='Megeath Protostars',
                  **hist_kwargs)
+
+        plt.title("K magnitude range (robust) for pristine-data stars")
+        plt.xlabel(r"$\Delta K$ magnitude (outlier-proof)")
+
+        plt.legend()
 
             
     plt.show()
