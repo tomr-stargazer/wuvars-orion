@@ -660,7 +660,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
                     np.median(strict_nomegeath['%s_ranger' % b])),
                        transform = jsub3.transAxes)
 
-            jsub1.set_title("%s range (robust) for pristine-data stars" % n)
+            jsub1.set_title("%s range (robust) for pristine-data variables" % n)
             jsub3.set_xlabel(r"$\Delta %s (outlier-proof)" % n.replace(' ', '$ '))
 
 
@@ -678,7 +678,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
                  color='c', hatch='--', label='Megeath Protostars',
                  **hist_kwargs)
 
-        plt.title("K magnitude range (robust) for pristine-data stars")
+        plt.title("K magnitude range (robust) for pristine-data variables")
         plt.xlabel(r"$\Delta K$ magnitude (outlier-proof)")
 
         plt.legend()
