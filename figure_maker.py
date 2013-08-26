@@ -664,6 +664,21 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
             jsub3.set_xlabel(r"$\Delta %s (outlier-proof)" % n.replace(' ', '$ '))
 
 
+    if onepanels:
+
+        fig = plt.figure()
+        
+        plt.hist(strict_nomegeath['k_ranger'], 
+                 color='b', hatch='/', label='no Megeath match',
+                 **hist_kwargs)
+        plt.hist(strict_disks['k_ranger'], 
+                 color='r', alpha=0.5, hatch='-', label='Megeath Disks',
+                 **hist_kwargs)
+        plt.hist(strict_protostars['k_ranger'], 
+                 color='c', hatch='\\', label='Megeath Protostars',
+                 **hist_kwargs)
+
+            
     plt.show()
 
 
