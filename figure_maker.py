@@ -441,7 +441,7 @@ def f_cc_and_map_by_megeath_class(sample='all'):
     fig = plt.figure()
     ax = plt.gca()
 
-    plot_trajectory_vanilla(ax)
+    plot_trajectory_vanilla(ax, a_k=3)
 
     plt.plot(ukvar_spread.hmk_median[nonmegeath_indices], 
              ukvar_spread.jmh_median[nonmegeath_indices], 
@@ -456,8 +456,8 @@ def f_cc_and_map_by_megeath_class(sample='all'):
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $J-H$")
 
-    plt.xlim(-0.1,2.5)
-    plt.ylim(-0.2, 2.8)
+    plt.xlim(-0.1,3.1)
+    plt.ylim(-0.2, 4.4)
     
     plt.title(sample_name + " variables, colored by Megeath 2012 class")
 
