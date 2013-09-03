@@ -36,6 +36,7 @@ lowvar_per_path_g = "/home/tom/reu/ORION/DATA/lowvar/periodic/glued/"
 
 # Breaks from convention cause it's destined for dropbox.
 jjh_path = dropbox_bo_lightcurves + "ukvar_jjh/"
+jjh_path_g = dropbox_bo_lightcurves + "ukvar_jjh/glued/"
 
 # Relevant variable names:
 # ==Global==
@@ -444,13 +445,17 @@ def gen_ukvar_all(start=0, stop=len(ukvar)):
 # And! This is a pure find-and-replace clone of `gen_ukvar_all()`! +some.
 def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
     """ 
-    Creates all the UKvar plots in one shot.
+    Creates all the UKvar JJH plots in one shot.
 
     Uses the UKvar ID as the primary identifier; lists info
     in the filename distinguishing auto/strict/subj, plus per/nonper
     I'm thinking: 'a' for autovar, 't' for strict, 'j' for subj,
     'p' for periodic, 'n' for nonperiodic. Each dude gets two letters.
 
+    The glued plots only consist of (a) colored-by-time and 
+    (b) colored-by-phase. No periodograms here, go see the lightcurves
+    for that.
+    
     if periodic:
         do the gluedvars stuff
     else:
@@ -483,40 +488,30 @@ def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
                 
             best_period = t.best_period[t.SOURCEID == s][0]
 
-            # Let's make 3 plots. LC, folded, and pgram. Save em all into a place.
+            # Let's make 2 plots. LC and folded. Save em into a place.
             # print out the names as ID_fs_lc.png
-            plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                            timecolor=True,
-                            name = "%s:  UKvar %s (%s)" %
-                            (str(s), str(id), suffix),
-                            outfile=ukvar_path_ng+"%s_%s_lc.png" %
-                            (str(id), suffix))
+            plot3.jjh(data, s, abridged=True, color_slope=True, 
+                      timecolor=True,
+                      name = "%s:  UKvar %s (%s)" %
+                      (str(s), str(id), suffix),
+                      outfile=jjh_path+"%s_%s_lc.png" %
+                      (str(id), suffix))
 
             # ID_fs_phase.png
-            plot3.graded_phase(data, s, timecolor='time', color_slope=True,
-                               period=best_period, 
-                               name = "%s:  UKvar %s (%s)" %
-                               (str(s), str(id), suffix),
-                               outfile=ukvar_path_ng+"%s_%s_phase.png" % 
-                               (str(id), suffix))
-            # ID_fs_pgram.png
-            try:
-                plot3.lsp_power(data, s, 
-                                name = "%s:  UKvar %s (%s)" %
-                                (str(s), str(id), suffix),
-                                outfile=ukvar_path_ng+"%s_%s_pgram.png" %
-                                (str(id), suffix))
-            except Exception, e:
-                print "periodogram failed for %s" % str(s)
-                print e
+            plot3.jjh_phase(data, s, timecolor='time', color_slope=True,
+                            period=best_period, 
+                            name = "%s:  UKvar %s (%s)" %
+                            (str(s), str(id), suffix),
+                            outfile=jjh_path+"%s_%s_phase.png" % 
+                            (str(id), suffix))
 
 
 # now glue em together!
                 
             try:
                 call(["montage","-mode", "concatenate", "-tile", "2x", 
-                      ukvar_path_ng+"%s_%s*.png" % (str(id), suffix), 
-                      ukvar_path+"%s_%s.png" % (str(id), suffix) ])
+                      jjh_path+"%s_%s*.png" % (str(id), suffix), 
+                      jjh_path_g+"%s_%s.png" % (str(id), suffix) ])
             except Exception, e:
                 print "Why did montage fail?"
                 raise e
@@ -524,14 +519,14 @@ def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
         else:
             # Just make the lightcurve.
             
-            plot3.graded_lc(data, s, abridged=True, color_slope=True, 
-                            timecolor=True, 
-                            name = "%s:  UKvar %s (%s)" %
-                            (str(s), str(id), suffix),
-                            outfile=ukvar_path+"%s_%s.png" % 
-                            (str(id), suffix))
+            plot3.jjh(data, s, abridged=True, color_slope=True, 
+                      timecolor=True, 
+                      name = "%s:  UKvar %s (%s)" %
+                      (str(s), str(id), suffix),
+                      outfile=jjh_path_g+"%s_%s.png" % 
+                      (str(id), suffix))
 
-        print "Completed UKvar %s" % str(id)
+        print "Completed jjh: UKvar %s" % str(id)
         
         
 def gen_lowvar_periodic_plots(start=0, stop=len(low_strict_periodics)):
