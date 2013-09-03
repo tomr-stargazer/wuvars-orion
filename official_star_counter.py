@@ -19,6 +19,7 @@ Useful importable variable names:
 """ 
 
 from __future__ import division
+import os
 
 import numpy as np
 
@@ -32,15 +33,17 @@ def c_print(str):
     else:
         pass
     return
+
+dropbox_bo_data = os.path.expanduser("~/Dropbox/Bo_Tom/data/")
     
 
 #spread = atpy.Table("/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5_spread.fits")
-spread = atpy.Table("/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5_spread_pstar.fits")
+spread = atpy.Table(dropbox_bo_data+"fdece_graded_clipped0.8_scrubbed0.1_dusted0.5_spread_pstar.fits")
 
-maxvars_spread_per = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/maxvars_data_statsper.fits")
-maxvars_s1_spread_per = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/maxvars_data_s1_statsper.fits")
+maxvars_spread_per = atpy.Table(dropbox_bo_data+"maxvars_data_statsper.fits")
+maxvars_s1_spread_per = atpy.Table(dropbox_bo_data+"maxvars_data_s1_statsper.fits")
 
-maxvars_pstar = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/maxvars_pstar.fits")
+maxvars_pstar = atpy.Table(dropbox_bo_data+"maxvars_pstar.fits")
 
 
 # Number of detected sources in the dataset
@@ -205,7 +208,7 @@ c_print( "Number of stars that have the data quality for auto-classification: %d
 
 subjectives = maxvars.where( ~np.in1d(maxvars.SOURCEID, autovars_true.SOURCEID))
 
-old_subjectives = atpy.Table("/home/tom/reu/ORION/DATA/old_subjectives.fits")
+old_subjectives = atpy.Table(dropbox_bo_data+"old_subjectives.fits")
 
 new_subjectives = subjectives.where( ~np.in1d(subjectives.SOURCEID, old_subjectives.SOURCEID))
 
@@ -390,7 +393,7 @@ c_print( "Number of stars automatically classed as LOW variables: %d" % len(low_
 c_print( "Number of stars that have the data quality for auto-classification: %d" % len(autocan_true) )
 
 
-low_maxvars_spread = atpy.Table("/media/storage/Documents/Research/reu/ORION/DATA/low_maxvars_data_spread.fits")
+low_maxvars_spread = atpy.Table(dropbox_bo_data+"low_maxvars_data_spread.fits")
 low_periodics = ps.best_period(ps.periodic_selector(low_maxvars_spread))
 
 low_strict_periodics = low_periodics.where(
