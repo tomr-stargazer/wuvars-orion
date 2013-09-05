@@ -495,6 +495,7 @@ def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
             # Let's make 2 plots. LC and folded. Save em into a place.
             # print out the names as ID_fs_lc.png
             plot3.jjh(data, s, color_slope=True, 
+                      date_offset=54034,
             #                      timecolor=True,
                       name = "%s:  UKvar %s (%s)" %
                       (str(s), str(id), suffix),
@@ -503,6 +504,7 @@ def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
 
             # ID_fs_phase.png
             plot3.jjh_phase(data, s, timecolor='time', color_slope=True,
+                            date_offset=54034,
                             period=best_period, 
                             name = "%s:  UKvar %s (%s)" %
                             (str(s), str(id), suffix),
@@ -524,6 +526,7 @@ def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
             # Just make the lightcurve.
             
             plot3.jjh(data, s, color_slope=True, 
+                      date_offset=54034,
             #                      timecolor=True, 
                       name = "%s:  UKvar %s (%s)" %
                       (str(s), str(id), suffix),
