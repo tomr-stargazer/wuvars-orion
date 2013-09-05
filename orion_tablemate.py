@@ -19,7 +19,10 @@ import copy
 import numpy as np
 
 import atpy
-import coords
+try:
+    import coords
+except ImportError:
+    import astrolib.coords as coords
 
 import match
 import official_star_counter as osc

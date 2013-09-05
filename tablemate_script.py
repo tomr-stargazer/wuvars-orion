@@ -12,6 +12,8 @@ We are asking three broad questions:
 
 """
 
+import os
+
 import numpy as np
 
 import orion_tablemate
@@ -19,7 +21,7 @@ from orion_tablemate import TableParameters, atpy
 
 # Top half of the script: defining various tables
 
-dpath = "/home/tom/Dropbox/Bo_Tom/aux_catalogs/"
+dpath = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
 tables = []
 
 

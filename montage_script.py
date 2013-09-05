@@ -3,6 +3,7 @@ This is a script to help us generate lots of lightcurves and,
 for periodics, glue together various plots.
 """
 
+import os
 from subprocess import call
 
 import numpy as np
@@ -10,6 +11,8 @@ import numpy as np
 import atpy
 
 import plot3
+
+dropbox_bo_data = os.path.expanduser("~/Dropbox/Bo_Tom/data/")
 
 path1 = "/home/tom/reu/ORION/DATA/subjective/periodic_book/"
 path2 = "/home/tom/reu/ORION/DATA/subjective/periodic_book/glued/"
@@ -25,26 +28,26 @@ path8 = "/home/tom/reu/ORION/DATA/subjective/new_periodic_book/glued/"
 path9 = "/home/tom/reu/ORION/DATA/subjective/new_nonperiodic_book/"
 
 
-subjective_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_periodic_candidate_spreadsheet.fits")
+subjective_periodics = atpy.Table(dropbox_bo_data+"subjective/subjective_periodic_candidate_spreadsheet.fits")
 
-conf_subj_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_periodics_confirmed_spread.fits")
+conf_subj_periodics = atpy.Table(dropbox_bo_data+"subjective/subjective_periodics_confirmed_spread.fits")
 
-new_conf_subj_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_periodics_confirmed_spread.fits")
+new_conf_subj_periodics = atpy.Table(dropbox_bo_data+"subjective/new_subjective_periodics_confirmed_spread.fits")
 
-subjective_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_nonperiod_candidate_spreadsheet.fits")
+subjective_nonpers = atpy.Table(dropbox_bo_data+"subjective/subjective_nonperiod_candidate_spreadsheet.fits")
 
-conf_subj_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/subjective_nonpers_confirmed_spread.fits")
+conf_subj_nonpers = atpy.Table(dropbox_bo_data+"subjective/subjective_nonpers_confirmed_spread.fits")
 
-new_conf_subj_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_nonpers_confirmed_spread.fits")
+new_conf_subj_nonpers = atpy.Table(dropbox_bo_data+"subjective/new_subjective_nonpers_confirmed_spread.fits")
 
 # this is for the new dudes
-new_subjective_periodics = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_periodic_candidate_spreadsheet.fits")
+new_subjective_periodics = atpy.Table(dropbox_bo_data+"subjective/new_subjective_periodic_candidate_spreadsheet.fits")
 
-new_subjective_nonpers = atpy.Table("/home/tom/reu/ORION/DATA/subjective/new_subjective_nonperiod_candidate_spreadsheet.fits")
+new_subjective_nonpers = atpy.Table(dropbox_bo_data+"subjective/new_subjective_nonperiod_candidate_spreadsheet.fits")
 
-low_periodics = atpy.Table("/home/tom/reu/ORION//DATA/low_periodics.fits")
+low_periodics = atpy.Table(dropbox_bo_data+"low_periodics.fits")
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
+data = atpy.Table(dropbox_bo_data+"fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits")
 
 # for UKvar 1226
 uk1226_id = 44199508514050

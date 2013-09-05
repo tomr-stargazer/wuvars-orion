@@ -13,6 +13,7 @@ and tablemate_script.py.
 """
 
 from __future__ import division
+import os
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -40,13 +41,14 @@ from montage_script import conf_subj_periodics, conf_subj_nonpers
 # Two: for input tables, access given columns in those tables corresponding
 #   to an input source.
 
+dropbox_bo_aux_catalogs = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
 
 # This is a table I made and then attached 
-mated_oncvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/matched_table_withSIMBAD_2013_2_25.fits")
-oncvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ONCvar_spreadsheet_withSIMBADnames.fits")
+mated_oncvar = atpy.Table(dropbox_bo_aux_catalogs+"matched_table_withSIMBAD_2013_2_25.fits")
+oncvar_spread = atpy.Table(dropbox_bo_aux_catalogs+"ONCvar_spreadsheet_withSIMBADnames.fits")
 
-mated_ukvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_8_15.fits")
-ukvar_spread = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties.fits")
+mated_ukvar = atpy.Table(dropbox_bo_aux_catalogs+"ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_8_15.fits")
+ukvar_spread = atpy.Table(dropbox_bo_aux_catalogs+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties.fits")
 
 def period_array_maker(spread):
     """ 
