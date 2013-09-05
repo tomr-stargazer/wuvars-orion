@@ -475,7 +475,8 @@ def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
 
         # Periodics first
 
-        if ukvar.periodic[i] == 1:
+        #        if ukvar.periodic[i] == 1:
+        if False: # uncomment the above line when jjh_phase is functional.
             
             # Dig up the best period for this dude! 3 main cases.
 
@@ -493,8 +494,8 @@ def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
 
             # Let's make 2 plots. LC and folded. Save em into a place.
             # print out the names as ID_fs_lc.png
-            plot3.jjh(data, s, abridged=True, color_slope=True, 
-                      timecolor=True,
+            plot3.jjh(data, s, color_slope=True, 
+            #                      timecolor=True,
                       name = "%s:  UKvar %s (%s)" %
                       (str(s), str(id), suffix),
                       outfile=jjh_path+"%s_%s_lc.png" %
@@ -522,8 +523,8 @@ def gen_ukvar_all_jjh(start=0, stop=len(ukvar)):
         else:
             # Just make the lightcurve.
             
-            plot3.jjh(data, s, abridged=True, color_slope=True, 
-                      timecolor=True, 
+            plot3.jjh(data, s, color_slope=True, 
+            #                      timecolor=True, 
                       name = "%s:  UKvar %s (%s)" %
                       (str(s), str(id), suffix),
                       outfile=jjh_path_g+"%s_%s.png" % 
