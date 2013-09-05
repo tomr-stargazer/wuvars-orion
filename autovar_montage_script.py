@@ -51,10 +51,13 @@ jjh_path_g = dropbox_bo_lightcurves + "ukvar_jjh/glued/"
 # `autovars_true_nonpers`: subset of `autovars_true` who are non-periodic
 # `autovars_strict_nonpers`: subset of `autovars_strict` who are non-periodic
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
+dropbox_bo_data = os.path.expanduser("~/Dropbox/Bo_Tom/data/")
+dropbox_bo_aux_catalogs = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
 
-oncvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ONCvar_spreadsheet.fits")
-ukvar = atpy.Table("/home/tom/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties.fits")
+data = atpy.Table(dropbox_bo_data+"fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits")
+
+oncvar = atpy.Table(dropbox_bo_aux_catalogs+"ONCvar_spreadsheet.fits")
+ukvar = atpy.Table(dropbox_bo_aux_catalogs+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties.fits")
 
 # Let's make a function that does periods for "high-variables".
 
