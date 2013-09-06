@@ -17,7 +17,7 @@ import aplpy
 
 dropbox_bo_images = os.path.expanduser("~/Dropbox/Bo_Tom/images/")
 
-def figure_1(dots=True, rect=True):
+def figure_1(dots=True, rect=True, latex=True):
     """
     Shows our field on top of VISTA's great M42 image.
 
@@ -52,7 +52,8 @@ def figure_1(dots=True, rect=True):
                         width_of_box_ra, width_of_box_dec,
                         color='y', lw=3)
 
-    fig.set_system_latex(True)
+    if latex:
+        fig.set_system_latex(True)
 
     return fig
  
