@@ -8,6 +8,7 @@ time if you only want one.
 
 """
 
+from __future__ import division
 import os
 
 from figure_maker import *
@@ -33,5 +34,25 @@ def figure_1(dots=True, rect=True):
 
     """
 
-    pass
+    fig = aplpy.FITSFigure(dropbox_bo_images+"slice.fits", north=True)
+
+    fig.show_rgb(dropbox_bo_images+"eso1006a.jpg")
+
+    fig.show_markers(np.degrees(ukvar_spread.RA),
+                     np.degrees(ukvar_spread.DEC),
+                     edgecolor='g', s=2, alpha=0.7)
+
+    center_of_box_ra = np.degrees(ukvar_spread.RA.min() + ukvar_spread.RA.max())/2
+    center_of_box_dec= np.degrees(ukvar_spread.DEC.min()+ ukvar_spread.DEC.max())/2
+
+    width_of_box_ra = np.degrees(ukvar_spread.RA.max() - ukvar_spread.RA.min())
+    width_of_box_dec = np.degrees(ukvar_spread.DEC.max() - ukvar_spread.DEC.min())
+
+    fig.show_rectangles(center_of_box_ra, center_of_box_dec,
+                        width_of_box_ra, width_of_box_dec,
+                        color='y', lw=3)
+
+    fig.set_system_latex(True)
+
+    return fig
  
