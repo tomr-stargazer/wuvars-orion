@@ -38,14 +38,6 @@ def figure_1(dots=True, rect=True, latex=True):
 
     fig.show_rgb(dropbox_bo_images+"eso1006a.jpg")
 
-    fig.show_markers(np.degrees(ukvar_spread.RA), 
-                     np.degrees(ukvar_spread.DEC), 
-                     marker='+',edgecolor='w', s=20)
-
-    fig.show_markers(np.degrees(ukvar_spread.RA), 
-                     np.degrees(ukvar_spread.DEC), 
-                     marker='o',edgecolor='r', s=2)
-
     center_of_box_ra = np.degrees(ukvar_spread.RA.min() + ukvar_spread.RA.max())/2
     center_of_box_dec= np.degrees(ukvar_spread.DEC.min()+ ukvar_spread.DEC.max())/2
 
@@ -55,6 +47,23 @@ def figure_1(dots=True, rect=True, latex=True):
     fig.show_rectangles(center_of_box_ra, center_of_box_dec,
                         width_of_box_ra, width_of_box_dec,
                         color='y', lw=3)
+    
+    fig.show_markers(np.degrees(ukvar_spread.RA), 
+                     np.degrees(ukvar_spread.DEC), 
+                     marker='+',edgecolor='w', s=20)
+
+    fig.show_markers(np.degrees(ukvar_spread.RA), 
+                     np.degrees(ukvar_spread.DEC), 
+                     marker='o',edgecolor='r', s=2)
+
+    '''    plt.xlim(np.degrees(ukvar_spread.RA.max())-0.001, 
+             np.degrees(ukvar_spread.RA.min())+0.001)
+
+    plt.ylim(np.degrees(ukvar_spread.DEC.min())-0.001, 
+             np.degrees(ukvar_spread.DEC.max())+0.001)'''
+
+    fig.axis_labels.set_yposition('right')
+
 
     if latex:
         fig.set_system_latex(True)
