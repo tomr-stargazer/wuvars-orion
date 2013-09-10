@@ -393,9 +393,11 @@ def f_color_slopes_and_periods(title1="K, H-K color slope distributions: "
 
 # Attaching periods to ukvar_spread
 
-def f_cc_and_map_by_megeath_class(sample='all'):
+def f_cc_cmd_and_map_by_megeath_class(sample='all'):
     """
     A color-color diagram where stars are colored by Megeath class.
+
+    Also a CMD and a map.
     
     """
 
@@ -462,8 +464,33 @@ def f_cc_and_map_by_megeath_class(sample='all'):
     plt.title(sample_name + " variables, colored by Megeath 2012 class")
 
     plt.legend(loc='lower right')
+
+
+    fig3 = plt.figure()
+    ax3 = plt.gca()
+
+    plot_trajectory_vanilla(ax, a_k=3)
+
+    plt.plot(ukvar_spread.hmk_median[nonmegeath_indices], 
+             ukvar_spread.k_median[nonmegeath_indices], 
+             'bo', ms=4, label="No Megeath Match")
+    plt.plot(ukvar_spread.hmk_median[disk_indices], 
+             ukvar_spread.k_median[disk_indices], 
+             'ro', ms=4, label="Megeath Disks")
+    plt.plot(ukvar_spread.hmk_median[protostar_indices], 
+             ukvar_spread.k_median[protostar_indices], 
+             'c*', ms=10, label="Megeath Protostars")
+
+    plt.xlabel(r"median $H-K$")
+    plt.ylabel(r"median $K$ mag")
+
+    plt.xlim(-0.1,3.1)
+    plt.ylim(17, 8)
     
-    plt.show()
+    plt.title(sample_name + " variables, colored by Megeath 2012 class")
+
+    plt.legend(loc='upper right')
+
 
     fig2 = plt.figure()
 
@@ -482,7 +509,7 @@ def f_cc_and_map_by_megeath_class(sample='all'):
 
     plt.show()
 
-    return (fig, fig2)
+    return (fig, fig2, fig3)
 
 
     
