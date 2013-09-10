@@ -56,17 +56,23 @@ def figure_1(dots=True, rect=True, latex=True):
                      np.degrees(ukvar_spread.DEC), 
                      marker='o',edgecolor='r', s=2)
 
-    '''    plt.xlim(np.degrees(ukvar_spread.RA.max())-0.001, 
-             np.degrees(ukvar_spread.RA.min())+0.001)
 
-    plt.ylim(np.degrees(ukvar_spread.DEC.min())-0.001, 
-             np.degrees(ukvar_spread.DEC.max())+0.001)'''
+    northeast_corner = (np.degrees(ukvar_spread.RA.max() + 0.001),
+                        np.degrees(ukvar_spread.DEC.max() + 0.001))
 
-    fig.axis_labels.set_yposition('right')
+    southwest_corner = (np.degrees(ukvar_spread.RA.min() - 0.001),
+                        np.degrees(ukvar_spread.DEC.min() - 0.001))
 
+    px_northeast_corner = fig.world2pixel(northeast_corner[0], northeast_corner[1])
+    px_southwest_corner = fig.world2pixel(southwest_corner[0], southwest_corner[1])
+    
+    plt.xlim(px_northeast_corner[0], px_southwest_corner[0])
+
+    plt.ylim(px_southwest_corner[1], px_northeast_corner[1])
 
     if latex:
         fig.set_system_latex(True)
 
     return fig
  
+0.0167
