@@ -136,6 +136,7 @@ def t_table2_variability_periods_periodics_bymegeathclass():
       Stetson : one float
       Stetson_choice : one string
       Period : one float
+      Data quality : int (0, 1, 2) corresponding to subjective/auto/strict
       
     """
 
@@ -173,6 +174,7 @@ def t_table2_variability_periods_periodics_bymegeathclass():
     addc('Stetson Variability Index', periodics.Stetson)
     addc('Bands used to compute Stetson', periodics.Stetson_choice)
     addc('Best-fit period', periodic_periods)
+    addc('Data quality flag', periodics.autovar + periodics.strict)
 
     # Now split it into three pieces and compute medians!
     
@@ -206,6 +208,7 @@ def t_table3_variability_nonperiodics_bymegeathclass():
       Color slopes (JH, HK, JHK): three floats
       Stetson : one float
       Stetson_choice : one string
+      Data quality : int (0, 1, 2) corresponding to subjective/auto/strict
 
     """
 
@@ -241,6 +244,7 @@ def t_table3_variability_nonperiodics_bymegeathclass():
     addc('K, (H-K) color slope', khk_slope_column)
     addc('Stetson Variability Index', nonperiodics.Stetson)
     addc('Bands used to compute Stetson', nonperiodics.Stetson_choice)
+    addc('Data quality flag', nonperiodics.autovar + nonperiodics.strict)
 
     # Now split it into three pieces and compute medians!
     t3_proto = table.where((megeath_by_nonperiodics.Class == 'P') |
