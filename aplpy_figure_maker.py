@@ -50,7 +50,7 @@ def figure_1(dots=True, rect=True, latex=True):
     
     fig.show_markers(np.degrees(ukvar_spread.RA), 
                      np.degrees(ukvar_spread.DEC), 
-                     marker='+',edgecolor='w', s=20)
+                     marker='+',edgecolor='w', s=40)
 
     fig.show_markers(np.degrees(ukvar_spread.RA), 
                      np.degrees(ukvar_spread.DEC), 
