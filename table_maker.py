@@ -33,7 +33,9 @@ from orion_tablemate import index_secondary_by_primary
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 
-output_directory = "/home/tom/Dropbox/Bo_Tom/paper/publication_tables/"
+dropbox_bo = os.path.expanduser("~/Dropbox/Bo_Tom/")
+output_directory = dropbox_bo+"paper/publication_tables/"
+
 
 # Let's grab IRAC colors from Megeath.
 megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
