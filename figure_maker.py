@@ -721,6 +721,9 @@ def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs "
     Plots Stetson against median H-mag for strict candidates 
     (i.e., all stars with "pristine" data quality.)
 
+    Also makes a cool side-histogram which is arguably the more useful
+    part of the figure.
+
     """
 
     fig = plt.figure()
@@ -746,20 +749,21 @@ def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs "
 
     plt.title(title)
 
-    ax_hist = fig.add_axes( (0.725, 0.1, 0.2, 0.8), sharey=ax_plot )
+    ax_hist = fig.add_axes( (0.725, 0.1, 0.175, 0.8), sharey=ax_plot )
 
-    plt.hist(autocan_strict.Stetson, bins=np.logspace(-2,2,15), range=[0.01,100], 
+    plt.hist(autocan_strict.Stetson, bins=np.logspace(-2,2,50), range=[0.01,100],
              orientation='horizontal', color='r')
+    plt.plot([0,1000], [0.55, 0.55], 'g--', lw=4, scalex=False)
+    plt.plot([0,1000], [1.0, 1.0], 'b--', lw=4, scalex=False)
 
-    plt.setp(ax_hist.get_yticklabels(), visible=False)
     plt.setp(ax_hist.get_xticklabels(), visible=False)
+    plt.yticks(tick_locations, tick_labels)
+    ax_hist.yaxis.tick_right()
     
     plt.show()
 
     return fig
-    
 
-    
 
 f_list = [f_hist_periods, 
           f_map_periods,
