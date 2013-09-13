@@ -716,13 +716,17 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
 
 def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs " 
                                             "median H magnitude for "
-                                            "Pristine-quality stars"):
+                                            "Pristine-quality stars",
+                                            yscale='linear'):
     """
     Plots Stetson against median H-mag for strict candidates 
     (i.e., all stars with "pristine" data quality.)
 
     Also makes a cool side-histogram which is arguably the more useful
     part of the figure.
+
+    Can be optionally log-scaled (to show all of the data) or linear scaled
+    (to show the zero-through-one region faithfully)
 
     """
 
@@ -736,13 +740,17 @@ def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs "
     plt.plot([11,16], [0.55, 0.55], 'g--', lw=4)
     plt.plot([11,16], [1.0, 1.0], 'b--', lw=4)
 
-    #    plt.semilogy()
-#    plt.ylim(0.01, 100)
+    if yscale == 'log':
+        plt.semilogy()
+        tick_locations = [0.01, 0.1, 0.55, 1.0, 10, 100]
+        hist_bins = np.logspace(-2,2,50)
+        hist_range=[0.01,100]
+    else:
+        tick_locations = [-1, 0, 0.55, 1.0, 2, 3, 4, 5]
+        hist_bins=40
+        hist_range=[-1,5]
 
-#    tick_locations = [0.01, 0.1, 0.55, 1.0, 10, 100]
-#    tick_labels = [str(x) for x in tick_locations]
-
-#    plt.yticks(tick_locations, tick_labels)
+    tick_labels = [str(x) for x in tick_locations]
     
     plt.xlabel("median H mag")
     plt.ylabel("Stetson index")
@@ -752,17 +760,17 @@ def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs "
     ax_hist = fig.add_axes( (0.725, 0.1, 0.175, 0.8), sharey=ax_plot )
 
     plt.hist(autocan_strict.Stetson, 
-             bins=40,
-             range=[-1,5],
+             bins=hist_bins,
+             range=hist_range,
              orientation='horizontal', color='r')
     plt.plot([0,1000], [0.55, 0.55], 'g--', lw=4, scalex=False)
     plt.plot([0,1000], [1.0, 1.0], 'b--', lw=4, scalex=False)
 
     plt.setp(ax_hist.get_xticklabels(), visible=False)
-    #    plt.yticks(tick_locations, tick_labels)
+    plt.yticks(tick_locations, tick_labels)
     ax_hist.yaxis.tick_right()
 
-    plt.ylim(-1,5)
+    plt.ylim(hist_range)
     
     plt.show()
 
