@@ -736,13 +736,13 @@ def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs "
     plt.plot([11,16], [0.55, 0.55], 'g--', lw=4)
     plt.plot([11,16], [1.0, 1.0], 'b--', lw=4)
 
-    plt.semilogy()
-    plt.ylim(0.01, 100)
+    #    plt.semilogy()
+#    plt.ylim(0.01, 100)
 
-    tick_locations = [0.01, 0.1, 0.55, 1.0, 10, 100]
-    tick_labels = [str(x) for x in tick_locations]
+#    tick_locations = [0.01, 0.1, 0.55, 1.0, 10, 100]
+#    tick_labels = [str(x) for x in tick_locations]
 
-    plt.yticks(tick_locations, tick_labels)
+#    plt.yticks(tick_locations, tick_labels)
     
     plt.xlabel("median H mag")
     plt.ylabel("Stetson index")
@@ -751,14 +751,18 @@ def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs "
 
     ax_hist = fig.add_axes( (0.725, 0.1, 0.175, 0.8), sharey=ax_plot )
 
-    plt.hist(autocan_strict.Stetson, bins=np.logspace(-2,2,50), range=[0.01,100],
+    plt.hist(autocan_strict.Stetson, 
+             bins=40,
+             range=[-1,5],
              orientation='horizontal', color='r')
     plt.plot([0,1000], [0.55, 0.55], 'g--', lw=4, scalex=False)
     plt.plot([0,1000], [1.0, 1.0], 'b--', lw=4, scalex=False)
 
     plt.setp(ax_hist.get_xticklabels(), visible=False)
-    plt.yticks(tick_locations, tick_labels)
+    #    plt.yticks(tick_locations, tick_labels)
     ax_hist.yaxis.tick_right()
+
+    plt.ylim(-1,5)
     
     plt.show()
 
