@@ -21,8 +21,13 @@ Guide to variable names:
 """
 
 import os
-# All of these imports are meant to mirror those from figure_maker.
 
+try:
+    import coords
+except ImportError:
+    import astrolib.coords as coords
+
+# All of these imports are meant to mirror those from figure_maker.
 from official_star_counter import *
 from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
                                    hk_empty, hk_filled)
