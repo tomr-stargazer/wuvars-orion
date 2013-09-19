@@ -335,6 +335,31 @@ def join_columns_with_plusminus(value_column, error_column, precision=3):
     joined_column = np.array(joined_list)
     
     return joined_column
+
+def convert_decimal_columns_to_sexagesimal(ra_column, dec_column):
+    """
+    Turns a pair of decimal RA, Dec columns into sexagesimal columns.
+
+    Like join_columns_with_plusminus(), this outputs an array of strings
+    rather than an array of values, so this is really only useful if 
+    you're going to write this as a LaTeX table.
+
+    Output format: hh:mm:ss.s, +dd:mm:ss.ss
+
+    Includes a sign on declination explicitly.
+
+    Parameters
+    ----------
+    ra_column, dec_column : np.arrays
+        Right Ascension and Declination, in decimal degrees.
+
+    Returns
+    -------
+    ra_sex_column, dec_sex_column : np.arrays
+        Right Ascension and Declination, in sexagesimal (hours, degrees)
+        respectively. These are arrays of strings.
+
+    """
     
 
 def table_latex_strings_test():
