@@ -285,6 +285,33 @@ def t_table0_crossref():
 
     return table
 
+def join_columns_with_plusminus(value_column, error_column, precision=3):
+    """
+    Joins two data columns together with the LaTeX $\pm$ symbol.
+
+    Outputs an array of strings, rather than an array of values, 
+    so this is really only useful if you're going to write this as 
+    a LaTeX table.
+
+    Parameters
+    ----------
+    value_column : np.array
+        A column of values (such as magnitudes, masses, etc).
+    error_column : np.array
+        The column of associated errors on those values.
+    precision : int, optional
+        The number of digits to keep in the value and error columns
+        when outputting to strings.
+
+    Returns
+    -------
+    joined_column : np.array (dtype=String)
+        Value column joined with error column by a $\pm$ in each line.
+
+    """
+
+    
+
 def table_latex_strings_test():
     """ 
     This is a 'test' for generating pretty LaTeX-style tables.
