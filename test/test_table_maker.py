@@ -21,11 +21,11 @@ def test_convert_decimal_degree_columns_to_sexagesimal():
     test_dec_decimal_degrees = [+78.9,
                                 -43.21]
 
-    expected_ra = np.array(['08:13:49.44',
-                            '06:35:03.60'])
+    expected_ra = np.array(['08:13:49.440',
+                            '06:35:03.600'])
 
-    expected_dec = np.array(['+78:54:00.00',
-                             '-43:12:36.00'])
+    expected_dec = np.array(['+78:54:00.000',
+                             '-43:12:36.000'])
 
     actual_ra, actual_dec = convert_decimal_degree_columns_to_sexagesimal(
         test_ra_decimal_degrees, test_dec_decimal_degrees)
