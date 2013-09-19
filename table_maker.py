@@ -283,5 +283,22 @@ def t_table0_crossref():
     clobber_table_write(table, output_directory+"Table_0.txt", type='ascii')
     clobber_table_write(table, output_directory+"Table_0.fits")
 
+    return table
+
+def table_latex_strings_test():
+    """ 
+    This is a 'test' for generating pretty LaTeX-style tables.
+
+    In particular, I want to see if I can make a) sexagesimal coordinate output
+    and b) value \pm errorbar columns.
+
+    See 
+    https://github.com/YSOVAR/YSOVAR/blob/master/docs/workflow.rst 
+    and
+    http://docs.astropy.org/en/v0.2.1/_generated/astropy.io.ascii.latex.Latex.html
+    for reference.
+    
+    """
+
     
     
