@@ -370,7 +370,7 @@ def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column):
 
     for ra, dec in zip(ra_column, dec_column):
 
-        sexagesimal_radec_string = coords.Position(ra, dec).hmsdms()
+        sexagesimal_radec_string = coords.Position((ra, dec)).hmsdms()
         ra_sex_string, dec_sex_string = sexagesimal_radec_string.split()
 
         sexagesimal_ra_list.append(ra_sex_string)
