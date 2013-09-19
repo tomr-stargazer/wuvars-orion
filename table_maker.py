@@ -397,5 +397,20 @@ def table_latex_strings_test():
     
     """
 
+    table = atpy.Table()
+    table.table_name = "Table 1"
     
+    addc = table.add_column
+
+    sexagesimal_RA, sexagesimal_Dec = convert_decimal_degree_columns_to_sexagesimal(
+        np.degrees(ukvar_spread.RA), np.degrees(ukvar_spread.DEC))
+
+    j_value_pm_error = join_columns_with_plusminus( ukvar_spread.j_median, 
+                                                    ukvar_spread.j_err_median)
+    
+    addc('UKvar ID', ukvar_spread.UKvar_ID)
+    addc('R.A.', sexagesimal_RA)
+    addc('Decl.', sexagesimal_Dec)
+    addc('Median J mag', j_value_pm_error)
+
     
