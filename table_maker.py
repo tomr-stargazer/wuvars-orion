@@ -336,7 +336,7 @@ def join_columns_with_plusminus(value_column, error_column, precision=3):
     
     return joined_column
 
-def convert_decimal_columns_to_sexagesimal(ra_column, dec_column):
+def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column):
     """
     Turns a pair of decimal RA, Dec columns into sexagesimal columns.
 
@@ -347,6 +347,7 @@ def convert_decimal_columns_to_sexagesimal(ra_column, dec_column):
     Output format: hh:mm:ss.s, +dd:mm:ss.ss
 
     Includes a sign on declination explicitly.
+    Uses astrolib.coords.Position internally.
 
     Parameters
     ----------
@@ -360,6 +361,25 @@ def convert_decimal_columns_to_sexagesimal(ra_column, dec_column):
         respectively. These are arrays of strings.
 
     """
+
+    if len(ra_column) != len(dec_column):
+        raise ValueError('Columns must be the same length!')
+
+    sexagesimal_ra_list = []
+    sexagesimal_dec_list = []
+
+    for ra, dec in zip(ra_column, dec_column):
+
+        sexagesimal_radec_string = coords.Position(ra, dec).hmsdms()
+        ra_sex_string, dec_sex_string = sexagesimal_radec_string.split()
+
+        sexagesimal_ra_list.append(ra_sex_string)
+        sexagesimal_dec_list.append(dec_sex_string)
+
+    ra_sex_column = np.array(sexagesimal_ra_list)
+    dec_sex_column = np.array(sexagesimal_dec_list)
+
+    return ra_sex_column, dec_sex_column
     
 
 def table_latex_strings_test():
