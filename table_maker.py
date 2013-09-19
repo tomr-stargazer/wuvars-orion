@@ -300,7 +300,7 @@ def join_columns_with_plusminus(value_column, error_column, precision=3):
     error_column : np.array
         The column of associated errors on those values.
     precision : int, optional
-        The number of digits to keep in the value and error columns
+        The number of decimal places to keep in the value and error columns
         when outputting to strings.
 
     Returns
@@ -310,6 +310,26 @@ def join_columns_with_plusminus(value_column, error_column, precision=3):
 
     """
 
+    if len(value_column) != len(error_column):
+        raise ValueError('Columns must be the same length!')
+    
+    # We're going to implement this as a slow, loop-based thing first,
+    # and then optimize it later array-like if necessary and if possible.
+
+    joined_list = []
+
+    for value, error in zip(value_column, error_column):
+
+        rounded_value = np.round(value, precision)
+        rounded_error = np.round(error, precision)
+        
+        joined_value_error = str(rounded_value)+r"$\pm$"+str(rounded_error)
+
+        joined_list.append(joined_value_error)
+
+    joined_column = np.array(joined_list)
+    
+    return joined_column
     
 
 def table_latex_strings_test():
