@@ -27,6 +27,9 @@ try:
 except ImportError:
     import astrolib.coords as coords
 
+import astropy.io.ascii
+import astropy.table
+
 # All of these imports are meant to mirror those from figure_maker.
 from official_star_counter import *
 from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
@@ -397,10 +400,12 @@ def table_latex_strings_test():
     
     """
 
-    table = atpy.Table()
+    table = astropy.table.Table()
     table.table_name = "Table 1"
-    
-    addc = table.add_column
+
+    # Be careful about this. Make sure you don't get the order of the args confused.
+    addc = lambda name, data: table.add_column( 
+        astropy.table.Column(name=name, data=data) )
 
     sexagesimal_RA, sexagesimal_Dec = convert_decimal_degree_columns_to_sexagesimal(
         np.degrees(ukvar_spread.RA), np.degrees(ukvar_spread.DEC))
@@ -412,5 +417,7 @@ def table_latex_strings_test():
     addc('R.A.', sexagesimal_RA)
     addc('Decl.', sexagesimal_Dec)
     addc('Median J mag', j_value_pm_error)
+
+    return table
 
     
