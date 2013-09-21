@@ -10,6 +10,14 @@ in particular,
 
 """
 
+from __future__ import division
+
+import os
+import scipy.io
+
+import atpy
+
+dropbox_aux_catalogs = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
 
 def get_full_megeath_table():
     """
@@ -19,4 +27,30 @@ def get_full_megeath_table():
 
     """
 
-    
+    # Read this guy in originally
+    megeath_fulltable_idl = scipy.io.readsav(
+        dropbox_aux_catalogs+'spitzer_orion_survey_082112.sav')
+
+    # Make it into an ATpy table
+    table = atpy.Table()
+    table.table_name = 'Megeath full Spitzer catalog'
+
+    addc = table.add_column
+
+    column_names = ['RA', 
+                    'Dec', 
+                    '3.6', 
+                    '4.5', 
+                    '5.8', 
+                    '8', 
+                    '24', 
+                    'e_3.6', 
+                    'e_4.5', 
+                    'e_5.8', 
+                    'e_8', 
+                    'e_24']
+
+    for column_name, i in zip(column_names, range(len(column_names))):
+        addc(column_name, megeath_fulltable_idl.ctotal[:,i])
+
+    return table
