@@ -31,6 +31,18 @@ min_RA = 83.39
 max_Dec = -4.96
 min_Dec = -5.86
 
+def clobber_table_write(table, filename, **kwargs):
+    """ Writes a table, even if it has to clobber an older one. """
+
+    try:
+        table.write(filename, **kwargs)
+    except Exception, e: 
+        print e
+        print "Overwriting file."
+        os.remove(filename)
+        table.write(filename, **kwargs)
+
+
 def get_full_megeath_table(truncated=True):
     """
     Turns the Megeath table into an ATpy table.
