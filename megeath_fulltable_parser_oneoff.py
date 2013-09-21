@@ -90,3 +90,19 @@ def get_full_megeath_table(truncated=True):
         return truncated_table
     else:
         return table
+
+def write_full_megeath_table(truncated=True):
+    """
+    Writes the above table to the `dropbox_aux_catalogs` path.
+
+    """
+
+    table = get_full_megeath_table(truncated)
+
+    if truncated:
+        trunc_string = '_truncated'
+    else:
+        trunc_string = ''
+
+    clobber_table_write(table, dropbox_aux_catalogs +
+                'spitzer_orion_survey_082112%s.fits' % trunc_string)
