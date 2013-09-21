@@ -19,7 +19,19 @@ import atpy
 
 dropbox_aux_catalogs = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
 
-def get_full_megeath_table():
+# In [38]: np.degrees(ukvar_spread.RA).max()+0.001, 
+#          np.degrees(ukvar_spread.RA).min()-0.001
+# Out[38]: (84.260968502790917, 83.390274129869482)
+max_RA = 84.261
+min_RA = 83.39
+
+# In [39]: np.degrees(ukvar_spread.DEC).max()+0.001, 
+#          np.degrees(ukvar_spread.DEC).min()-0.001
+# Out[39]: (-4.9666934580824265, -5.8535642750075771)
+max_Dec = -4.96
+min_Dec = -5.86
+
+def get_full_megeath_table(truncated=True):
     """
     Turns the Megeath table into an ATpy table.
 
@@ -59,4 +71,10 @@ def get_full_megeath_table():
     for column_name, i in zip(column_names, range(len(column_names))):
         addc(column_name, megeath_fulltable_idl.ctotal[:,i])
 
-    return table
+    if truncated:
+        truncated_table = table.where((table.RA < max_RA) & (table.RA > min_RA) &
+                                      (table.Dec < max_Dec) & (table.Dec > min_Dec))
+        
+        return truncated_table
+    else:
+        return table
