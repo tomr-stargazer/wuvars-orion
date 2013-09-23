@@ -15,6 +15,8 @@ from __future__ import division
 import os
 import scipy.io
 
+import numpy as np
+
 import atpy
 
 dropbox_aux_catalogs = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
@@ -79,6 +81,8 @@ def get_full_megeath_table(truncated=True):
                     'e_5.8', 
                     'e_8', 
                     'e_24']
+
+    addc('IDL_index', np.arange(len(megeath_fulltable_idl.ctotal[:,0])))
 
     for column_name, i in zip(column_names, range(len(column_names))):
         addc(column_name, megeath_fulltable_idl.ctotal[:,i])
