@@ -36,7 +36,7 @@ from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
                                    hk_empty, hk_filled)
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
-from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
+from tablemate_script import (Megeath2012, Megeath_P, Megeath_D, Megeath_Full)
 from orion_tablemate import index_secondary_by_primary
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
@@ -46,7 +46,10 @@ output_directory = dropbox_bo+"paper/publication_tables/"
 
 
 # Let's grab IRAC colors from Megeath.
-megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
+megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, 
+                                                  Megeath2012)
+megeath2012_full_by_ukvar = index_secondary_by_primary(mated_ukvar, 
+                                                       Megeath_Full)
 
 def clobber_table_write(table, filename, **kwargs):
     """ Writes a table, even if it has to clobber an older one. """
@@ -98,14 +101,14 @@ def t_table1_radec_xref_jhk_irac():
     addc('Median H mag error', ukvar_spread.h_err_median)
     addc('Median K mag', ukvar_spread.k_median)
     addc('Median K mag error', ukvar_spread.k_err_median)
-    addc('Spitzer [3.6] mag', megeath2012_by_ukvar['3.6mag'])
-    addc('Spitzer [3.6] mag error', megeath2012_by_ukvar['e_3.6mag'])
-    addc('Spitzer [4.5] mag', megeath2012_by_ukvar['4.5mag'])
-    addc('Spitzer [4.5] mag error', megeath2012_by_ukvar['e_4.5mag'])
-    addc('Spitzer [5.8] mag', megeath2012_by_ukvar['5.8mag'])
-    addc('Spitzer [5.8] mag error', megeath2012_by_ukvar['e_5.8mag'])
-    addc('Spitzer [8.0] mag', megeath2012_by_ukvar['8.0mag'])
-    addc('Spitzer [8.0] mag error', megeath2012_by_ukvar['e_8.0mag'])
+    addc('Spitzer [3.6] mag', megeath2012_full_by_ukvar['3.6'])
+    addc('Spitzer [3.6] mag error', megeath2012_full_by_ukvar['e_3.6'])
+    addc('Spitzer [4.5] mag', megeath2012_full_by_ukvar['4.5'])
+    addc('Spitzer [4.5] mag error', megeath2012_full_by_ukvar['e_4.5'])
+    addc('Spitzer [5.8] mag', megeath2012_full_by_ukvar['5.8'])
+    addc('Spitzer [5.8] mag error', megeath2012_full_by_ukvar['e_5.8'])
+    addc('Spitzer [8.0] mag', megeath2012_full_by_ukvar['8'])
+    addc('Spitzer [8.0] mag error', megeath2012_full_by_ukvar['e_8'])
     addc('Class (from Megeath et al. 2012)', megeath2012_by_ukvar.Class)
 
     # This writing convention is not sustainable.
