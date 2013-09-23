@@ -315,7 +315,7 @@ Megeath_Full = TableParameters(
     ra_cols = ['RA'], dec_cols=['Dec'],
     radec_fmt = 'decimal-degrees',
     name_col = 'IDL_index')
-
+tables.append(Megeath_Full)
     
 # Here's our first function, that we'll use just to get things rolling
 def test():
