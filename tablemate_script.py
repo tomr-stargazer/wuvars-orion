@@ -18,6 +18,7 @@ import numpy as np
 
 import orion_tablemate
 from orion_tablemate import TableParameters, atpy
+import megeath_fulltable_parser_oneoff
 
 # Top half of the script: defining various tables
 
@@ -307,7 +308,13 @@ Megeath_D = TableParameters(
     radec_fmt = 'sex-three-four',
     name_col = 'Num')
 
-
+Megeath_Full = TableParameters(
+    data = megeath_fulltable_parser_oneoff.get_full_megeath_table(truncated=True),
+    alias = "Megeath2012_Full",
+    full_name = "'the entire Spitzer Orion Survey Point Source Catalog', from http://astro1.physics.utoledo.edu/~megeath/Orion/The_Spitzer_Orion_Survey.html",
+    ra_cols = ['RA'], dec_cols=['Dec'],
+    radec_fmt = 'decimal-degrees',
+    name_col = 'IDL_index')
 
     
 # Here's our first function, that we'll use just to get things rolling
