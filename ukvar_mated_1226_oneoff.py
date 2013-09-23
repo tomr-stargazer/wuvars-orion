@@ -9,9 +9,15 @@ by default, since tablemate_script implicitly does that.
 
 """
 
+from __future__ import division
+import os
+
 import numpy as np
 
 from tablemate_script import UKvars_match, Rice_UKvars
+
+dpath = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
+
 
 #create it
 ukvar_spread = Rice_UKvars.data
@@ -31,5 +37,6 @@ mated_ukvar.table_name = "Mated UKvar"
 
 # Don't write the file if it doesn't conform to what we expect it to look like!
 assert len(mated_ukvar) == 1202, "Mated UKvar does not have 1202 rows!"
+assert len(mated_ukvar.columns) == 44, "Mated UKvar does not have 44 columns!"
 
-mated_ukvar.write("/home/tom/Dropbox/Bo_Tom/aux_catalogs/ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_8_15.fits")
+mated_ukvar.write(dpath+"ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_9_22.fits")
