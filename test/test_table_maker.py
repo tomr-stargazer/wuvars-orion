@@ -32,3 +32,33 @@ def test_convert_decimal_degree_columns_to_sexagesimal():
 
     assert (expected_ra == actual_ra).all()
     assert (expected_dec == actual_dec).all()
+
+def test_make_megeath_class_column():
+
+    # Let's make sure that all the D's stay D's, all the P's stay P's,
+    # and that all the na's transform into either na's or NDs.
+
+    new_class_column = make_megeath_class_column()
+
+    old_class_column = megeath2012_by_ukvar.Class
+
+    assert (len(old_class_column[old_class_column == 'D']) ==
+            len(new_class_column[new_class_column == 'D']))
+
+    assert (len(old_class_column[old_class_column == 'P']) ==
+            len(new_class_column[new_class_column == 'P']))
+
+    assert (len(old_class_column[old_class_column == 'na']) ==
+            len(new_class_column[new_class_column == 'ND']) +
+            len(new_class_column[new_class_column == 'na']))
+
+    # make sure you DID change SOMETHING
+    assert (len(old_class_column[old_class_column == 'na']) !=
+            len(new_class_column[new_class_column == 'na']))
+
+
+    # and finally make sure you didn't swap the order of any D's or P's
+    assert (old_class_column[(old_class_column == 'D') |
+                             (old_class_column == 'P')] ==
+            new_class_column[(new_class_column == 'D') |
+                             (new_class_column == 'P')] ).all()
