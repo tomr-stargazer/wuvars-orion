@@ -37,6 +37,6 @@ mated_ukvar.table_name = "Mated UKvar"
 
 # Don't write the file if it doesn't conform to what we expect it to look like!
 assert len(mated_ukvar) == 1202, "Mated UKvar does not have 1202 rows!"
-assert len(mated_ukvar.columns) == 44, "Mated UKvar does not have 44 columns!"
+assert len(mated_ukvar.columns) == 46, "Mated UKvar does not have 46 columns!"
 
-mated_ukvar.write(dpath+"ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_9_22.fits")
+mated_ukvar.write(dpath+"ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_9_23.fits")
