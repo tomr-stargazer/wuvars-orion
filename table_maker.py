@@ -101,7 +101,7 @@ def t_table1_radec_xref_jhk_irac():
       Periodic : int (0, 1)
       Median J, H, K, with error bars : six floats
       IRAC colors from Megeath, and errors : eight floats
-      Class from Megeath : string
+      Class from Megeath : string {'P', 'D', 'ND', or 'na'}
 
     Returns
     -------
@@ -135,7 +135,7 @@ def t_table1_radec_xref_jhk_irac():
     addc('Spitzer [5.8] mag error', megeath2012_full_by_ukvar['e_5.8'])
     addc('Spitzer [8.0] mag', megeath2012_full_by_ukvar['8'])
     addc('Spitzer [8.0] mag error', megeath2012_full_by_ukvar['e_8'])
-    addc('Class (from Megeath et al. 2012)', megeath2012_by_ukvar.Class)
+    addc('Class (from Megeath et al. 2012)', make_megeath_class_column())
 
     # This writing convention is not sustainable.
 
