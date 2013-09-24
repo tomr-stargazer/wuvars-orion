@@ -27,7 +27,7 @@ try:
 except ImportError:
     import astrolib.coords as coords
 
-import astropy.io.ascii
+import astropy.io.ascii as ascii
 import astropy.table
 
 # All of these imports are meant to mirror those from figure_maker.
@@ -486,7 +486,7 @@ def table_latex_strings_test():
 
     return table
 
-def table1_latex_output():
+def table1_latex_output(write=False):
     """
     Morphs Table 1 into a LaTeX-friendly output and writes it to a .tex file.
 
@@ -542,5 +542,12 @@ def table1_latex_output():
 
     addc('Class (from Megeath et al. 2012)', 
          table1_data['Class (from Megeath et al. 2012)'])
-        
+
+
+    if write:
+        ascii.write(
+            latex_table, output_directory+"Table_1.tex", Writer = ascii.Latex,
+            latexdict = {'tabletype': 'deluxetable'},
+            caption = 'Basic Properties of Stars')
+    
     return latex_table
