@@ -73,14 +73,13 @@ def make_megeath_class_column():
     For Disks and Protostars, the Class comes straight from
     megeath2012_by_ukvar. But there are two other classes:
     'ND' (no disk) which are sources in Megeath_allgoodsources_by_ukvar
-    that are NOT in megeath2012_by_ukvar; and '--' (blank),
+    that are NOT in megeath2012_by_ukvar; and 'na' (blank),
     which are the 'orphans' and Megeath-matches-with-poor-Spitzer-photometry.
 
     """
 
     megeath_class_column = np.copy(megeath2012_by_ukvar.Class)
 
-    # the ND array: the string 'ND' wherever
     for i in range(len(megeath_class_column)):
         if (megeath_class_column[i] == 'na' and
             megeath2012_all_by_ukvar.IDL_index[i] > 0) :
