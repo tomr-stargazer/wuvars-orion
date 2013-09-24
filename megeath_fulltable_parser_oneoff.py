@@ -45,11 +45,26 @@ def clobber_table_write(table, filename, **kwargs):
         table.write(filename, **kwargs)
 
 
-def get_full_megeath_table(truncated=True):
+def get_full_megeath_table(truncated=True, all=False):
     """
     Turns the Megeath table into an ATpy table.
 
-    Truncated by RA, Dec to make matching easier.
+    Parameters
+    ----------
+    truncated : bool, optional (default True)
+        Truncate by RA, Dec to make matching easier?
+        (i.e., discard all sources substantially outside our field.
+        Probably a good idea in general.)
+    all : bool, optional (default False)
+        Filter out low-photometric-quality sources (i.e. sources
+        for which an IR excess could not be determined either way)?
+        Note: The confusing name is because Tom Megeath's IDLsave file 
+        calls `all` the array listing indices of high-quality data.
+    
+    Returns
+    -------
+    table : atpy.Table
+        The ATpy table containing the relevant data (filtered by kwargs).
 
     """
 
@@ -59,7 +74,10 @@ def get_full_megeath_table(truncated=True):
 
     # Make it into an ATpy table
     table = atpy.Table()
-    table.table_name = 'Megeath full Spitzer catalog'
+    if all:
+        table.table_name = 'Megeath full Spitzer catalog: only high-quality sources'
+    else:
+        table.table_name = 'Megeath full Spitzer catalog: all detected sources'
 
     addc = table.add_column
 
@@ -87,6 +105,9 @@ def get_full_megeath_table(truncated=True):
     for column_name, i in zip(column_names, range(len(column_names))):
         addc(column_name, megeath_fulltable_idl.ctotal[:,i])
 
+    if all:
+        table = table.where(megeath_fulltable_idl.all)
+        
     if truncated:
         truncated_table = table.where((table.RA < max_RA) & (table.RA > min_RA) &
                                       (table.Dec < max_Dec) & (table.Dec > min_Dec))
@@ -95,18 +116,25 @@ def get_full_megeath_table(truncated=True):
     else:
         return table
 
-def write_full_megeath_table(truncated=True):
+def write_full_megeath_table(truncated=True, all=False):
     """
     Writes the above table to the `dropbox_aux_catalogs` path.
 
     """
 
-    table = get_full_megeath_table(truncated)
+    table = get_full_megeath_table(truncated=truncated,
+                                   all=all)
 
     if truncated:
         trunc_string = '_truncated'
     else:
         trunc_string = ''
+    if all:
+        all_string = '_all'
+    else:
+        all_string = ''
 
     clobber_table_write(table, dropbox_aux_catalogs +
-                'spitzer_orion_survey_082112%s.fits' % trunc_string)
+                'spitzer_orion_survey_082112%s%s.fits' % (all_string, trunc_string))
+
+    return table
