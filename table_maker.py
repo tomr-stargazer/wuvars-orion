@@ -322,7 +322,9 @@ def t_table0_crossref():
 
     return table
 
-def join_columns_with_plusminus(value_column, error_column, precision=3):
+def join_columns_with_plusminus(value_column, error_column, precision=3,
+                                null_input=np.double(-9.99999488e+08),
+                                null_output=' '):
     """
     Joins two data columns together with the LaTeX $\pm$ symbol.
 
@@ -339,6 +341,11 @@ def join_columns_with_plusminus(value_column, error_column, precision=3):
     precision : int, optional
         The number of decimal places to keep in the value and error columns
         when outputting to strings.
+    null_input : float, optional
+        An input value that you want masked to `null_output` before joining 
+        things together.
+    null_output : string, optional
+        The output string you want to use in place of null_input.
 
     Returns
     -------
@@ -356,6 +363,16 @@ def join_columns_with_plusminus(value_column, error_column, precision=3):
     joined_list = []
 
     for value, error in zip(value_column, error_column):
+
+        # Some complicated handling of null_inputs and null_outputs.
+        if error == null_input and value != null_input:
+            raise ValueError("An error is null_input but its value is not!")
+        if value == null_input:
+            if error != null_input:
+                raise ValueError("A value is null_input but its error is not!")
+
+            joined_list.append(null_output)
+            continue
 
         rounded_value = np.round(value, precision)
         rounded_error = np.round(error, precision)
