@@ -486,7 +486,7 @@ def table_latex_strings_test():
 
     return table
 
-def table1_latex_output(write=False):
+def table1_latex_output(write=False, begin=0, end=30):
     """
     Morphs Table 1 into a LaTeX-friendly output and writes it to a .tex file.
 
@@ -546,7 +546,8 @@ def table1_latex_output(write=False):
 
     if write:
         ascii.write(
-            latex_table, output_directory+"Table_1.tex", Writer = ascii.Latex,
+            latex_table[begin:end], output_directory+"Table_1.tex", 
+            Writer = ascii.Latex,
             latexdict = {'tabletype': 'deluxetable'},
             caption = 'Basic Properties of Stars')
     
