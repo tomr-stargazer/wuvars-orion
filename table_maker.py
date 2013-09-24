@@ -486,4 +486,61 @@ def table_latex_strings_test():
 
     return table
 
-    
+def table1_latex_output():
+    """
+    Morphs Table 1 into a LaTeX-friendly output and writes it to a .tex file.
+
+    """
+
+    # Load up the table you want to transform to LaTeX.
+    table1_data = t_table1_radec_xref_jhk_irac()
+
+    latex_table = astropy.table.Table()
+    latex_table.table_name = "Table 1"
+
+    # Be careful about this. Make sure you don't get the order of the args confused.
+    addc = lambda name, data: latex_table.add_column( 
+        astropy.table.Column(name=name, data=data) )
+
+    sexagesimal_RA, sexagesimal_Dec = convert_decimal_degree_columns_to_sexagesimal(
+        table1_data['R.A. (deg)'], table1_data['Decl. (deg)'])
+
+    photometry_column_names = [
+        'Median J mag',
+        'Median H mag',
+        'Median K mag',
+        'Spitzer [3.6] mag',
+        'Spitzer [4.5] mag',
+        'Spitzer [5.8] mag',
+        'Spitzer [8.0] mag']
+
+    error_column_names = [x + " error" for x in photometry_column_names]
+
+    # There must be a less bonehead way to do this...
+    addc('UKvar ID', table1_data['UKvar ID'])
+    addc('R.A. (hh:mm:ss)', sexagesimal_RA)
+    addc('Decl. (dd:mm:ss)', sexagesimal_Dec)
+    addc('SIMBAD Cross-reference', table1_data['SIMBAD Cross-reference'])
+    addc('Data quality flag', table1_data['Data quality flag'])
+    addc('Periodic flag', table1_data['Periodic flag'])
+
+    joined_column_list = []
+
+    # Let's create a bunch of mag \pm error columns.
+    for photometry_column, error_column in zip(
+            photometry_column_names, error_column_names):
+
+        joined_column = join_columns_with_plusminus(
+            table1_data[photometry_column], table1_data[error_column])
+        
+        joined_column_list.append(joined_column)
+
+
+    for joined_column, column_name in zip(joined_column_list, 
+                                          photometry_column_names):
+        addc(column_name, joined_column)
+
+    addc('Class (from Megeath et al. 2012)', 
+         table1_data['Class (from Megeath et al. 2012)'])
+        
+    return latex_table
