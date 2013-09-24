@@ -36,7 +36,8 @@ from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
                                    hk_empty, hk_filled)
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
-from tablemate_script import (Megeath2012, Megeath_P, Megeath_D, Megeath_Full)
+from tablemate_script import (Megeath2012, Megeath_P, Megeath_D,
+                              Megeath_Full, Megeath_Allgoodsources)
 from orion_tablemate import index_secondary_by_primary
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
@@ -50,6 +51,8 @@ megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar,
                                                   Megeath2012)
 megeath2012_full_by_ukvar = index_secondary_by_primary(mated_ukvar, 
                                                        Megeath_Full)
+megeath2012_all_by_ukvar = index_secondary_by_primary(mated_ukvar,
+                                                      Megeath_Allgoodsources)
 
 def clobber_table_write(table, filename, **kwargs):
     """ Writes a table, even if it has to clobber an older one. """
@@ -61,6 +64,30 @@ def clobber_table_write(table, filename, **kwargs):
         print "Overwriting file."
         os.remove(filename)
         table.write(filename, **kwargs)
+
+
+def make_megeath_class_column():
+    """
+    Generates a Class column from the Megeath data.
+
+    For Disks and Protostars, the Class comes straight from
+    megeath2012_by_ukvar. But there are two other classes:
+    'ND' (no disk) which are sources in Megeath_allgoodsources_by_ukvar
+    that are NOT in megeath2012_by_ukvar; and '--' (blank),
+    which are the 'orphans' and Megeath-matches-with-poor-Spitzer-photometry.
+
+    """
+
+    megeath_class_column = np.copy(megeath2012_by_ukvar.Class)
+
+    # the ND array: the string 'ND' wherever
+    for i in range(len(megeath_class_column)):
+        if (megeath_class_column[i] == 'na' and
+            megeath2012_all_by_ukvar.IDL_index[i] > 0) :
+            megeath_class_column[i] = 'ND'
+
+    return megeath_class_column
+
         
 def t_table1_radec_xref_jhk_irac():
     """
