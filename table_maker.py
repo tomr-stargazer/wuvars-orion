@@ -88,7 +88,7 @@ def make_megeath_class_column():
     return megeath_class_column
 
         
-def t_table1_radec_xref_jhk_irac():
+def t_table1_radec_xref_jhk_irac(write=False):
     """
     Generates Table 1.
 
@@ -103,6 +103,11 @@ def t_table1_radec_xref_jhk_irac():
       IRAC colors from Megeath, and errors : eight floats
       Class from Megeath : string {'P', 'D', 'ND', or 'na'}
 
+    Parameters
+    ----------
+    write : bool, optional (default False)
+        Write to disk? Either way, this function returns an ATpy table.
+      
     Returns
     -------
     table : atpy.Table
@@ -139,9 +144,10 @@ def t_table1_radec_xref_jhk_irac():
 
     # This writing convention is not sustainable.
 
-    clobber_table_write(table,output_directory+"Table_1.txt", type='ascii')
-    clobber_table_write(table,output_directory+"Table_1.tbl", type='ipac')
-    clobber_table_write(table, output_directory+"Table_1.fits")
+    if write:
+        clobber_table_write(table,output_directory+"Table_1.txt", type='ascii')
+        clobber_table_write(table,output_directory+"Table_1.tbl", type='ipac')
+        clobber_table_write(table, output_directory+"Table_1.fits")
 
     return table
 
@@ -156,7 +162,7 @@ def t_table1_radec_xref_jhk_irac():
     addc('Outlier-proof K range', ukvar_spread.k_ranger)
 """
 
-def t_table2_variability_periods_periodics_bymegeathclass():
+def t_table2_variability_periods_periodics_bymegeathclass(write=False):
     """
     Generates Table 2, which comes in three pieces.
 
@@ -174,6 +180,12 @@ def t_table2_variability_periods_periodics_bymegeathclass():
       Stetson_choice : one string
       Period : one float
       Data quality : int (0, 1, 2) corresponding to subjective/auto/strict
+
+
+    Parameters
+    ----------
+    write : bool, optional (default False)
+        Write to disk? Either way, this function returns an ATpy table.
       
     """
 
@@ -226,13 +238,14 @@ def t_table2_variability_periods_periodics_bymegeathclass():
     assert len(t2_proto) + len(t2_disks) + len(t2_nomegeath) == len(table), \
            "Tables don't add up to the right length!"
 
-    clobber_table_write(t2_proto, output_directory+"Table_2a.txt", type='ascii')
-    clobber_table_write(t2_disks, output_directory+"Table_2b.txt", type='ascii')
-    clobber_table_write(t2_nomegeath, output_directory+"Table_2c.txt", type='ascii')
+    if write:
+        clobber_table_write(t2_proto, output_directory+"Table_2a.txt", type='ascii')
+        clobber_table_write(t2_disks, output_directory+"Table_2b.txt", type='ascii')
+        clobber_table_write(t2_nomegeath, output_directory+"Table_2c.txt", type='ascii')
 
     return table
 
-def t_table3_variability_nonperiodics_bymegeathclass():
+def t_table3_variability_nonperiodics_bymegeathclass(write=False):
     """
     Generates Table 3, which also comes in three pieces.
 
@@ -246,6 +259,11 @@ def t_table3_variability_nonperiodics_bymegeathclass():
       Stetson : one float
       Stetson_choice : one string
       Data quality : int (0, 1, 2) corresponding to subjective/auto/strict
+
+    Parameters
+    ----------
+    write : bool, optional (default False)
+        Write to disk? Either way, this function returns an ATpy table.
 
     """
 
@@ -295,14 +313,15 @@ def t_table3_variability_nonperiodics_bymegeathclass():
     assert len(t3_proto) + len(t3_disks) + len(t3_nomegeath) == len(table), \
            "Tables don't add up to the right length!"
 
-    clobber_table_write(t3_proto, output_directory+"Table_3a.txt", type='ascii')
-    clobber_table_write(t3_disks, output_directory+"Table_3b.txt", type='ascii')
-    clobber_table_write(t3_nomegeath, output_directory+"Table_3c.txt", type='ascii')
+    if write:
+        clobber_table_write(t3_proto, output_directory+"Table_3a.txt", type='ascii')
+        clobber_table_write(t3_disks, output_directory+"Table_3b.txt", type='ascii')
+        clobber_table_write(t3_nomegeath, output_directory+"Table_3c.txt", type='ascii')
 
     return table
     
          
-def t_table0_crossref():
+def t_table0_crossref(write=False):
     """
     Generates Table 'zero', which probably won't go in the print paper,
     but enumerates how our sources match up (positionally) against 
@@ -317,8 +336,9 @@ def t_table0_crossref():
     table = mated_ukvar.where(mated_ukvar.WFCAM_SOURCEID > 0)
     table.table_name = "Table 0"
 
-    clobber_table_write(table, output_directory+"Table_0.txt", type='ascii')
-    clobber_table_write(table, output_directory+"Table_0.fits")
+    if write:
+        clobber_table_write(table, output_directory+"Table_0.txt", type='ascii')
+        clobber_table_write(table, output_directory+"Table_0.fits")
 
     return table
 
