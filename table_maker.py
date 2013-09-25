@@ -573,6 +573,13 @@ def table1_latex_output(write=False, begin=0, end=30):
         convert_decimal_degree_columns_to_sexagesimal(
             table1_data['R.A. (deg)'], table1_data['Decl. (deg)']) )
 
+    # Let's "compress" the SIMBAD column.
+    simbad_compressed = []
+    for simbad_id in table1_data['SIMBAD Cross-reference']:
+        if "2MASS J" in simbad_id:
+            simbad_id = simbad_id.replace("2MASS J", "2M")
+        simbad_compressed.append(simbad_id)
+
     photometry_column_names = [
         'Median J mag',
         'Median H mag',
@@ -597,7 +604,7 @@ def table1_latex_output(write=False, begin=0, end=30):
     addc('ID', table1_data['UKvar ID'])
     addc(r'$\textrm{RA}_{J2000}$', sexagesimal_RA)
     addc(r'$\textrm{Dec}_{J2000}$', sexagesimal_Dec)
-    addc('SIMBAD alt. ID', table1_data['SIMBAD Cross-reference'])
+    addc('SIMBAD alt. ID', simbad_compressed)
     addc('Q', table1_data['Data quality flag'].astype('int'))
     addc('P', table1_data['Periodic flag'].astype('int'))
 
