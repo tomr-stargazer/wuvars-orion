@@ -545,10 +545,21 @@ def table1_latex_output(write=False, begin=0, end=30):
 
 
     if write:
+
+        preamble = '\\tabletypesize{\\scriptsize}\n\\rotate\n\\tablewidth{0pt}'
+        data_start = r'\startdata'
+        data_end = r'\enddata'
+        
         ascii.write(
             latex_table[begin:end], output_directory+"Table_1.tex", 
             Writer = ascii.Latex,
-            latexdict = {'tabletype': 'deluxetable'},
+            latexdict = {
+                'tabletype': 'deluxetable',
+                'preamble': preamble,
+                'header_start': r'\tablehead{',
+                'header_end': '}',
+                'data_start': data_start,
+                'data_end': data_end},
             caption = 'Basic Properties of Stars')
     
     return latex_table
