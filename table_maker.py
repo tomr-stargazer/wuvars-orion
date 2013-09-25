@@ -583,7 +583,8 @@ def table1_latex_output(write=False, begin=0, end=30):
 
     sexagesimal_RA, sexagesimal_Dec = (
         convert_decimal_degree_columns_to_sexagesimal(
-            table1_data['R.A. (deg)'], table1_data['Decl. (deg)']) )
+            table1_data['R.A. (deg)'], table1_data['Decl. (deg)'],
+            truncate=1) )
 
     # Let's "compress" the SIMBAD column.
     simbad_compressed = []
