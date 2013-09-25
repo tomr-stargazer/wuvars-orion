@@ -21,6 +21,8 @@ Guide to variable names:
 """
 
 import os
+import sys
+import fileinput
 
 try:
     import coords
@@ -65,6 +67,41 @@ def clobber_table_write(table, filename, **kwargs):
         os.remove(filename)
         table.write(filename, **kwargs)
 
+def convert_tabletabular_to_deluxetable(file_path):
+    """
+    Directly modifies a .tex table file and makes it a compliant deluxetable.
+
+    Expected input begins with
+        \begin{table}
+        \begin{tabular}{cc...cc}
+
+    and ends with
+        \end{tabular}
+        \end{table} .
+
+    The lines with {table} get deleted wholesale, and all appearances of
+    'tabular' get replaced with 'deluxetable'.
+
+    Don't put anything before the \begin{tabular} or after the \end{tabular}.
+
+    Parameters
+    ----------
+    file_path : string
+        Location of the .tex file containing the deluxetable-less table.
+
+    """
+
+    for line in fileinput.input(file_path, inplace=True):
+        # Delete the \begin{table} and \end{table} lines.
+        if "{table}" in line:
+            sys.stdout.write("")
+        # Convert tabular into deluxetable.
+        elif 'tabular' in line:
+            line = line.replace('tabular', 'deluxetable')
+            sys.stdout.write(line)
+        # Leave all the remaining lines alone.
+        else:
+            sys.stdout.write(line)
 
 def make_megeath_class_column():
     """
