@@ -1,5 +1,8 @@
 from __future__ import division
 
+import shutil
+import filecmp
+
 from table_maker import *
     
 def test_join_columns_with_plusminus():
@@ -62,3 +65,21 @@ def test_make_megeath_class_column():
                              (old_class_column == 'P')] ==
             new_class_column[(new_class_column == 'D') |
                              (new_class_column == 'P')] ).all()
+
+
+def test_convert_tabletabular_to_deluxetable():
+
+    origin_file = "test/convert_tabletabular_to_deluxetable_testfile.tex"
+    converted_file = "test/convert_tabletabular_to_deluxetable_testfile_converted.tex"
+    expected_file = "test/convert_tabletabular_to_deluxetable_testfile_expected.tex"
+
+    # we don't want to start with identical files
+    assert filecmp.cmp(origin_file, expected_file, shallow=False) == False
+
+    shutil.copy(origin_file, converted_file)
+
+    convert_tabletabular_to_deluxetable(converted_file)
+
+    assert filecmp.cmp(converted_file, expected_file, shallow=False) == True
+
+    os.remove(converted_file)
