@@ -486,7 +486,31 @@ def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column):
     dec_sex_column = np.array(sexagesimal_dec_list)
 
     return ra_sex_column, dec_sex_column
-    
+
+def write_and_correct_latex_table(table, filename, caption, begin=0, end=30):
+
+    header_start = ('\\tabletypesize{\\scriptsize}' +
+                    '\n\\rotate\n' +
+                    ('\\tablecaption{ %s }\n' % caption) +
+                    '\\tablewidth{0pt}\n\n')
+    data_start = r'\startdata'
+    data_end = r'\enddata'
+
+    # 3. Write the table as a {table} and {tabular} thing
+    ascii.write(
+        table[begin:end], filename,
+        Writer = ascii.Latex,
+        latexdict = {
+            'header_start': header_start+r'\tablehead{',
+            'header_end': '}',
+            'data_start': data_start,
+            'data_end': data_end
+            },
+        )
+
+    # 4. Convert it from {table}+{tabular} environment to {deluxetable}
+    convert_tabletabular_to_deluxetable(filename)
+
 
 def table_latex_strings_test(write=False, begin=0, end=30):
     """ 
