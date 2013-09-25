@@ -584,13 +584,22 @@ def table1_latex_output(write=False, begin=0, end=30):
 
     error_column_names = [x + " error" for x in photometry_column_names]
 
+    new_column_names = [
+        '$J$',
+        '$H$',
+        '$K$',
+        '[3.6]',
+        '[4.5]',
+        '[5.8]',
+        '[8.0]']
+
     # There must be a less bonehead way to do this...
-    addc('UKvar ID', table1_data['UKvar ID'])
+    addc('ID', table1_data['UKvar ID'])
     addc('R.A. (J2000)', sexagesimal_RA)
     addc('Decl. (J2000)', sexagesimal_Dec)
     addc('SIMBAD alt. ID', table1_data['SIMBAD Cross-reference'])
-    addc('Data quality', table1_data['Data quality flag'])
-    addc('Periodic', table1_data['Periodic flag'])
+    addc('Quality', table1_data['Data quality flag'].astype('int'))
+    addc('Periodic', table1_data['Periodic flag'].astype('int'))
 
     joined_column_list = []
 
@@ -599,13 +608,14 @@ def table1_latex_output(write=False, begin=0, end=30):
             photometry_column_names, error_column_names):
 
         joined_column = join_columns_with_plusminus(
-            table1_data[photometry_column], table1_data[error_column])
+            table1_data[photometry_column], table1_data[error_column],
+            precision=2)
         
         joined_column_list.append(joined_column)
 
 
     for joined_column, column_name in zip(joined_column_list, 
-                                          photometry_column_names):
+                                          new_column_names):
         addc(column_name, joined_column)
 
     addc('Class (from Megeath et al. 2012)', 
