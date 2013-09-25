@@ -447,7 +447,8 @@ def join_columns_with_plusminus(value_column, error_column, precision=3,
     
     return joined_column
 
-def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column):
+def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column,
+                                                  truncate=0):
     """
     Turns a pair of decimal RA, Dec columns into sexagesimal columns.
 
@@ -464,6 +465,8 @@ def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column):
     ----------
     ra_column, dec_column : np.arrays
         Right Ascension and Declination, in decimal degrees.
+    truncate : int, optional
+        How many decimal places to delete from the end of each coordinate.
 
     Returns
     -------
@@ -483,6 +486,10 @@ def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column):
 
         sexagesimal_radec_string = coords.Position((ra, dec)).hmsdms()
         ra_sex_string, dec_sex_string = sexagesimal_radec_string.split()
+
+        if truncate > 0:
+            ra_sex_string = ra_sex_string[:-truncate]
+            dec_sex_string = dec_sex_string[:-truncate]
 
         sexagesimal_ra_list.append(ra_sex_string)
         sexagesimal_dec_list.append(dec_sex_string)
