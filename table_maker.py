@@ -547,36 +547,9 @@ def table_latex_strings_test(write=False, begin=0, end=30):
     addc('Median J mag', j_value_pm_error)
 
     if write:
-
-        # 1. Convert all the column headers to colhead { old_name }
-        #        for colname in table.colnames:
-        #    table[colname].name = "\\colhead{ %s }" % colname
-
-        # 2. Prepare the latexdict
-        preamble = ('\\tabletypesize{\\scriptsize}'
-                    '\n\\rotate\n'
-                    '\\tablecaption{Basic Properties of Stars}\n'
-                    '\\tablewidth{0pt}\n\n')
-        data_start = r'\startdata'
-        data_end = r'\enddata'
-
         filename = output_directory+"Table_test.tex" 
-
-        # 3. Write the table as a {table} and {tabular} thing
-        ascii.write(
-            table[begin:end], filename,
-            Writer = ascii.Latex,
-            latexdict = {
-                'header_start': preamble+r'\tablehead{',
-                'header_end': '}',
-                'data_start': data_start,
-                'data_end': data_end
-                },
-            )
-
-        # 4. Convert it from {table}+{tabular} environment to {deluxetable}
-        convert_tabletabular_to_deluxetable(filename)
-
+        write_and_correct_latex_table(table, filename, 
+                                      "Basic Properties of Stars")
     return table
 
 def table1_latex_output(write=False, begin=0, end=30):
