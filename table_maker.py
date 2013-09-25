@@ -587,11 +587,11 @@ def table1_latex_output(write=False, begin=0, end=30):
 
     # There must be a less bonehead way to do this...
     addc('UKvar ID', table1_data['UKvar ID'])
-    addc('R.A. (hh:mm:ss)', sexagesimal_RA)
-    addc('Decl. (dd:mm:ss)', sexagesimal_Dec)
-    addc('SIMBAD Cross-reference', table1_data['SIMBAD Cross-reference'])
-    addc('Data quality flag', table1_data['Data quality flag'])
-    addc('Periodic flag', table1_data['Periodic flag'])
+    addc('R.A. (J2000)', sexagesimal_RA)
+    addc('Decl. (J2000)', sexagesimal_Dec)
+    addc('SIMBAD alt. ID', table1_data['SIMBAD Cross-reference'])
+    addc('Data quality', table1_data['Data quality flag'])
+    addc('Periodic', table1_data['Periodic flag'])
 
     joined_column_list = []
 
