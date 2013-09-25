@@ -595,11 +595,11 @@ def table1_latex_output(write=False, begin=0, end=30):
 
     # There must be a less bonehead way to do this...
     addc('ID', table1_data['UKvar ID'])
-    addc('R.A. (J2000)', sexagesimal_RA)
-    addc('Decl. (J2000)', sexagesimal_Dec)
+    addc(r'$\textrm{RA}_{J2000}$', sexagesimal_RA)
+    addc(r'$\textrm{Dec}_{J2000}$', sexagesimal_Dec)
     addc('SIMBAD alt. ID', table1_data['SIMBAD Cross-reference'])
-    addc('Quality', table1_data['Data quality flag'].astype('int'))
-    addc('Periodic', table1_data['Periodic flag'].astype('int'))
+    addc('Q', table1_data['Data quality flag'].astype('int'))
+    addc('P', table1_data['Periodic flag'].astype('int'))
 
     joined_column_list = []
 
@@ -618,8 +618,7 @@ def table1_latex_output(write=False, begin=0, end=30):
                                           new_column_names):
         addc(column_name, joined_column)
 
-    addc('Class (from Megeath et al. 2012)', 
-         table1_data['Class (from Megeath et al. 2012)'])
+    addc('Class', table1_data['Class (from Megeath et al. 2012)'])
 
 
     if write:
