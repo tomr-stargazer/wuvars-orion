@@ -488,7 +488,7 @@ def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column):
     return ra_sex_column, dec_sex_column
     
 
-def table_latex_strings_test():
+def table_latex_strings_test(write=False, begin=0, end=30):
     """ 
     This is a 'test' for generating pretty LaTeX-style tables.
 
@@ -513,13 +513,45 @@ def table_latex_strings_test():
     sexagesimal_RA, sexagesimal_Dec = convert_decimal_degree_columns_to_sexagesimal(
         np.degrees(ukvar_spread.RA), np.degrees(ukvar_spread.DEC))
 
-    j_value_pm_error = join_columns_with_plusminus( ukvar_spread.j_median, 
-                                                    ukvar_spread.j_err_median)
+    j_value_pm_error = join_columns_with_plusminus(ukvar_spread.j_median,
+                                                   ukvar_spread.j_err_median,
+                                                   precision=2)
     
     addc('UKvar ID', ukvar_spread.UKvar_ID)
     addc('R.A.', sexagesimal_RA)
     addc('Decl.', sexagesimal_Dec)
     addc('Median J mag', j_value_pm_error)
+
+    if write:
+
+        # 1. Convert all the column headers to colhead { old_name }
+        #        for colname in table.colnames:
+        #    table[colname].name = "\\colhead{ %s }" % colname
+
+        # 2. Prepare the latexdict
+        preamble = ('\\tabletypesize{\\scriptsize}'
+                    '\n\\rotate\n'
+                    '\\tablecaption{Basic Properties of Stars}\n'
+                    '\\tablewidth{0pt}\n\n')
+        data_start = r'\startdata'
+        data_end = r'\enddata'
+
+        filename = output_directory+"Table_test.tex" 
+
+        # 3. Write the table as a {table} and {tabular} thing
+        ascii.write(
+            table[begin:end], filename,
+            Writer = ascii.Latex,
+            latexdict = {
+                'header_start': preamble+r'\tablehead{',
+                'header_end': '}',
+                'data_start': data_start,
+                'data_end': data_end
+                },
+            )
+
+        # 4. Convert it from {table}+{tabular} environment to {deluxetable}
+        convert_tabletabular_to_deluxetable(filename)
 
     return table
 
