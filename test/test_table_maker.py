@@ -13,9 +13,20 @@ def test_join_columns_with_plusminus():
     expected = np.array( [str(round(x,3))+r"$\pm$"+str(round(y,3)) for
                           x, y in zip(test_values, test_errors)] )
 
-    actual = join_columns_with_plusminus(test_values, test_errors, 3)
+    actual = join_columns_with_plusminus(test_values, test_errors,
+                                         precision=3, lstrip_zero_error=False)
 
     assert (expected == actual).all()
+
+    expected_with_lstrip = np.array(
+        [str(round(x,3))+r"$\pm$"+str(round(y,3)).lstrip('0') for
+         x, y in zip(test_values, test_errors)] )
+
+    actual_with_lstrip = join_columns_with_plusminus(
+        test_values, test_errors, precision=3, lstrip_zero_error=True)
+
+    assert (expected_with_lstrip == actual_with_lstrip).all()
+
 
 def test_convert_decimal_degree_columns_to_sexagesimal():
 
