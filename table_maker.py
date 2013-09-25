@@ -381,7 +381,7 @@ def t_table0_crossref(write=False):
 
 def join_columns_with_plusminus(value_column, error_column, precision=3,
                                 null_input=np.double(-9.99999488e+08),
-                                null_output=' '):
+                                null_output=' ', lstrip_zero_error=True):
     """
     Joins two data columns together with the LaTeX $\pm$ symbol.
 
@@ -433,8 +433,13 @@ def join_columns_with_plusminus(value_column, error_column, precision=3,
 
         rounded_value = np.round(value, precision)
         rounded_error = np.round(error, precision)
+
+        if lstrip_zero_error:
+            rounded_error_string = str(rounded_error).lstrip('0')
+        else:
+            rounded_error_string = str(rounded_error)
         
-        joined_value_error = str(rounded_value)+r"$\pm$"+str(rounded_error)
+        joined_value_error = str(rounded_value)+r"$\pm$"+rounded_error_string
 
         joined_list.append(joined_value_error)
 
