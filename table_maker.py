@@ -534,8 +534,9 @@ def table_latex_strings_test(write=False, begin=0, end=30):
     addc = lambda name, data: table.add_column( 
         astropy.table.Column(name=name, data=data) )
 
-    sexagesimal_RA, sexagesimal_Dec = convert_decimal_degree_columns_to_sexagesimal(
-        np.degrees(ukvar_spread.RA), np.degrees(ukvar_spread.DEC))
+    sexagesimal_RA, sexagesimal_Dec = (
+        convert_decimal_degree_columns_to_sexagesimal(
+            np.degrees(ukvar_spread.RA), np.degrees(ukvar_spread.DEC)) )
 
     j_value_pm_error = join_columns_with_plusminus(ukvar_spread.j_median,
                                                    ukvar_spread.j_err_median,
@@ -564,12 +565,13 @@ def table1_latex_output(write=False, begin=0, end=30):
     latex_table = astropy.table.Table()
     latex_table.table_name = "Table 1"
 
-    # Be careful about this. Make sure you don't get the order of the args confused.
+    # Make sure you don't get the order of the args confused.
     addc = lambda name, data: latex_table.add_column( 
         astropy.table.Column(name=name, data=data) )
 
-    sexagesimal_RA, sexagesimal_Dec = convert_decimal_degree_columns_to_sexagesimal(
-        table1_data['R.A. (deg)'], table1_data['Decl. (deg)'])
+    sexagesimal_RA, sexagesimal_Dec = (
+        convert_decimal_degree_columns_to_sexagesimal(
+            table1_data['R.A. (deg)'], table1_data['Decl. (deg)']) )
 
     photometry_column_names = [
         'Median J mag',
