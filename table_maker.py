@@ -613,7 +613,11 @@ def table1_latex_output(write=False, begin=0, end=30):
 
 
     if write:
+        filename = output_directory+"Table_1.tex" 
+        write_and_correct_latex_table(latex_table, filename, 
+                                      "Basic Properties of Stars")
 
+        '''
         preamble = '\\tabletypesize{\\scriptsize}\n\\rotate\n\\tablewidth{0pt}'
         data_start = r'\startdata'
         data_end = r'\enddata'
@@ -629,5 +633,6 @@ def table1_latex_output(write=False, begin=0, end=30):
                 'data_start': data_start,
                 'data_end': data_end},
             caption = 'Basic Properties of Stars')
+        '''
     
     return latex_table
