@@ -425,8 +425,6 @@ def join_columns_with_plusminus(value_column, error_column, precision=3,
         if error == null_input and value != null_input:
             raise ValueError("An error is null_input but its value is not!")
         if value == null_input:
-            if error != null_input:
-                raise ValueError("A value is null_input but its error is not!")
 
             joined_list.append(null_output)
             continue
@@ -634,7 +632,9 @@ def table1_latex_output(write=False, begin=0, end=30):
 
         joined_column = join_columns_with_plusminus(
             table1_data[photometry_column], table1_data[error_column],
-            precision=2)
+            precision=2, 
+            null_input=np.nanmin(table1_data[photometry_column]),
+            null_output=r'\ldots')
         
         joined_column_list.append(joined_column)
 
