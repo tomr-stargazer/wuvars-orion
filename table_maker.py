@@ -648,8 +648,12 @@ def table1_latex_output(write=False, begin=0, end=30):
 
     if write:
         filename = output_directory+"Table_1.tex" 
+
+        col_align = "ccccccrrrrrrrc"
+        
         write_and_correct_latex_table(latex_table, filename, 
-                                      "Basic Properties of Stars")
+                                      "Basic Properties of Stars",
+                                      col_align = col_align)
 
         '''
         preamble = '\\tabletypesize{\\scriptsize}\n\\rotate\n\\tablewidth{0pt}'
