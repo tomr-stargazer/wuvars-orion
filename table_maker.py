@@ -499,7 +499,11 @@ def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column,
 
 def write_and_correct_latex_table(table, filename, caption, begin=0, end=30,
                                   **kwargs):
+    # 1. Convert all the column headers to colhead { old_name }
+    for colname in table.colnames:
+        table[colname].name = "\\colhead{ %s }" % colname
 
+    # 2. Prepare the latexdict
     header_start = ('\\tabletypesize{\\scriptsize}' +
                     '\n\\rotate\n' +
                     ('\\tablecaption{ %s }\n' % caption) +
