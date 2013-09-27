@@ -381,7 +381,8 @@ def t_table0_crossref(write=False):
 
 def join_columns_with_plusminus(value_column, error_column, precision=3,
                                 null_input=np.double(-9.99999488e+08),
-                                null_output=' ', lstrip_zero_error=True):
+                                null_output=' ', lstrip_zero_error=True,
+                                omit_pm_and_error=False):
     """
     Joins two data columns together with the LaTeX $\pm$ symbol.
 
@@ -403,6 +404,11 @@ def join_columns_with_plusminus(value_column, error_column, precision=3,
         things together.
     null_output : string, optional
         The output string you want to use in place of null_input.
+    lstrip_zero_error : bool, optional
+        Remove a leading zero from the error term? Defaults True.
+    omit_pm_and_error : bool, optional
+        Discard the \pm and error term completely? Defaults False.
+        Useful if you just wanted to round and filter out bad values.
 
     Returns
     -------
@@ -439,7 +445,11 @@ def join_columns_with_plusminus(value_column, error_column, precision=3,
         
         joined_value_error = str(rounded_value)+r"$\pm$"+rounded_error_string
 
-        joined_list.append(joined_value_error)
+        if omit_pm_and_error:
+            # This is not the usual use case.
+            joined_list.append(rounded_value) 
+        else:
+            joined_list.append(joined_value_error)
 
     joined_column = np.array(joined_list)
     
