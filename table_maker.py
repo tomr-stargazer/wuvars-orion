@@ -639,16 +639,19 @@ def table1_latex_output(write=False, begin=0, end=30):
     addc('P', table1_data['Periodic flag'].astype('int'))
 
     joined_column_list = []
+    # This array says "drop the error terms on the Spitzer mags"
+    # when we feed them into join_whatever.
+    omit_errorbar_list = [False, False, False, True, True, True, True]
 
     # Let's create a bunch of mag \pm error columns.
-    for photometry_column, error_column in zip(
-            photometry_column_names, error_column_names):
+    for photometry_column, error_column, omit_errorbar in zip(
+            photometry_column_names, error_column_names, omit_errorbar_list):
 
         joined_column = join_columns_with_plusminus(
             table1_data[photometry_column], table1_data[error_column],
             precision=2, 
             null_input=np.nanmin(table1_data[photometry_column]),
-            null_output=r'\ldots')
+            null_output=r'\ldots', omit_pm_and_error=omit_errorbar)
         
         joined_column_list.append(joined_column)
 
