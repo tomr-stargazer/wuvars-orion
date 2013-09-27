@@ -671,6 +671,7 @@ def table1_latex_output(write=False, begin=0, end=30):
         
         write_and_correct_latex_table(latex_table, filename, 
                                       "Basic Properties of Stars",
+                                      begin=begin, end=end,
                                       col_align = col_align)
 
         '''
