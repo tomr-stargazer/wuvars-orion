@@ -583,7 +583,8 @@ def table_latex_strings_test(write=False, begin=0, end=30):
                                       "Basic Properties of Stars")
     return table
 
-def table1_latex_output(write=False, begin=0, end=30):
+def table1_latex_output(write=False, begin=0, end=30,
+                        omit_spitzer_errors=False):
     """
     Morphs Table 1 into a LaTeX-friendly output and writes it to a .tex file.
 
@@ -640,9 +641,13 @@ def table1_latex_output(write=False, begin=0, end=30):
     addc('P', table1_data['Periodic flag'].astype('int'))
 
     joined_column_list = []
-    # This array says "drop the error terms on the Spitzer mags"
-    # when we feed them into join_whatever.
-    omit_errorbar_list = [False, False, False, True, True, True, True]
+
+    if omit_spitzer_errors:
+        # This array says "drop the error terms on the Spitzer mags"
+        # when we feed them into join_whatever.
+        omit_errorbar_list = [False]*3 + [True]*4
+    else:
+        omit_errorbar_list = [False]*7
 
     # Let's create a bunch of mag \pm error columns.
     for photometry_column, error_column, omit_errorbar in zip(
