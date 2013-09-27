@@ -10,7 +10,7 @@ def test_join_columns_with_plusminus():
     test_values = np.arange(10)*1.
     test_errors = np.sin(np.arange(10))
     
-    expected = np.array( [str(round(x,3))+r"$\pm$"+str(round(y,3)) for
+    expected = np.array( ["%.*f" % (3,x)+r"$\pm$"+"%.*f" % (3,y) for
                           x, y in zip(test_values, test_errors)] )
 
     actual = join_columns_with_plusminus(test_values, test_errors,
@@ -19,7 +19,7 @@ def test_join_columns_with_plusminus():
     assert (expected == actual).all()
 
     expected_with_lstrip = np.array(
-        [str(round(x,3))+r"$\pm$"+str(round(y,3)).lstrip('0') for
+        ["%.*f" % (3,x)+r"$\pm$"+("%.*f" % (3,y)).lstrip('0') for
          x, y in zip(test_values, test_errors)] )
 
     actual_with_lstrip = join_columns_with_plusminus(

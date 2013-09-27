@@ -435,15 +435,13 @@ def join_columns_with_plusminus(value_column, error_column, precision=3,
             joined_list.append(null_output)
             continue
 
-        rounded_value = np.round(value, precision)
-        rounded_error = np.round(error, precision)
+        rounded_value = "%.*f" % (precision, value)
+        rounded_error = "%.*f" % (precision, error)
 
         if lstrip_zero_error:
-            rounded_error_string = str(rounded_error).lstrip('0')
-        else:
-            rounded_error_string = str(rounded_error)
+            rounded_error = rounded_error.lstrip('0')
         
-        joined_value_error = str(rounded_value)+r"$\pm$"+rounded_error_string
+        joined_value_error = rounded_value+r"$\pm$"+rounded_error
 
         if omit_pm_and_error:
             # This is not the usual use case.
