@@ -6,7 +6,7 @@ virtualenv:
 before_install:
  - sudo apt-get install -qq python-numpy python-scipy
 # command to install dependencies
-install:
+#install:
 #  - "pip install -r requirements.txt --use-mirrors"
 # - export PYTHONPATH=$PYTHONPATH:$PWD
 # command to run tests
