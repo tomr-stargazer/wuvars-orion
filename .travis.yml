@@ -8,6 +8,6 @@ before_install:
 # command to install dependencies
 install:
 #  - "pip install -r requirements.txt --use-mirrors"
- - export $PYTHONPATH=$PYTHONPATH:$PWD
+ - export PYTHONPATH=$PYTHONPATH:$PWD
 # command to run tests
 script: py.test
