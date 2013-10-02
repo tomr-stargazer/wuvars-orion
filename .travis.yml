@@ -10,4 +10,6 @@ install:
 #  - "pip install -r requirements.txt --use-mirrors"
  - export PYTHONPATH=$PYTHONPATH:$PWD
 # command to run tests
-script: py.test
+script: 
+ - export PYTHONPATH=$PYTHONPATH:$PWD
+ - py.test
