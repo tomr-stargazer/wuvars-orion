@@ -3,14 +3,15 @@ python:
     - 2.7
 virtualenv:
     system_site_packages: true
+env:
+ - export PYTHONPATH=$PYTHONPATH:$PWD
 before_install:
  - sudo apt-get install -qq python-numpy python-scipy
+ - echo $PWD
 # command to install dependencies
 #install:
 #  - "pip install -r requirements.txt --use-mirrors"
 # - export PYTHONPATH=$PYTHONPATH:$PWD
 # command to run tests
-script: 
-# - export PYTHONPATH=$PYTHONPATH:$PWD
- - echo $PWD
- - py.test
+
+script: py.test
