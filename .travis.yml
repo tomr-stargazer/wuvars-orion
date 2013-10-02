@@ -11,5 +11,6 @@ install:
 # - export PYTHONPATH=$PYTHONPATH:$PWD
 # command to run tests
 script: 
- - export PYTHONPATH=$PYTHONPATH:$PWD
+# - export PYTHONPATH=$PYTHONPATH:$PWD
+ - echo $PWD
  - py.test
