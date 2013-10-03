@@ -233,7 +233,7 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
 
     periodics = ukvar_spread.where(ukvar_spread.periodic != 0)
     periodic_periods = ukvar_periods[ukvar_spread.periodic != 0]
-    megeath_by_periodics = megeath2012_by_ukvar.where(ukvar_spread.periodic != 0)
+    megeath_class_by_periodics = make_megeath_class_column()[ukvar_spread.periodic != 0]
 
     # Do some stuff where we blank out color slopes that are no good
     jhk_slope_column = periodics.jhk_slope
@@ -264,21 +264,25 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
 
     # Now split it into three pieces and compute medians!
     
-    t2_proto = table.where((megeath_by_periodics.Class == 'P') |
-                           (megeath_by_periodics.Class == 'FP')|
-                           (megeath_by_periodics.Class == 'RP'))
+    t2_proto = table.where((megeath_class_by_periodics == 'P') |
+                           (megeath_class_by_periodics == 'FP')|
+                           (megeath_class_by_periodics == 'RP'))
 
-    t2_disks = table.where(megeath_by_periodics.Class == 'D')
+    t2_disks = table.where(megeath_class_by_periodics == 'D')
 
-    t2_nomegeath = table.where(megeath_by_periodics.Class == 'na')
+    t2_nodisks = table.where(megeath_class_by_periodics == 'ND')
 
-    assert len(t2_proto) + len(t2_disks) + len(t2_nomegeath) == len(table), \
-           "Tables don't add up to the right length!"
+    t2_unknown = table.where(megeath_class_by_periodics == 'na')
+
+    assert (len(t2_proto) + len(t2_disks) +
+            len(t2_nodisks) +len(t2_unknown) == len(table)), \
+            "Tables don't add up to the right length!"
 
     if write:
         clobber_table_write(t2_proto, output_directory+"Table_2a.txt", type='ascii')
         clobber_table_write(t2_disks, output_directory+"Table_2b.txt", type='ascii')
-        clobber_table_write(t2_nomegeath, output_directory+"Table_2c.txt", type='ascii')
+        clobber_table_write(t2_nodisks, output_directory+"Table_2c.txt", type='ascii')
+        clobber_table_write(t2_unknown, output_directory+"Table_2d.txt", type='ascii')
 
     return table
 
