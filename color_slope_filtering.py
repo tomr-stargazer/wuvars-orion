@@ -63,7 +63,59 @@ def filter_color_slopes(data, color, noise_threshold=1.5, slope_confidence=0.2):
         else:
             return filtered_data_soft
 
-    
+    # Case 2. Doing J-H or H-K
+    else:
+        faintness_cutoff = {'j': 17, 'h': 16, 'k': 16}
+
+        blue_band, red_band = color.lower()
+        color_with_m = blue_band + 'm' + red_band
+
+        N_blue = 'N_'+blue_band
+        blue_mean = blue_band+'_mean'
+        N_blue_info = 'N_'+blue_band+'_info'
+
+        N_red = 'N_'+red_band
+        red_mean = red_band+'_mean'
+        N_red_info = 'N_'+red_band+'_info'
+
+        color_rmsr = color_with_m + '_rmsr'
+        color_err_meanr = color_with_m + '_err_meanr'
+
+        # Blue and Red pristine - copied from "case1" re: official_star_counter
+        filtered_data_soft = data.where(
+        (    # BLUE band criteria
+            (data[N_blue] >= 50) & (data[N_blue] <= 125) &
+            (data[blue_mean] > 11) &
+            (data[blue_mean] < faintness_cutoff[blue_band]) &
+            (data[N_blue_info] == 0)
+            ) &
+        (   # RED band criteria
+            (data[N_red] >= 50) & (data[N_red] <= 125) &
+            (data[red_mean] > 11) &
+            (data[red_mean] < faintness_cutoff[red_band]) &
+            (data[N_red_info] == 0)
+            ) &
+        # Blue-Red variability criterion
+        (data[color_rmsr] > noise_threshold * data[color_err_meanr]) )
+
+        if slope_confidence:
+
+            if color == 'jh':
+                color_slope = 'jjh_slope'
+            else:
+                color_slope = 'khk_slope'
+
+            color_slope_err = color_slope+'_err'
+
+            filtered_data = filtered_data_soft.where(
+                filtered_data_soft[color_slope_err] <
+                np.abs( slope_confidence * filtered_data_soft[color_slope]))
+
+            return filtered_data
+        else:
+            return filtered_data_soft
+
+### don't touch below here
 
 # How much more than noise do we want the "color variability" cutoff to be?
 noise_threshold = 1.5
