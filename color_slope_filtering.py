@@ -11,7 +11,7 @@ Carpenter, Hillenbrand & Skrutskie 2001:
 from official_star_counter import *
 
 
-def filter_color_slopes(data, band, noise_threshold=1.5, slope_confidence=0.2):
+def filter_color_slopes(data, color, noise_threshold=1.5, slope_confidence=0.2):
     """
     Filters color slopes on quality. Returns a sub-table with good cslopes.
 
@@ -24,8 +24,8 @@ def filter_color_slopes(data, band, noise_threshold=1.5, slope_confidence=0.2):
     data : atpy.Table
         Table of spreadsheet data (including previously calculated
         color slopes) on the stars in question.
-    band : {'jh', 'hk', or 'jhk'}
-        Which color term to filter on. The relevant bands will
+    color : {'jh', 'hk', or 'jhk'}
+        Which color term to filter on. The relevant colors will
         be ensured for quality.
     noise_threshold : float, optional, default: 1.5
         How many times above the expected photometric noise
@@ -39,31 +39,29 @@ def filter_color_slopes(data, band, noise_threshold=1.5, slope_confidence=0.2):
 
     Returns
     -------
-    filtered_table : atpy.Table
+    filtered_data : atpy.Table
         Subset of `data` filtered by color slopes that meet our criteria.
     
     """
 
-    good_bands = ['jh', 'hk', 'jhk']
-    if band.lower() not in good_bands:
-        raise ValueError("Invalid band! Use 'jh', 'hk', or 'jhk'.")
+    valid_colors = ['jh', 'hk', 'jhk']
+    if color.lower() not in valid_colors:
+        raise ValueError("Invalid color! Use 'jh', 'hk', or 'jhk'.")
 
-    # Let's break this into two cases. 1. Doing all of JHK:
-    if band.lower() == 'jhk':
-        filtered_table_soft = autovars_strict.where(
-            (autovars_strict.hmk_rmsr > noise_threshold *
-             autovars_strict.hmk_err_meanr) &
-             (autovars_strict.jmh_rmsr > noise_threshold *
-              autovars_strict.jmh_err_meanr) )
+    # Let's break this into two cases. 1. Doing all of JHK
+    if color.lower() == 'jhk':
+        filtered_data_soft = data.where(
+            (data.hmk_rmsr > noise_threshold * data.hmk_err_meanr) &
+             (data.jmh_rmsr > noise_threshold * data.jmh_err_meanr) )
 
         if slope_confidence:
-            filtered_table = filtered_table_soft.where(
-                filtered_table_soft.jhk_slope_err <
-                np.abs( slope_confidence * filtered_table_soft.jhk_slope))
+            filtered_data = filtered_data_soft.where(
+                filtered_data_soft.jhk_slope_err <
+                np.abs( slope_confidence * filtered_data_soft.jhk_slope))
 
-            return filtered_table
+            return filtered_data
         else:
-            return filtered_table_soft
+            return filtered_data_soft
 
     
 
