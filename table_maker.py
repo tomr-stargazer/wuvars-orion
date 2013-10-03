@@ -680,3 +680,12 @@ def table1_latex_output(write=False, begin=0, end=30,
                                       col_align = col_align)
 
     return latex_table
+
+def table2_latex_output(write=False, begin=0, end=30):
+    """
+    Morphs Table 2 into a LaTeX-friendly output and writes it to a .tex file.
+
+    """
+
+    # Actually, with my new and improved Megeath classes I should re-compute this guy.
+    table2_data = t_table2_variability_periods_periodics_bymegeathclass()
