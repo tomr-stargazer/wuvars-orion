@@ -45,8 +45,25 @@ def filter_color_slopes(data, band, noise_threshold=1.5, slope_confidence=0.2):
     """
 
     good_bands = ['jh', 'hk', 'jhk']
-    if band not in good_bands:
+    if band.lower() not in good_bands:
         raise ValueError("Invalid band! Use 'jh', 'hk', or 'jhk'.")
+
+    # Let's break this into two cases. 1. Doing all of JHK:
+    if band.lower() == 'jhk':
+        filtered_table_soft = autovars_strict.where(
+            (autovars_strict.hmk_rmsr > noise_threshold *
+             autovars_strict.hmk_err_meanr) &
+             (autovars_strict.jmh_rmsr > noise_threshold *
+              autovars_strict.jmh_err_meanr) )
+
+        if slope_confidence:
+            filtered_table = filtered_table_soft.where(
+                filtered_table_soft.jhk_slope_err <
+                np.abs( slope_confidence * filtered_table_soft.jhk_slope))
+
+            return filtered_table
+        else:
+            return filtered_table_soft
 
     
 
