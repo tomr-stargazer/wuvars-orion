@@ -35,7 +35,7 @@ import astropy.table
 # All of these imports are meant to mirror those from figure_maker.
 from official_star_counter import *
 from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
-                                   hk_empty, hk_filled)
+                                   hk_empty, hk_filled, filter_color_slopes)
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D,
@@ -55,6 +55,14 @@ megeath2012_full_by_ukvar = index_secondary_by_primary(mated_ukvar,
                                                        Megeath_Full)
 megeath2012_all_by_ukvar = index_secondary_by_primary(mated_ukvar,
                                                       Megeath_Allgoodsources)
+
+# And let's make some color slope references that we like.
+jhk_slope_reference = filter_color_slopes(autovars_strict, 'jhk',
+                                          slope_confidence=0.5)
+jh_slope_reference = filter_color_slopes(autovars_true, 'jh',
+                                         slope_confidence=0.5)
+hk_slope_reference = filter_color_slopes(autovars_true, 'hk',
+                                         slope_confidence=0.5)
 
 def clobber_table_write(table, filename, **kwargs):
     """ Writes a table, even if it has to clobber an older one. """
@@ -237,13 +245,16 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
 
     # Do some stuff where we blank out color slopes that are no good
     jhk_slope_column = periodics.jhk_slope
-    jhk_slope_column[~np.in1d(periodics.SOURCEID, jhk_filled.SOURCEID)] = np.nan
+    jhk_slope_column[~np.in1d(periodics.SOURCEID,
+                              jhk_slope_reference.SOURCEID)] = np.nan
 
     jjh_slope_column = periodics.jjh_slope
-    jjh_slope_column[~np.in1d(periodics.SOURCEID, jh_filled.SOURCEID)] = np.nan
+    jjh_slope_column[~np.in1d(periodics.SOURCEID,
+                              jh_slope_reference.SOURCEID)] = np.nan
 
     khk_slope_column = periodics.khk_slope
-    khk_slope_column[~np.in1d(periodics.SOURCEID, hk_filled.SOURCEID)] = np.nan
+    khk_slope_column[~np.in1d(periodics.SOURCEID,
+                              hk_slope_reference.SOURCEID)] = np.nan
 
     addc('UKvar ID', periodics.UKvar_ID)
     addc('N_J', periodics.N_j)
@@ -318,13 +329,13 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
 
     # Do some stuff where we blank out color slopes that are no good
     jhk_slope_column = nonperiodics.jhk_slope
-    jhk_slope_column[~np.in1d(nonperiodics.SOURCEID, jhk_filled.SOURCEID)] = np.nan
+    jhk_slope_column[~np.in1d(nonperiodics.SOURCEID, jhk_slope_reference.SOURCEID)] = np.nan
 
     jjh_slope_column = nonperiodics.jjh_slope
-    jjh_slope_column[~np.in1d(nonperiodics.SOURCEID, jh_filled.SOURCEID)] = np.nan
+    jjh_slope_column[~np.in1d(nonperiodics.SOURCEID, jh_slope_reference.SOURCEID)] = np.nan
 
     khk_slope_column = nonperiodics.khk_slope
-    khk_slope_column[~np.in1d(nonperiodics.SOURCEID, hk_filled.SOURCEID)] = np.nan
+    khk_slope_column[~np.in1d(nonperiodics.SOURCEID, hk_slope_reference.SOURCEID)] = np.nan
 
     addc('UKvar ID', nonperiodics.UKvar_ID)
     addc('N_J', nonperiodics.N_j)
