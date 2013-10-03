@@ -1,9 +1,16 @@
 from __future__ import division
 
+import os
 import shutil
 import filecmp
 
-from table_maker import *
+import numpy as np
+
+from table_maker import (join_columns_with_plusminus,
+                         convert_decimal_degree_columns_to_sexagesimal,
+                         make_megeath_class_column,
+                         convert_tabletabular_to_deluxetable,
+                         megeath2012_by_ukvar)
     
 def test_join_columns_with_plusminus():
 
