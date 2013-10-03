@@ -325,7 +325,7 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
     addc = table.add_column
 
     nonperiodics = ukvar_spread.where(ukvar_spread.periodic == 0)
-    megeath_by_nonperiodics = megeath2012_by_ukvar.where(ukvar_spread.periodic == 0)
+    megeath_class_by_nonperiodics = make_megeath_class_column()[ukvar_spread.periodic == 0]
 
     # Do some stuff where we blank out color slopes that are no good
     jhk_slope_column = nonperiodics.jhk_slope
@@ -354,21 +354,25 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
     addc('Data quality flag', nonperiodics.autovar + nonperiodics.strict)
 
     # Now split it into three pieces and compute medians!
-    t3_proto = table.where((megeath_by_nonperiodics.Class == 'P') |
-                           (megeath_by_nonperiodics.Class == 'FP')|
-                           (megeath_by_nonperiodics.Class == 'RP'))
+    t3_proto = table.where((megeath_class_by_nonperiodics == 'P') |
+                           (megeath_class_by_nonperiodics == 'FP')|
+                           (megeath_class_by_nonperiodics == 'RP'))
 
-    t3_disks = table.where(megeath_by_nonperiodics.Class == 'D')
+    t3_disks = table.where(megeath_class_by_nonperiodics == 'D')
 
-    t3_nomegeath = table.where(megeath_by_nonperiodics.Class == 'na')
+    t3_nodisks = table.where(megeath_class_by_nonperiodics == 'ND')
 
-    assert len(t3_proto) + len(t3_disks) + len(t3_nomegeath) == len(table), \
+    t3_unknown = table.where(megeath_class_by_nonperiodics == 'na')
+
+    assert (len(t3_proto) + len(t3_disks) +
+            len(t3_nodisks) + len(t3_unknown) == len(table)), \
            "Tables don't add up to the right length!"
 
     if write:
         clobber_table_write(t3_proto, output_directory+"Table_3a.txt", type='ascii')
         clobber_table_write(t3_disks, output_directory+"Table_3b.txt", type='ascii')
-        clobber_table_write(t3_nomegeath, output_directory+"Table_3c.txt", type='ascii')
+        clobber_table_write(t3_nodisks, output_directory+"Table_3c.txt", type='ascii')
+        clobber_table_write(t3_unknown, output_directory+"Table_3d.txt", type='ascii')
 
     return table
     
