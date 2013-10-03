@@ -1,10 +1,54 @@
 """
 This is a script for calculating color slopes! Its products are used
 by other scripts.
+
+Some of the parameters I've chosen are inspired by Fig. 20 from 
+Carpenter, Hillenbrand & Skrutskie 2001:
+"Only variable stars in which the observed rms of the appropriate colors or magnitudes exceeded the expected rms by a factor of 1.5 are shown. The open histograms are for all stars that meet these criteria, and the hatched histograms are those stars in which the slope have been determined to an accuracy of better than 20%."
+
 """
 
 from official_star_counter import *
 
+
+def filter_color_slopes(data, band, noise_threshold=1.5, slope_confidence=0.2):
+    """
+    Filters color slopes on quality. Returns a sub-table with good cslopes.
+
+    By default we filter both on magnitude of color change 
+    (relative to photometric noise) and on confidence on the fitted 
+    color slope. You can optionally disable the slope confidence filter.
+
+    Parameters
+    ----------
+    data : atpy.Table
+        Table of spreadsheet data (including previously calculated
+        color slopes) on the stars in question.
+    band : {'jh', 'hk', or 'jhk'}
+        Which color term to filter on. The relevant bands will
+        be ensured for quality.
+    noise_threshold : float, optional, default: 1.5
+        How many times above the expected photometric noise
+        do you require the rms color variability to be?
+        Try not to go below 1.0. The default choice of 1.5 is
+        inspired by Carpenter et al. 2001.
+    slope_confidence : float, optional, default: 0.2
+        How small should the uncertainty be on a slope for us
+        to include it? The default choice of 20% is also
+        inspired by Carpenter er al. 2001.
+
+    Returns
+    -------
+    filtered_table : atpy.Table
+        Subset of `data` filtered by color slopes that meet our criteria.
+    
+    """
+
+    good_bands = ['jh', 'hk', 'jhk']
+    if band not in good_bands:
+        raise ValueError("Invalid band! Use 'jh', 'hk', or 'jhk'.")
+
+    
 
 # How much more than noise do we want the "color variability" cutoff to be?
 noise_threshold = 1.5
