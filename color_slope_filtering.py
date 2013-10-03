@@ -180,3 +180,13 @@ hk_filled = hk_empty.where(
     hk_empty.khk_slope_err < 
     np.abs( slope_confidence * hk_empty.khk_slope))
 
+
+
+jhk_empty = filter_color_slopes(autovars_strict, 'jhk', slope_confidence=None)
+jhk_filled = filter_color_slopes(autovars_strict, 'jhk')
+
+jh_empty = filter_color_slopes(autovars_true, 'jh', slope_confidence=None)
+jh_filled = filter_color_slopes(autovars_true, 'jh')
+
+hk_empty = filter_color_slopes(autovars_true, 'hk', slope_confidence=None)
+hk_filled = filter_color_slopes(autovars_true, 'hk')
