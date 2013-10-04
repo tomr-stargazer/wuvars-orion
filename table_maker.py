@@ -342,13 +342,19 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
 
     # Do some stuff where we blank out color slopes that are no good
     jhk_slope_column = nonperiodics.jhk_slope
+    jhk_slope_error = nonperiodics.jhk_slope_err
     jhk_slope_column[~np.in1d(nonperiodics.SOURCEID, jhk_slope_reference.SOURCEID)] = np.nan
+    jhk_slope_error[~np.in1d(nonperiodics.SOURCEID, jhk_slope_reference.SOURCEID)] = np.nan
 
     jjh_slope_column = nonperiodics.jjh_slope
+    jjh_slope_error = nonperiodics.jjh_slope_err
     jjh_slope_column[~np.in1d(nonperiodics.SOURCEID, jh_slope_reference.SOURCEID)] = np.nan
+    jjh_slope_error[~np.in1d(nonperiodics.SOURCEID, jh_slope_reference.SOURCEID)] = np.nan
 
     khk_slope_column = nonperiodics.khk_slope
+    khk_slope_error = nonperiodics.khk_slope_err
     khk_slope_column[~np.in1d(nonperiodics.SOURCEID, hk_slope_reference.SOURCEID)] = np.nan
+    khk_slope_error[~np.in1d(nonperiodics.SOURCEID, hk_slope_reference.SOURCEID)] = np.nan
 
     addc('UKvar ID', nonperiodics.UKvar_ID)
     addc('N_J', nonperiodics.N_j)
@@ -360,8 +366,11 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
     addc('J-H range (robust)', nonperiodics.jmh_ranger)
     addc('H-K range (robust)', nonperiodics.hmk_ranger)
     addc('(J-H), (H-K) color slope', jhk_slope_column)
+    addc('jhk_slope_err', jhk_slope_err)
     addc('J, (J-H) color slope', jjh_slope_column)
+    addc('jjh_slope_err', jjh_slope_err)
     addc('K, (H-K) color slope', khk_slope_column)
+    addc('khk_slope_err', khk_slope_err)
     addc('Stetson Variability Index', nonperiodics.Stetson)
     addc('Bands used to compute Stetson', nonperiodics.Stetson_choice)
     addc('Data quality flag', nonperiodics.autovar + nonperiodics.strict)
