@@ -474,7 +474,7 @@ def join_columns_with_plusminus(value_column, error_column=None, precision=3,
         # Some complicated handling of null_inputs and null_outputs.
         if error == null_input and value != null_input:
             raise ValueError("An error is null_input but its value is not!")
-        if value == null_input:
+        if value == null_input or np.isnan(value):
 
             joined_list.append(null_output)
             continue
