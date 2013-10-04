@@ -399,7 +399,7 @@ def t_table0_crossref(write=False):
 
     return table
 
-def join_columns_with_plusminus(value_column, error_column, precision=3,
+def join_columns_with_plusminus(value_column, error_column=None, precision=3,
                                 null_input=np.double(-9.99999488e+08),
                                 null_output=' ', lstrip_zero_error=True,
                                 omit_pm_and_error=False):
@@ -437,7 +437,10 @@ def join_columns_with_plusminus(value_column, error_column, precision=3,
 
     """
 
-    if len(value_column) != len(error_column):
+    if error_column == None:
+        omit_pm_and_error = True
+        error_column = np.zeros_like(value_column)
+    elif len(value_column) != len(error_column):
         raise ValueError('Columns must be the same length!')
     
     # We're going to implement this as a slow, loop-based thing first,
@@ -472,6 +475,11 @@ def join_columns_with_plusminus(value_column, error_column, precision=3,
     joined_column = np.array(joined_list)
     
     return joined_column
+
+def make_column_pretty(value_column, **kwargs):
+    
+    return join_columns_with_plusminus(value_column, 
+                                       error_column=None, **kwargs)
 
 def convert_decimal_degree_columns_to_sexagesimal(ra_column, dec_column,
                                                   ra_truncate=0,
@@ -701,7 +709,7 @@ def table1_latex_output(write=False, begin=0, end=30,
 
     return latex_table
 
-def table2_latex_output(write=False, begin=0, end=30):
+def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
     """
     Morphs Table 2 into a LaTeX-friendly output and writes it to a .tex file.
 
@@ -709,3 +717,38 @@ def table2_latex_output(write=False, begin=0, end=30):
 
     # Actually, with my new and improved Megeath classes I should re-compute this guy.
     table2_data = t_table2_variability_periods_periodics_bymegeathclass()
+
+    latex_table = astropy.table.Table()
+    latex_table.table_name = "Table 2"
+
+    addc = lambda name, data: latex_table.add_column( 
+        astropy.table.Column(name=name, data=data) )
+
+    # reorder the table by Class
+    class_number = np.zeros(table2_data.Class.size)+4.
+    class_number[table2_data.Class == 'P'] = 1
+    class_number[table2_data.Class == 'D'] = 2
+    class_number[table2_data.Class == 'ND'] = 3
+    table2_data.add_column("class_number", class_number)
+
+    table2_data.sort('class_number')
+
+    addc('ID', table2_data['UKvar ID'])
+    addc('$N_J$', table2_data.N_J)
+    addc('$N_H$', table2_data.N_H)
+    addc('$N_K$', table2_data.N_K)
+    addc(r'$\Delta K$', 
+         make_column_pretty(table2_data['K mag range (robust)'], precision=2))
+    addc(r'$\Delta J-H$', 
+         make_column_pretty(table2_data['J-H range (robust)'], precision=2))
+    addc(r'$\Delta H-K$', 
+         make_column_pretty(table2_data['H-K range (robust)'], precision=2))
+
+    if write:
+        filename = output_directory+"Table_2.tex"
+
+        write_and_correct_latex_table(
+            latex_table, filename, "Variability properties of periodic stars",
+            begin=begin, end=end)
+        
+    return latex_table
