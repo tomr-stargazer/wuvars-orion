@@ -272,6 +272,7 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
     addc('Bands used to compute Stetson', periodics.Stetson_choice)
     addc('Best-fit period', periodic_periods)
     addc('Data quality flag', periodics.autovar + periodics.strict)
+    addc('Class', megeath_class_by_periodics)
 
     # Now split it into three pieces and compute medians!
     
