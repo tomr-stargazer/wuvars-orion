@@ -767,22 +767,22 @@ def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
     addc(r'$\Delta H-K$', 
          make_column_pretty(table2_data['H-K range (robust)'], precision=2,
                             null_output='\ldots'))
-    addc("JHK slope", 
+    addc("$m(J-H,H-K)$",
          join_columns_with_plusminus(
              table2_data['(J-H), (H-K) color slope'], 
              table2_data.jhk_slope_error, precision=2, 
              null_output='\ldots'))
-    addc("JJH slope", 
+    addc("$m(J,J-H)$",
          join_columns_with_plusminus(
              table2_data['J, (J-H) color slope'], 
              table2_data.jjh_slope_error, precision=2, 
              null_output='\ldots'))
-    addc("KHK slope", 
+    addc("$m(K,H-K)$",
          join_columns_with_plusminus(
              table2_data['K, (H-K) color slope'], 
              table2_data.khk_slope_error, precision=2, 
              null_output='\ldots'))
-    addc("S", make_column_pretty(
+    addc("$S$", make_column_pretty(
         table2_data['Stetson Variability Index'], precision=2))
     addc("Period", make_column_pretty(table2_data['Best-fit period'],
                                       precision=4))
