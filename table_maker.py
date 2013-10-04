@@ -738,11 +738,14 @@ def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
     addc('$N_H$', table2_data.N_H)
     addc('$N_K$', table2_data.N_K)
     addc(r'$\Delta K$', 
-         make_column_pretty(table2_data['K mag range (robust)'], precision=2))
+         make_column_pretty(table2_data['K mag range (robust)'], precision=2,
+                            null_output='\ldots'))
     addc(r'$\Delta J-H$', 
-         make_column_pretty(table2_data['J-H range (robust)'], precision=2))
+         make_column_pretty(table2_data['J-H range (robust)'], precision=2,
+                            null_output='\ldots'))
     addc(r'$\Delta H-K$', 
-         make_column_pretty(table2_data['H-K range (robust)'], precision=2))
+         make_column_pretty(table2_data['H-K range (robust)'], precision=2,
+                            null_output='\ldots'))
 
     if write:
         filename = output_directory+"Table_2.tex"
