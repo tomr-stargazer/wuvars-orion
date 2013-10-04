@@ -782,6 +782,10 @@ def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
              table2_data['K, (H-K) color slope'], 
              table2_data.khk_slope_error, precision=2, 
              null_output='\ldots'))
+    addc("S", make_column_pretty(
+        table2_data['Stetson Variability Index'], precision=2))
+    addc("Period", make_column_pretty(table2_data['Best-fit period'],
+                                      precision=4))
 
     if write:
         filename = output_directory+"Table_2.tex"
