@@ -366,14 +366,15 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
     addc('J-H range (robust)', nonperiodics.jmh_ranger)
     addc('H-K range (robust)', nonperiodics.hmk_ranger)
     addc('(J-H), (H-K) color slope', jhk_slope_column)
-    addc('jhk_slope_err', jhk_slope_error)
+    addc('jhk_slope_error', jhk_slope_error)
     addc('J, (J-H) color slope', jjh_slope_column)
-    addc('jjh_slope_err', jjh_slope_error)
+    addc('jjh_slope_error', jjh_slope_error)
     addc('K, (H-K) color slope', khk_slope_column)
-    addc('khk_slope_err', khk_slope_error)
+    addc('khk_slope_error', khk_slope_error)
     addc('Stetson Variability Index', nonperiodics.Stetson)
     addc('Bands used to compute Stetson', nonperiodics.Stetson_choice)
     addc('Data quality flag', nonperiodics.autovar + nonperiodics.strict)
+    addc('Class', megeath_class_by_nonperiodics)
 
     # Now split it into three pieces and compute medians!
     t3_proto = table.where((megeath_class_by_nonperiodics == 'P') |
