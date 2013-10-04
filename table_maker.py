@@ -767,6 +767,21 @@ def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
     addc(r'$\Delta H-K$', 
          make_column_pretty(table2_data['H-K range (robust)'], precision=2,
                             null_output='\ldots'))
+    addc("JHK slope", 
+         join_columns_with_plusminus(
+             table2_data['(J-H), (H-K) color slope'], 
+             table2_data.jhk_slope_error, precision=2, 
+             null_output='\ldots'))
+    addc("JJH slope", 
+         join_columns_with_plusminus(
+             table2_data['J, (J-H) color slope'], 
+             table2_data.jjh_slope_error, precision=2, 
+             null_output='\ldots'))
+    addc("KHK slope", 
+         join_columns_with_plusminus(
+             table2_data['K, (H-K) color slope'], 
+             table2_data.khk_slope_error, precision=2, 
+             null_output='\ldots'))
 
     if write:
         filename = output_directory+"Table_2.tex"
