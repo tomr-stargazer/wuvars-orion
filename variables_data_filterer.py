@@ -76,7 +76,6 @@ def filter_by_tile():
 
             tile_tables.append(tile_photometry)
             tile_spreadsheets.append(tile_spreadsheet)
-            print len(set(tile_photometry.SOURCEID)), " stars in Tile %d, %d" % (ra_i,dec_j)
 
     return tile_tables, tile_spreadsheets
 
