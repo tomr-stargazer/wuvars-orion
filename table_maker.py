@@ -737,7 +737,6 @@ def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
 
     """
 
-    # Actually, with my new and improved Megeath classes I should re-compute this guy.
     table2_data = t_table2_variability_periods_periodics_bymegeathclass()
 
     latex_table = astropy.table.Table()
@@ -793,6 +792,70 @@ def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
 
         write_and_correct_latex_table(
             latex_table, filename, "Variability properties of periodic stars",
+            begin=begin, end=end)
+        
+    return latex_table
+
+def table3_latex_output(write=False, begin=0, end=30, decimal_precision=2):
+    """
+    Morphs table 3 into a LaTeX-friendly output and writes it to a .tex file.
+
+    """
+
+    table3_data = t_table3_variability_nonperiodics_bymegeathclass()
+
+    latex_table = astropy.table.Table()
+    latex_table.table_name = "table 3"
+
+    addc = lambda name, data: latex_table.add_column( 
+        astropy.table.Column(name=name, data=data) )
+
+    # reorder the table by Class
+    class_number = np.zeros(table3_data.Class.size)+4.
+    class_number[table3_data.Class == 'P'] = 1
+    class_number[table3_data.Class == 'D'] = 2
+    class_number[table3_data.Class == 'ND'] = 3
+    table3_data.add_column("class_number", class_number)
+
+    table3_data.sort('class_number')
+
+    addc('ID', table3_data['UKvar ID'])
+    addc('$N_J$', table3_data.N_J)
+    addc('$N_H$', table3_data.N_H)
+    addc('$N_K$', table3_data.N_K)
+    addc(r'$\Delta K$', 
+         make_column_pretty(table3_data['K mag range (robust)'], precision=2,
+                            null_output='\ldots'))
+    addc(r'$\Delta J-H$', 
+         make_column_pretty(table3_data['J-H range (robust)'], precision=2,
+                            null_output='\ldots'))
+    addc(r'$\Delta H-K$', 
+         make_column_pretty(table3_data['H-K range (robust)'], precision=2,
+                            null_output='\ldots'))
+    addc("$m(J-H,H-K)$",
+         join_columns_with_plusminus(
+             table3_data['(J-H), (H-K) color slope'], 
+             table3_data.jhk_slope_error, precision=2, 
+             null_output='\ldots'))
+    addc("$m(J,J-H)$",
+         join_columns_with_plusminus(
+             table3_data['J, (J-H) color slope'], 
+             table3_data.jjh_slope_error, precision=2, 
+             null_output='\ldots'))
+    addc("$m(K,H-K)$",
+         join_columns_with_plusminus(
+             table3_data['K, (H-K) color slope'], 
+             table3_data.khk_slope_error, precision=2, 
+             null_output='\ldots'))
+    addc("$S$", make_column_pretty(
+        table3_data['Stetson Variability Index'], precision=2))
+
+    if write:
+        filename = output_directory+"Table_3.tex"
+
+        write_and_correct_latex_table(
+            latex_table, filename, 
+            "Variability properties of nonperiodic stars",
             begin=begin, end=end)
         
     return latex_table
