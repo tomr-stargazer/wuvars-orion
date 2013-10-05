@@ -780,7 +780,7 @@ def f_stetson_versus_Hmag_strict_candidates(
     return fig
 
 
-def f_observing_log():
+def f_observing_log(title="Observing log for each tile, for each band"):
     """
     Makes a graphical observing log.
 
@@ -805,6 +805,11 @@ def f_observing_log():
         plt.plot(h_dates, 1+i*np.ones(len(h_dates)), 'g.')
         plt.plot(k_dates, 3/4+i*np.ones(len(k_dates)), 'r.')
 
+    plt.xlabel("Modified Julian Date")
+    plt.ylabel("Tile #", rotation='horizontal')
+    plt.title(title)
+
+    plt.ylim(1-1/3, 16+1/3)
 
     return fig
 
