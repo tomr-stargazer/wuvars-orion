@@ -718,10 +718,9 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
     plt.show()
 
 
-def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs " 
-                                            "median H magnitude for "
-                                            "Pristine-quality stars",
-                                            yscale='linear'):
+def f_stetson_versus_Hmag_strict_candidates(
+        title="Stetson index vs median H magnitude for Pristine-quality stars",
+        yscale='linear'):
     """
     Plots Stetson against median H-mag for strict candidates 
     (i.e., all stars with "pristine" data quality.)
