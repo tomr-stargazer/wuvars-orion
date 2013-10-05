@@ -38,6 +38,7 @@ from tablemate_comparisons import (mated_ukvar, ukvar_spread,
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
 from orion_tablemate import index_secondary_by_primary
 from variables_data_filterer import filter_by_tile
+from table_maker import make_megeath_class_column
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
@@ -405,6 +406,8 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
     
     """
 
+    megeath_class_column = make_megeath_class_column()
+
     # Nonperiodic stars only
     if 'non' in sample.lower():
         sample_boolean_criterion = np.isnan(ukvar_periods)
@@ -420,28 +423,19 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
     # Megeath subsamples.
 
     disk_indices = (
-        # it's got a Megeath2012 counterpart
-        (mated_ukvar.Megeath2012_ID != -1) & 
-        # whose Class is 'D'
-        (Megeath2012.data.Class[mated_ukvar.Megeath2012_index] == 'D') &
+        # its Class is 'D'
+        (megeath_class_column == 'D') &
         # and it matches our 'periodic/nonperiodic/all' cut.
          sample_boolean_criterion)
 
     protostar_indices = (
-        # it's got a Megeath2012 counterpart
-        (mated_ukvar.Megeath2012_ID != -1) & 
-        # whose Class is 'P', 'FP', or 'RP'
-        ((Megeath2012.data.Class[mated_ukvar.Megeath2012_index] == 'P') |
-         (Megeath2012.data.Class[mated_ukvar.Megeath2012_index] == 'FP') |
-         (Megeath2012.data.Class[mated_ukvar.Megeath2012_index] == 'RP')) &
-        # and it matches our 'periodic/nonperiodic/all' cut.
-         sample_boolean_criterion)
+        (megeath_class_column == 'P') & sample_boolean_criterion)
 
-    nonmegeath_indices = (
-        # it doesn't have a Megeath2012 counterpart
-        (mated_ukvar.Megeath2012_ID == -1) & 
-        # and it matches our 'periodic/nonperiodic/all' cut.
-        sample_boolean_criterion)
+    nondisk_indices = (
+        (megeath_class_column == 'ND') & sample_boolean_criterion)
+
+    unknown_indices = (
+        (megeath_class_column == 'na') & sample_boolean_criterion)
     
         
     fig = plt.figure()
@@ -449,14 +443,14 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
 
     plot_trajectory_vanilla(ax, a_k=3)
 
-    plt.plot(ukvar_spread.hmk_median[nonmegeath_indices], 
-             ukvar_spread.jmh_median[nonmegeath_indices], 
-             'bo', ms=4, label="No Megeath Match")
-    plt.plot(ukvar_spread.hmk_median[disk_indices], 
-             ukvar_spread.jmh_median[disk_indices], 
+    plt.plot(ukvar_spread.hmk_median[nondisk_indices],
+             ukvar_spread.jmh_median[nondisk_indices],
+             'bo', ms=4, label="Megeath Non-disks")
+    plt.plot(ukvar_spread.hmk_median[disk_indices],
+             ukvar_spread.jmh_median[disk_indices],
              'ro', ms=4, label="Megeath Disks")
-    plt.plot(ukvar_spread.hmk_median[protostar_indices], 
-             ukvar_spread.jmh_median[protostar_indices], 
+    plt.plot(ukvar_spread.hmk_median[protostar_indices],
+             ukvar_spread.jmh_median[protostar_indices],
              'c*', ms=10, label="Megeath Protostars")
 
     plt.xlabel(r"median $H-K$")
@@ -475,14 +469,14 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
 
     plot_trajectory_vanilla(ax, a_k=3)
 
-    plt.plot(ukvar_spread.hmk_median[nonmegeath_indices], 
-             ukvar_spread.k_median[nonmegeath_indices], 
-             'bo', ms=4, label="No Megeath Match")
-    plt.plot(ukvar_spread.hmk_median[disk_indices], 
-             ukvar_spread.k_median[disk_indices], 
+    plt.plot(ukvar_spread.hmk_median[nondisk_indices],
+             ukvar_spread.k_median[nondisk_indices],
+             'bo', ms=4, label="Megeath Non-disks")
+    plt.plot(ukvar_spread.hmk_median[disk_indices],
+             ukvar_spread.k_median[disk_indices],
              'ro', ms=4, label="Megeath Disks")
-    plt.plot(ukvar_spread.hmk_median[protostar_indices], 
-             ukvar_spread.k_median[protostar_indices], 
+    plt.plot(ukvar_spread.hmk_median[protostar_indices],
+             ukvar_spread.k_median[protostar_indices],
              'c*', ms=10, label="Megeath Protostars")
 
     plt.xlabel(r"median $H-K$")
@@ -498,9 +492,9 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
 
     fig2 = plt.figure()
 
-    plt.plot(np.degrees(ukvar_spread.RA)[nonmegeath_indices], 
-             np.degrees(ukvar_spread.DEC)[nonmegeath_indices], 
-             'bo', ms=4, label="No Megeath Match")
+    plt.plot(np.degrees(ukvar_spread.RA)[nondisk_indices], 
+             np.degrees(ukvar_spread.DEC)[nondisk_indices], 
+             'bo', ms=4, label="Megeath Non-disks")
     plt.plot(np.degrees(ukvar_spread.RA)[disk_indices], 
              np.degrees(ukvar_spread.DEC)[disk_indices], 
              'ro', ms=4, label="Megeath Disks")
