@@ -62,3 +62,14 @@ def filter_by_tile():
 
     return tile_tables, tile_spreadsheets
 
+def check_max_observations_per_tile():
+
+    tile_tables, tile_spreadsheets = filter_by_tile()
+
+    for i, tile_spreadsheet in zip(range(len(tile_spreadsheets)), 
+                                   tile_spreadsheets):
+
+        ts = tile_spreadsheet
+        
+        print ("Tile %d, N_J: %3d, N_H: %3d, N_K: %3d" % 
+               (i, ts.N_j.max(), ts.N_h.max(), ts.N_k.max()))
