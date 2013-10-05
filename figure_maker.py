@@ -26,6 +26,8 @@ Guide to variable names:
 
 """
 
+from __future__ import division
+
 import matplotlib.pyplot as plt
 
 from official_star_counter import *
@@ -35,9 +37,11 @@ from tablemate_comparisons import (mated_ukvar, ukvar_spread,
                                    ukvar_periods, source_period_digger)
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
 from orion_tablemate import index_secondary_by_primary
+from variables_data_filterer import filter_by_tile
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
+from helpers3 import band_cut
 
 # Let's grab IRAC colors from Megeath.
 megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
@@ -773,6 +777,35 @@ def f_stetson_versus_Hmag_strict_candidates(title="Stetson index vs "
     plt.ylim(hist_range)
     
     plt.show()
+
+    return fig
+
+
+def f_observing_log():
+    """
+    Makes a graphical observing log.
+
+    """
+
+    tile_tables = filter_by_tile()[0]
+
+    fig = plt.figure()
+
+    for i, tile_table in zip(range(len(tile_tables)), tile_tables):
+
+        # How do we J slice? BAND CUT
+        j_tile_table = band_cut(tile_table, 'j')
+        h_tile_table = band_cut(tile_table, 'h')
+        k_tile_table = band_cut(tile_table, 'k')
+
+        j_dates = list(set(j_tile_table.MEANMJDOBS))
+        h_dates = list(set(h_tile_table.MEANMJDOBS))
+        k_dates = list(set(k_tile_table.MEANMJDOBS))
+
+        plt.plot(j_dates, 3/4+i*np.ones(len(j_dates)), 'b.')
+        plt.plot(h_dates, 1+i*np.ones(len(h_dates)), 'g.')
+        plt.plot(k_dates, 5/4+i*np.ones(len(k_dates)), 'r.')
+
 
     return fig
 
