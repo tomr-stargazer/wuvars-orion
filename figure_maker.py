@@ -802,9 +802,9 @@ def f_observing_log():
         h_dates = list(set(h_tile_table.MEANMJDOBS))
         k_dates = list(set(k_tile_table.MEANMJDOBS))
 
-        plt.plot(j_dates, 3/4+i*np.ones(len(j_dates)), 'b.')
+        plt.plot(j_dates, 5/4+i*np.ones(len(j_dates)), 'b.')
         plt.plot(h_dates, 1+i*np.ones(len(h_dates)), 'g.')
-        plt.plot(k_dates, 5/4+i*np.ones(len(k_dates)), 'r.')
+        plt.plot(k_dates, 3/4+i*np.ones(len(k_dates)), 'r.')
 
 
     return fig
