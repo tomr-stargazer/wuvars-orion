@@ -22,6 +22,24 @@ variables_photometry = source_photometry.where(
     np.in1d(source_photometry.SOURCEID, ukvar_spread.SOURCEID))
 
 def filter_by_tile():
+    """
+    Splits the input data tables into 16 tiles, avoiding overlap regions.
+
+    Uses the spatial extent of the `maxvars` spreadsheet to figure out
+    where the bounds of the tiles are.
+
+    Only returns data pertaining to our 1202 variables.
+
+    Returns
+    -------
+    tile_tables : list of atpy.Table
+        A list of the variable star photometry tables 
+        corresponding to each tile.
+    tile_spreadsheets : list of atpy.Table
+        A list of the variable star variability spreadsheets
+        corresponding to each table.
+        
+    """
 
     vp = variables_photometry
 
