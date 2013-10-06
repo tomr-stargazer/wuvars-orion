@@ -45,7 +45,7 @@ dropbox_bo_aux_catalogs = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
 
 # This is a table I made and then attached 
 mated_ukvar = atpy.Table(dropbox_bo_aux_catalogs+"ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_9_23.fits")
-ukvar_spread = atpy.Table(dropbox_bo_aux_catalogs+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties.fits")
+ukvar_spread = atpy.Table(dropbox_bo_aux_catalogs+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties_renamedOldONCvarColumn.fits")
 
 def period_array_maker(spread):
     """ 
