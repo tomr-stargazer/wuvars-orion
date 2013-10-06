@@ -138,9 +138,9 @@ def t_table1_radec_xref_jhk_irac(write=False):
     Generates Table 1.
 
     Current columns:
-      UKvar ID : int  ## note: will likely be migrated to "ONCvar ID" in paper
+      ONCvar ID : int  ## note: this comes from our internal UKvar_ID column.
       RA : float, degrees
-      DEC : float, degrees # note: we could probably have an optional sexg. format for these
+      DEC : float, degrees
       X-ref : string # Using SIMBAD names for now.
       Data quality : int (0, 1, 2) corresponding to subjective/auto/strict
       Periodic : int (0, 1)
@@ -165,7 +165,7 @@ def t_table1_radec_xref_jhk_irac(write=False):
 
     addc = table.add_column
 
-    addc('UKvar ID', ukvar_spread.UKvar_ID)
+    addc('ONCvar ID', ukvar_spread.UKvar_ID)
     addc('R.A. (deg)', np.degrees(ukvar_spread.RA))
     addc('Decl. (deg)', np.degrees(ukvar_spread.DEC))
     addc('SIMBAD Cross-reference', ukvar_spread.SIMBAD_name)
@@ -265,7 +265,7 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
     khk_slope_error[~np.in1d(periodics.SOURCEID,
                              hk_slope_reference.SOURCEID)] = np.nan
 
-    addc('UKvar ID', periodics.UKvar_ID)
+    addc('ONCvar ID', periodics.UKvar_ID)
     addc('N_J', periodics.N_j)
     addc('N_H', periodics.N_h)
     addc('N_K', periodics.N_k)
@@ -356,7 +356,7 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
     khk_slope_column[~np.in1d(nonperiodics.SOURCEID, hk_slope_reference.SOURCEID)] = np.nan
     khk_slope_error[~np.in1d(nonperiodics.SOURCEID, hk_slope_reference.SOURCEID)] = np.nan
 
-    addc('UKvar ID', nonperiodics.UKvar_ID)
+    addc('ONCvar ID', nonperiodics.UKvar_ID)
     addc('N_J', nonperiodics.N_j)
     addc('N_H', nonperiodics.N_h)
     addc('N_K', nonperiodics.N_k)
@@ -622,7 +622,7 @@ def table_latex_strings_test(write=False, begin=0, end=30):
                                                    ukvar_spread.j_err_median,
                                                    precision=2)
     
-    addc('UKvar ID', ukvar_spread.UKvar_ID)
+    addc('ONCvar ID', ukvar_spread.UKvar_ID)
     addc('R.A.', sexagesimal_RA)
     addc('Decl.', sexagesimal_Dec)
     addc('Median J mag', j_value_pm_error)
@@ -683,7 +683,7 @@ def table1_latex_output(write=False, begin=0, end=30,
         '[8.0]']
 
     # There must be a less bonehead way to do this...
-    addc('ID', table1_data['UKvar ID'])
+    addc('ID', table1_data['ONCvar ID'])
     addc(r'$\textrm{RA}_{J2000}$', sexagesimal_RA)
     addc(r'$\textrm{Dec}_{J2000}$', sexagesimal_Dec)
     addc('SIMBAD alt. ID', simbad_compressed)
@@ -754,7 +754,7 @@ def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
 
     table2_data.sort('class_number')
 
-    addc('ID', table2_data['UKvar ID'])
+    addc('ID', table2_data['ONCvar ID'])
     addc('$N_J$', table2_data.N_J)
     addc('$N_H$', table2_data.N_H)
     addc('$N_K$', table2_data.N_K)
@@ -819,7 +819,7 @@ def table3_latex_output(write=False, begin=0, end=30, decimal_precision=2):
 
     table3_data.sort('class_number')
 
-    addc('ID', table3_data['UKvar ID'])
+    addc('ID', table3_data['ONCvar ID'])
     addc('$N_J$', table3_data.N_J)
     addc('$N_H$', table3_data.N_H)
     addc('$N_K$', table3_data.N_K)
