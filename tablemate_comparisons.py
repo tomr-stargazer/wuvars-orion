@@ -1,5 +1,5 @@
 """
-Makes comparisons between our ONCvar data and previous studies.
+Makes comparisons between our UKvar data and previous studies.
 
 This module has functions that generate the answers to questions 
 like "How many of our variables are previously known (a) stars or
@@ -44,9 +44,6 @@ from montage_script import conf_subj_periodics, conf_subj_nonpers
 dropbox_bo_aux_catalogs = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
 
 # This is a table I made and then attached 
-mated_oncvar = atpy.Table(dropbox_bo_aux_catalogs+"matched_table_withSIMBAD_2013_2_25.fits")
-oncvar_spread = atpy.Table(dropbox_bo_aux_catalogs+"ONCvar_spreadsheet_withSIMBADnames.fits")
-
 mated_ukvar = atpy.Table(dropbox_bo_aux_catalogs+"ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_9_23.fits")
 ukvar_spread = atpy.Table(dropbox_bo_aux_catalogs+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties.fits")
 
@@ -91,7 +88,6 @@ def period_array_maker(spread):
 
     return spread_periods
 
-oncvar_periods = period_array_maker(oncvar_spread)
 ukvar_periods = period_array_maker(ukvar_spread)
 
 
@@ -99,7 +95,7 @@ ukvar_periods = period_array_maker(ukvar_spread)
 # the length of the dict corresponds 
 # The desired table aliases are possible keys, added only if there's 
 # a corresponding value in the columns. Value: Possibly a tuple of (name, index).
-# Returns two lists: ONCvar ID, above dict. Then you can 
+# Returns two lists: UKvar ID, above dict. Then you can 
 # NO the above is silly. JUST TELL US HOW MANY NON-NULL MATCHES IT HAS AMONG THE GIVEN TABLES.
  
 

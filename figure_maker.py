@@ -581,7 +581,7 @@ def f_period_lit_comparisons():
     """
     lit_periods = source_period_digger(mated_ukvar)
 
-    # what we REALLY need is a table that does ONCvars and best periods...
+    # what we REALLY need is a table that does UKvars and best periods...
     # problem solved! `ukvar_periods`
     
     fig = plt.figure()

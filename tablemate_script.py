@@ -34,14 +34,6 @@ Rice_2013_vars = TableParameters(
     radec_fmt = 'decimal-radians',
     name_col = 'SOURCEID')
 
-Rice_ONCvars = TableParameters(
-    data = dpath+"ONCvar_spreadsheet.fits",#"gluedvars_1240_variables.fits",
-    alias= "Rice2013_ONCvars",
-    full_name = "'Master spreadsheet for 1240 ONC variables', from 'High-amplitude and Periodic Near-Infrared Variables in the Orion Nebula Cluster', Rice, Reipurth, Vaz, Wolk, Cross, Guimaraes 2013.",
-    ra_cols = ['RA'], dec_cols=['DEC'],
-    radec_fmt = 'decimal-radians',
-    name_col = 'ONCvar_ID')
-
 Rice_UKvars =  TableParameters(
     data = dpath+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties.fits",
     alias= "Rice2013_UKvars",
@@ -361,16 +353,6 @@ def vars_match():
     """
 
     return orion_tablemate.tablemater( Rice_2013_vars, tables)
-
-def ONCvars_match():
-    """ 
-    A function that matches our variables table to all the other tables!
-
-    Takes about 15 seconds (2/13/13).
-    """
-
-    return orion_tablemate.tablemater( Rice_ONCvars, tables)
-
 
 def UKvars_match():
     
