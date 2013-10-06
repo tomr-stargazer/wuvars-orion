@@ -536,52 +536,38 @@ def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Mege
     Out[18]: (0.6880829015544041, 5.6089548452427115e-78)
 
     """ 
-    # we're using: mated_ukvar AND ukvar_periods.
-    # We'll also have to import Megeath2012 from tablemate_script.
 
-    # Okay, so we want to do something sensitive:
-    # figure out the intersection between UKvar stars that have PERIODS
-    # and Ukvar stars that are mated to Megeath2012 sources.
-
-    # These are the indices (in the UKvar system) of such overlapped stars.
-    periodic_megeath_stars_indices = (mated_ukvar.Megeath2012_ID != -1) & (~np.isnan(ukvar_periods))
-
-    # This is an array of their Spitzer Classes. 
-    periodic_megeath_stars_megeath_class = Megeath2012.data.Class[mated_ukvar.Megeath2012_index[periodic_megeath_stars_indices]]
-
-    # This is an array of their periods. I hope.
-    periodic_megeath_stars_period = ukvar_periods[periodic_megeath_stars_indices]
-
-    # These are the periodic stars without Megeath correspondence.
-    periodic_nonmegeath_stars_indices = ~periodic_megeath_stars_indices
-    # and their periods
-    periodic_nonmegeath_stars_period = ukvar_periods[periodic_nonmegeath_stars_indices]
-
+    megeath_class_column = make_megeath_class_column()
 
     fig = plt.figure()
 
     sub1 = plt.subplot(3,1,1)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], range=[0,20], bins=40, color='c')
+    plt.hist(ukvar_periods[megeath_class_column == 'P'],
+             range=[0,20], bins=40, color='c')
 
     sub2 = plt.subplot(3,1,2, sharex=sub1)
-    plt.hist(periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], range=[0,20], bins=40, color='r')
+    plt.hist(ukvar_periods[megeath_class_column == 'D'],
+             range=[0,20], bins=40, color='r')
 
     sub3 = plt.subplot(3,1,3, sharex=sub1)
-    plt.hist(periodic_nonmegeath_stars_period, range=[0,20], bins=40, 
-             color='b')
+    plt.hist(ukvar_periods[megeath_class_column == 'ND'],
+             range=[0,20], bins=40, color='b')
     
     sub3.set_xlabel("Period (days)")
 
     sub1.text(10, 1, "Megeath Periodic Protostar sample")
     sub2.text(10,15, "Megeath Periodic Disk sample")
-    sub3.text(10,25, "Periodic UKvars that did not \ncorrespond to Megeath objects")
+    sub3.text(10,25, "Megeath Periodic Non-disk sample")
 
     if title:
         sub1.set_title(title)
 
     plt.show()
 
-    return fig, periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'P'], periodic_megeath_stars_period[periodic_megeath_stars_megeath_class == 'D'], periodic_nonmegeath_stars_period
+    return (fig,
+            ukvar_periods[megeath_class_column == 'P'], 
+            ukvar_periods[megeath_class_column == 'D'], 
+            ukvar_periods[megeath_class_column == 'ND'])
 
 def f_period_lit_comparisons():
     """
