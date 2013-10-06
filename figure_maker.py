@@ -617,21 +617,17 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
     Uses "strict" sources only for these.
     
     """
-    
-    # The selections we want:
-    # All sources that are "strict"
-    strict_sources = ukvar_spread.strict == 1
+
+    megeath_class_column = make_megeath_class_column()
     
     strict_protostars = ukvar_spread.where(
-        strict_sources & ( (megeath2012_by_ukvar.Class == 'P') |
-                           (megeath2012_by_ukvar.Class == 'FP')| 
-                           (megeath2012_by_ukvar.Class == 'RP')) )
+        (ukvar_spread.strict == 1) & (megeath_class_column == 'P') )
 
     strict_disks = ukvar_spread.where(
-        strict_sources & (megeath2012_by_ukvar.Class == 'D'))
+        (ukvar_spread.strict == 1) & (megeath_class_column == 'D'))
 
-    strict_nomegeath = ukvar_spread.where(
-        strict_sources & (megeath2012_by_ukvar.Class == 'na'))
+    strict_nondisks = ukvar_spread.where(
+        (ukvar_spread.strict == 1) & (megeath_class_column == 'ND'))
 
     # Let's test the J mag aspect of this, and then define some dicts or forloops to iterate through all "5" bands.
 
@@ -648,7 +644,8 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
             j_fig = plt.figure()
 
             jsub1 = plt.subplot(3,1,1)
-            jsub1.hist(strict_protostars['%s_ranger' % b], color='c', **hist_kwargs)
+            jsub1.hist(strict_protostars['%s_ranger' % b], color='c', 
+                       **hist_kwargs)
             jsub1.text(0.5, 0.65, "Megeath protostars \n"
                        r"median $\Delta %s: %.2f" % (
                     n.replace(' ', '$ '), 
@@ -664,23 +661,25 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
                        transform = jsub2.transAxes)
 
             jsub3 = plt.subplot(3,1,3)
-            jsub3.hist(strict_nomegeath['%s_ranger' % b], color='b', **hist_kwargs)
-            jsub3.text(0.5, 0.65, "no Megeath match \n"
+            jsub3.hist(strict_nondisks['%s_ranger' % b], color='b', 
+                       **hist_kwargs)
+            jsub3.text(0.5, 0.65, "Megeath non-disks \n"
                        r"median $\Delta %s: %.2f" % (
                     n.replace(' ', '$ '), 
-                    np.median(strict_nomegeath['%s_ranger' % b])),
+                    np.median(strict_nondisks['%s_ranger' % b])),
                        transform = jsub3.transAxes)
 
-            jsub1.set_title("%s range (robust) for pristine-data variables" % n)
-            jsub3.set_xlabel(r"$\Delta %s (outlier-proof)" % n.replace(' ', '$ '))
+            jsub1.set_title("%s range (robust) for pristine-data variables"%n)
+            jsub3.set_xlabel(r"$\Delta %s (outlier-proof)" % 
+                             n.replace(' ', '$ '))
 
 
     if onepanels:
 
         fig = plt.figure()
         
-        plt.hist(strict_nomegeath['k_ranger'], 
-                 color='b', hatch='/', label='no Megeath match',
+        plt.hist(strict_nondisks['k_ranger'], 
+                 color='b', hatch='/', label='Megeath Non-disks',
                  **hist_kwargs)
         plt.hist(strict_disks['k_ranger'], 
                  color='r', alpha=0.5, hatch='\\', label='Megeath Disks',
