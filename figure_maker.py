@@ -29,6 +29,7 @@ Guide to variable names:
 from __future__ import division
 
 import matplotlib.pyplot as plt
+import scipy.stats
 
 from official_star_counter import *
 from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
@@ -533,7 +534,7 @@ def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Mege
     In [17]: blue = foo[3]
     
     In [18]: scipy.stats.ks_2samp(red, blue)
-    Out[18]: (0.6880829015544041, 5.6089548452427115e-78)
+    Out[18]: (0.32200088003520139, 1.2771000514405625e-22)
 
     """ 
 
@@ -563,6 +564,10 @@ def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Mege
         sub1.set_title(title)
 
     plt.show()
+
+    print "scipy.stats.ks_2samp(disks, no_disks):"
+    print scipy.stats.ks_2samp(ukvar_periods[megeath_class_column == 'D'],
+                               ukvar_periods[megeath_class_column == 'ND'])
 
     return (fig,
             ukvar_periods[megeath_class_column == 'P'], 
