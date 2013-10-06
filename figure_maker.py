@@ -652,7 +652,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
                     np.median(strict_protostars['%s_ranger' % b])),
                        transform = jsub1.transAxes)
 
-            jsub2 = plt.subplot(3,1,2)
+            jsub2 = plt.subplot(3,1,2, sharex=jsub1)
             jsub2.hist(strict_disks['%s_ranger' % b], color='r', **hist_kwargs)
             jsub2.text(0.5, 0.65, "Megeath disks \n"
                        r"median $\Delta %s: %.2f" % (
@@ -660,7 +660,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
                     np.median(strict_disks['%s_ranger' % b])),
                        transform = jsub2.transAxes)
 
-            jsub3 = plt.subplot(3,1,3)
+            jsub3 = plt.subplot(3,1,3, sharex=jsub1)
             jsub3.hist(strict_nondisks['%s_ranger' % b], color='b', 
                        **hist_kwargs)
             jsub3.text(0.5, 0.65, "Megeath non-disks \n"
