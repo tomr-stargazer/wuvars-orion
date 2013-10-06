@@ -18,10 +18,12 @@ def test_simple_case():
     expected_table.add_column('UKvar_ID', new_id_column)
 
     assert input_table.columns.keys != expected_table.columns.keys
+    assert input_table.shape == expected_table.shape
 
     renamed_input_table = renamer(input_table)
 
     assert renamed_input_table.columns.keys == expected_table.columns.keys
+    assert renamed_input_table.shape == expected_table.shape
 
     for column in expected_table.columns.keys:
 
