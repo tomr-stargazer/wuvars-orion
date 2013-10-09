@@ -12,6 +12,7 @@ and
 
 """
 
+import numpy as np
 import matplotlib.pyplot as plt
 
 from tablemate_comparisons import ukvar_spread as ukvar_s
@@ -19,7 +20,7 @@ from tablemate_comparisons import ukvar_periods
 from plot2 import plot_trajectory_vanilla
 from tablemate_script import (XMM_north, XMM_north_c1, 
                               XMM_north_c2, XMM_north_c3,
-                              Megeath2012, Megeath_P, Megeath_D)
+                              Megeath2012, Megeath_P, Megeath_D, Megeath_ND)
 from orion_tablemate import tablemater, TableParameters
 from official_star_counter import autocan_strict, autocan_true
 
@@ -159,8 +160,9 @@ def match_spitzer_to_ukirt():
     # filtered on Class.
     mated_P =  tablemater(Megeath_P, ukirt_list)
     mated_D =  tablemater(Megeath_D, ukirt_list)
+    mated_ND = tablemater(Megeath_ND, ukirt_list)
 
-    mated_list = [mated_spitzer, mated_P, mated_D]
+    mated_list = [mated_P, mated_D, mated_ND]
 
     # What kinds of plots do we want?
     # Histogram of S, for each IR category (incl. "all")
@@ -177,9 +179,9 @@ def match_spitzer_to_ukirt():
     s3 = plt.subplot(3,1,3)
 
     subplot_list = [s1, s2, s3]
-    name_list = ["all Spitzer YSO sources",
-                 "Spitzer Protostars",
-                 "Spitzer Disked sources"]
+    name_list = ["Spitzer Protostars",
+                 "Spitzer Disked sources",
+                 "Spitzer Non-Disked sources"]
 
     for s, m, name in zip(subplot_list, mated_list, name_list):
         # in approximate english: "the stats table, where you take the row 
@@ -205,13 +207,13 @@ def match_spitzer_to_ukirt():
 
         # annotate each subplot so they're readable
         if s == s1:
-            s.text(0.25, 0.75, name, transform=s.transAxes)
+            s.text(0.65, 0.75, "%s\nMedian S: %s" % (name, , transform=s.transAxes)
         else:
-            s.text(0.65, 0.75, name, transform=s.transAxes)
+            s.text(0.5, 0.75, name, transform=s.transAxes)
         
 
     s1.set_title("Histogram: Stetson indices of Spitzer-selected stars in ONC")
-    s1.legend()
+    s1.legend(loc="upper left")
     s3.set_xlabel("Stetson Index")
     plt.show()
 
@@ -226,18 +228,19 @@ def match_spitzer_to_ukirt():
         auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
         strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
 
-        print ("%s Mean Stetson for auto-stars: %.3f +- %.2f" % 
-               (name, auto_stetson.mean(), auto_stetson.std()))
-        print ("%s Mean Stetson for strict-stars: %.3f +- %.2f" % 
-               (name, strict_stetson.mean(), strict_stetson.std()))
-        
+        print ("%s Median Stetson for auto-stars: %.3f +- %.2f" % 
+               (name, np.median(auto_stetson), auto_stetson.std()))
+        print ("%s Median Stetson for strict-stars: %.3f +- %.2f" % 
+               (name, np.median(strict_stetson), strict_stetson.std()))
+
+    print ""
     for s, m, name in zip(subplot_list, mated_list, name_list):
         # Mean Delta Mag (and sigmas)?
 #        auto_delta = uka_d.[m.where(m[uka_i] != -1)[uka_i]]# doesn't quite work
         strict_delta = uks_d.k_range[m.where(m[uks_i] != -1)[uks_i]]
 
-        print ("%s Mean delta-K (max-min) for strict-stars: %.3f +- %.2f" % 
-               (name, strict_delta.mean(), strict_delta.std()))
+        print ("%s Median delta-K (max-min) for strict-stars: %.3f +- %.2f" % 
+               (name, np.median(strict_delta), strict_delta.std()))
 
 
         # What fraction have good periods? Not answerable right now.

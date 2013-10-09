@@ -319,6 +319,14 @@ Megeath_Allgoodsources = TableParameters(
     name_col = 'IDL_index')
 tables.append(Megeath_Allgoodsources)
 
+Megeath_ND = TableParameters(
+    data = megeath_fulltable_parser_oneoff.get_full_megeath_table(
+        truncated=True, nondisks=True),
+    alias = "Megeath2012_nondisks",
+    full_name = "'Non-disked, good-quality sources from Spitzer Orion Survey Point Source Catalog', from http://astro1.physics.utoledo.edu/~megeath/Orion/The_Spitzer_Orion_Survey.html",
+    ra_cols = ['RA'], dec_cols=['Dec'],
+    radec_fmt = 'decimal-degrees',
+    name_col = 'IDL_index')
     
 # Here's our first function, that we'll use just to get things rolling
 def test():

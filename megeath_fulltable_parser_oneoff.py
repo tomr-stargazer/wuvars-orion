@@ -45,7 +45,7 @@ def clobber_table_write(table, filename, **kwargs):
         table.write(filename, **kwargs)
 
 
-def get_full_megeath_table(truncated=True, all=False):
+def get_full_megeath_table(truncated=True, all=False, nondisks=False):
     """
     Turns the Megeath table into an ATpy table.
 
@@ -60,6 +60,8 @@ def get_full_megeath_table(truncated=True, all=False):
         for which an IR excess could not be determined either way)?
         Note: The confusing name is because Tom Megeath's IDLsave file 
         calls `all` the array listing indices of high-quality data.
+    nondisks : bool, optional (default False)
+        Return only the `all` sources which are not in `IR`
     
     Returns
     -------
@@ -67,6 +69,9 @@ def get_full_megeath_table(truncated=True, all=False):
         The ATpy table containing the relevant data (filtered by kwargs).
 
     """
+
+    if all and nondisks:
+        raise ValueError("`all` and `nondisks` cannot both be True! Pick one.")
 
     # Read this guy in originally
     megeath_fulltable_idl = scipy.io.readsav(
@@ -76,6 +81,8 @@ def get_full_megeath_table(truncated=True, all=False):
     table = atpy.Table()
     if all:
         table.table_name = 'Megeath full Spitzer catalog: only high-quality sources'
+    elif nondisks:
+        table.table_name = 'Megeath full Spitzer catalog: nondisked, high-quality sources'
     else:
         table.table_name = 'Megeath full Spitzer catalog: all detected sources'
 
@@ -107,6 +114,12 @@ def get_full_megeath_table(truncated=True, all=False):
 
     if all:
         table = table.where(megeath_fulltable_idl.all)
+
+    elif nondisks:
+        table = table.where( 
+        # setdiff(a,b) takes all elements in a that are not in b
+            np.setdiff1d(megeath_fulltable_idl.all, 
+                         megeath_fulltable_idl.IR) )
         
     if truncated:
         truncated_table = table.where((table.RA < max_RA) & (table.RA > min_RA) &
