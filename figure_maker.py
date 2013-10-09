@@ -38,7 +38,7 @@ from tablemate_comparisons import (mated_ukvar, ukvar_spread,
                                    ukvar_periods, source_period_digger)
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
 from orion_tablemate import index_secondary_by_primary
-from variables_data_filterer import filter_by_tile
+from variables_data_filterer import filter_by_tile, variables_photometry
 from table_maker import make_megeath_class_column
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
@@ -761,6 +761,29 @@ def f_stetson_versus_Hmag_strict_candidates(
     
     plt.show()
 
+    return fig
+
+def simple_observing_log():
+    """
+    Makes a 1D observing log separated by JHK but not by tile.
+
+    """
+
+    fig = plt.figure()
+
+    j_table = band_cut(variables_photometry, 'j')
+    h_table = band_cut(variables_photometry, 'h')
+    k_table = band_cut(variables_photometry, 'k')
+
+    j_dates = list(set(j_table.MEANMJDOBS))
+    h_dates = list(set(h_table.MEANMJDOBS))
+    k_dates = list(set(k_table.MEANMJDOBS))
+
+    plt.plot(j_dates, np.ones(len(j_dates)) + 1/4, 'b.')
+    plt.plot(h_dates, np.ones(len(h_dates)), 'g.')
+    plt.plot(k_dates, np.ones(len(k_dates)) - 1/4, 'r.')
+
+    plt.show()
     return fig
 
 
