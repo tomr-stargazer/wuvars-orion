@@ -763,7 +763,7 @@ def f_stetson_versus_Hmag_strict_candidates(
 
     return fig
 
-def simple_observing_log():
+def f_simple_observing_log(offset=54034):
     """
     Makes a 1D observing log separated by JHK but not by tile.
 
@@ -771,17 +771,29 @@ def simple_observing_log():
 
     fig = plt.figure()
 
+    sub1= plt.subplot(3,1,1)
+
     j_table = band_cut(variables_photometry, 'j')
     h_table = band_cut(variables_photometry, 'h')
     k_table = band_cut(variables_photometry, 'k')
 
-    j_dates = list(set(j_table.MEANMJDOBS))
-    h_dates = list(set(h_table.MEANMJDOBS))
-    k_dates = list(set(k_table.MEANMJDOBS))
+    j_dates = np.array(list(set(j_table.MEANMJDOBS)))
+    h_dates = np.array(list(set(h_table.MEANMJDOBS)))
+    k_dates = np.array(list(set(k_table.MEANMJDOBS)))
 
-    plt.plot(j_dates, np.ones(len(j_dates)) + 1/4, 'b.')
-    plt.plot(h_dates, np.ones(len(h_dates)), 'g.')
-    plt.plot(k_dates, np.ones(len(k_dates)) - 1/4, 'r.')
+    plt.plot(j_dates - offset, np.ones(len(j_dates)) + 1/4, 'b.')
+    plt.plot(h_dates - offset, np.ones(len(h_dates)), 'g.')
+    plt.plot(k_dates - offset, np.ones(len(k_dates)) - 1/4, 'r.')
+
+    plt.ylim(1/3,2-1/3)
+    plt.xticks([54101-offset, 54282-offset, 
+                54466-offset, 54648-offset,
+                54832-offset],
+                ["Jan 2007", "July 2007",
+                 "Jan 2008", "July 2008",
+                 "Jan 2009"], rotation=30, fontsize=18)
+
+    plt.setp(sub1.get_yticklabels(), visible=False)
 
     plt.show()
     return fig
