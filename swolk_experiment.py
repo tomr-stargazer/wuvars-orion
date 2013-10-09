@@ -15,6 +15,8 @@ and
 import numpy as np
 import matplotlib.pyplot as plt
 
+import robust as rb
+
 from tablemate_comparisons import ukvar_spread as ukvar_s
 from tablemate_comparisons import ukvar_periods
 from plot2 import plot_trajectory_vanilla
@@ -205,11 +207,25 @@ def match_spitzer_to_ukirt():
                 )
         except: pass
 
+        # Calculate medians.
+        auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
+        strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
+
+        print ("%s Median Stetson for auto-stars: %.3f +- %.2f" % 
+               (name, np.median(auto_stetson), rb.mad(auto_stetson)))
+        print ("%s Median Stetson for strict-stars: %.3f +- %.2f" % 
+               (name, np.median(strict_stetson), rb.mad(strict_stetson)))
+        
         # annotate each subplot so they're readable
         if s == s1:
-            s.text(0.65, 0.75, "%s\nMedian S: %s" % (name, , transform=s.transAxes)
+            xtext = 0.65
         else:
-            s.text(0.5, 0.75, name, transform=s.transAxes)
+            xtext = 0.5
+            
+        s.text(xtext, 0.75,
+               "%s\nMedian S: %.2f$\pm$%.2f" % (name, np.median(auto_stetson),
+                                                rb.mad(auto_stetson)),
+               transform=s.transAxes)
         
 
     s1.set_title("Histogram: Stetson indices of Spitzer-selected stars in ONC")
@@ -222,16 +238,6 @@ def match_spitzer_to_ukirt():
     # Think of how "official_star_counter" works.
 
     # For each group, print the stuff.
-
-    for s, m, name in zip(subplot_list, mated_list, name_list):
-        # Mean S and Variance?
-        auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
-        strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
-
-        print ("%s Median Stetson for auto-stars: %.3f +- %.2f" % 
-               (name, np.median(auto_stetson), auto_stetson.std()))
-        print ("%s Median Stetson for strict-stars: %.3f +- %.2f" % 
-               (name, np.median(strict_stetson), strict_stetson.std()))
 
     print ""
     for s, m, name in zip(subplot_list, mated_list, name_list):
