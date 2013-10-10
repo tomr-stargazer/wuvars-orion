@@ -798,6 +798,74 @@ def f_simple_observing_log(offset=54034):
     plt.show()
     return fig
 
+def f_comparison_observing_log():
+    """
+    Zoomed out timeline comparing us to CHS2001 and YSOVAR time coverage.
+
+    """
+
+    fig = plt.figure()
+
+    chs01_start = 51580 #2000 Feb 6 in MJD 
+    chs01_end = 51639 # 2000 Apr 8 in MJD
+    ysovar_spitzer_start = 55126 #2009 Oct 23 in MJD
+    ysovar_spitzer_end = 55163 # 2009 Dec 1 in MJD
+    ysovar_ukirt_start = 55123 #2009 Oct 20 in MJD
+    ysovar_ukirt_end = 55185 # 2009 Dec 22
+    ysovar_cfht_start = 55130 # 2009 Oct 27
+    ysovar_cfht_end = 55142 # 2009 Nov 8
+
+    j_wavelength = 1.1 #microns
+    h_wavelength = 1.6
+    ks_wavelength = 2.0
+    k_wavelength = 2.2
+    irac1_wavelength = 3.6
+    irac2_wavelength = 4.5
+
+    j_table = band_cut(variables_photometry, 'j')
+    h_table = band_cut(variables_photometry, 'h')
+    k_table = band_cut(variables_photometry, 'k')
+
+    wfcam_j_dates = np.array(list(set(j_table.MEANMJDOBS)))
+    wfcam_h_dates = np.array(list(set(h_table.MEANMJDOBS)))
+    wfcam_k_dates = np.array(list(set(k_table.MEANMJDOBS)))
+
+
+    # Our observations
+    plt.plot(wfcam_j_dates, j_wavelength*np.ones_like(wfcam_j_dates), 'b.')
+    plt.plot(wfcam_h_dates, h_wavelength*np.ones_like(wfcam_h_dates), 'g.')
+    plt.plot(wfcam_k_dates, k_wavelength*np.ones_like(wfcam_k_dates), 'r.')
+
+    # Carpenter
+    plt.plot([chs01_start, chs01_end], [j_wavelength]*2, 'b',lw=4)
+    plt.plot([chs01_start, chs01_end], [h_wavelength]*2, 'g', lw=4)
+    plt.plot([chs01_start, chs01_end], [ks_wavelength]*2, 'r', lw=4)
+
+    # YSOVAR
+    # spitzer
+    plt.plot([ysovar_spitzer_start, ysovar_spitzer_end], 
+             [irac1_wavelength]*2, 'm', lw=4)
+    plt.plot([ysovar_spitzer_start, ysovar_spitzer_end], 
+             [irac2_wavelength]*2, 'k', lw=4)
+
+    # UKIRT
+    plt.plot([ysovar_ukirt_start, ysovar_ukirt_end], [j_wavelength]*2, 
+             'b', lw=4)
+    # CFHT
+    plt.plot([ysovar_cfht_start, ysovar_cfht_end], [j_wavelength]*2, 
+             'b', lw=4)
+    plt.plot([ysovar_cfht_start, ysovar_cfht_end], [ks_wavelength]*2, 
+             'r', lw=4)
+
+    #    plt.gca().invert_yaxis()
+    plt.ylabel("Wavelength (microns)")
+    plt.ylim(6, 0.1)
+
+    plt.title("History of IR monitoring campaigns in the ONC")
+    
+    plt.show()
+
+    return fig
 
 def f_observing_log(title="Observing log for each tile, for each band"):
     """
