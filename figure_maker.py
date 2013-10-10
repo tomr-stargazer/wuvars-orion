@@ -861,6 +861,12 @@ def f_comparison_observing_log():
     plt.ylabel("Wavelength (microns)")
     plt.ylim(6, 0.1)
 
+    xticks_values = [51544, 51910, 52275, 52640, 53005,
+                     53371, 53736, 54101, 54466, 54832, 55197]
+    xticklabels_values = ["20%02d"%x for x in range(11)]
+
+    plt.xticks(xticks_values[::2], xticklabels_values[::2])
+
     plt.title("History of IR monitoring campaigns in the ONC")
     
     plt.show()
