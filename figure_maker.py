@@ -953,7 +953,39 @@ def f_observing_map():
 
     return fig
 
+def f_sensitivity_per_band():
+    """
+    Plots the observed rms versus magnitude for J, H, K.
 
+    """
+
+    fig = plt.figure()
+
+    j_minimum = minimum.where((minimum.N_j > 50) & (minimum.Stetson < 0.5))
+    h_minimum = minimum.where((minimum.N_h > 80) & (minimum.Stetson < 0.5))
+    k_minimum = minimum.where((minimum.N_k > 80) & (minimum.Stetson < 0.5))
+
+    s1 = plt.subplot(3,1,1)
+    s2 = plt.subplot(3,1,2, sharex=s1)
+    s3 = plt.subplot(3,1,3, sharex=s1)
+    
+    s1.plot(j_minimum.j_meanr, j_minimum.j_rmsr, 'b,')
+    s2.plot(h_minimum.h_meanr, h_minimum.h_rmsr, 'g,')
+    s3.plot(k_minimum.k_meanr, k_minimum.k_rmsr, 'r,')
+
+    plt.xlim(10.5, 17.5)
+
+    s3.set_xlabel("Magnitude")
+    for s in [s1,s2,s3]:
+        s.set_ylim(0,0.1)
+        s.set_yticks([0, 0.05, 0.1])
+
+    plt.show()
+
+    return fig
+    
+
+#outdated
 f_list = [f_hist_periods, 
           f_map_periods,
           f_map_nonpers,
