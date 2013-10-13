@@ -17,7 +17,7 @@ import aplpy
 
 dropbox_bo_images = os.path.expanduser("~/Dropbox/Bo_Tom/images/")
 
-def m42_map(xmarker_array, ymarker_array, rect=True, latex=True):
+def m42_map(xmarker_array=None, ymarker_array=None, rect=True, latex=True):
     """
     Shows our field on top of VISTA's great M42 image.
 
@@ -53,13 +53,13 @@ def m42_map(xmarker_array, ymarker_array, rect=True, latex=True):
     fig.show_rectangles(center_of_box_ra, center_of_box_dec,
                         width_of_box_ra, width_of_box_dec,
                         color='y', lw=3)
-    
-    fig.show_markers(xmarker_array, ymarker_array,
-                     marker='+',edgecolor='w', s=40)
 
-    fig.show_markers(xmarker_array, ymarker_array, 
-                     marker='o',edgecolor='r', s=2)
+    if xmarker_array != None and ymarker_array != None:
+        fig.show_markers(xmarker_array, ymarker_array,
+                         marker='+',edgecolor='w', s=40)
 
+        fig.show_markers(xmarker_array, ymarker_array,
+                         marker='o',edgecolor='r', s=2)
 
     northeast_corner = (np.degrees(maxvars.RA.max() + 0.001),
                         np.degrees(maxvars.DEC.max() + 0.001))
