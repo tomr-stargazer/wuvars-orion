@@ -38,11 +38,15 @@ def figure_1(dots=True, rect=True, latex=True):
 
     fig.show_rgb(dropbox_bo_images+"eso1006a.jpg")
 
-    center_of_box_ra = np.degrees(ukvar_spread.RA.min() + ukvar_spread.RA.max())/2
-    center_of_box_dec= np.degrees(ukvar_spread.DEC.min()+ ukvar_spread.DEC.max())/2
+    center_of_box_ra = np.degrees(maxvars.RA.min() +
+                                  maxvars.RA.max())/2
+    center_of_box_dec= np.degrees(maxvars.DEC.min() +
+                                  maxvars.DEC.max())/2
 
-    width_of_box_ra = np.degrees(ukvar_spread.RA.max() - ukvar_spread.RA.min())
-    width_of_box_dec = np.degrees(ukvar_spread.DEC.max() - ukvar_spread.DEC.min())
+    width_of_box_ra = np.degrees(maxvars.RA.max() -
+                                 maxvars.RA.min())
+    width_of_box_dec = np.degrees(maxvars.DEC.max() -
+                                  maxvars.DEC.min())
 
     fig.show_rectangles(center_of_box_ra, center_of_box_dec,
                         width_of_box_ra, width_of_box_dec,
@@ -57,11 +61,11 @@ def figure_1(dots=True, rect=True, latex=True):
                      marker='o',edgecolor='r', s=2)
 
 
-    northeast_corner = (np.degrees(ukvar_spread.RA.max() + 0.001),
-                        np.degrees(ukvar_spread.DEC.max() + 0.001))
+    northeast_corner = (np.degrees(maxvars.RA.max() + 0.001),
+                        np.degrees(maxvars.DEC.max() + 0.001))
 
-    southwest_corner = (np.degrees(ukvar_spread.RA.min() - 0.001),
-                        np.degrees(ukvar_spread.DEC.min() - 0.001))
+    southwest_corner = (np.degrees(maxvars.RA.min() - 0.001),
+                        np.degrees(maxvars.DEC.min() - 0.001))
 
     px_northeast_corner = fig.world2pixel(northeast_corner[0], northeast_corner[1])
     px_southwest_corner = fig.world2pixel(southwest_corner[0], southwest_corner[1])
