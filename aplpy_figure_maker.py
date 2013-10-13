@@ -17,16 +17,18 @@ import aplpy
 
 dropbox_bo_images = os.path.expanduser("~/Dropbox/Bo_Tom/images/")
 
-def figure_1(dots=True, rect=True, latex=True):
+def m42_map(xmarker_array, ymarker_array, rect=True, latex=True):
     """
     Shows our field on top of VISTA's great M42 image.
 
     Parameters
     ----------
-    dots : bool, optional
-        Plot the markers where our variables live?
+    xmarker_array, ymarker_array : numpy.ndarrays
+        X and Y coordinates (here, R.A. and Decl.) of the markers to plot
     rect : bool, optional
         Plot the rectangle demarcating our field?
+    latex : bool, optional
+        Use LaTeX to render the text and labels?
 
     Returns
     -------
@@ -52,12 +54,10 @@ def figure_1(dots=True, rect=True, latex=True):
                         width_of_box_ra, width_of_box_dec,
                         color='y', lw=3)
     
-    fig.show_markers(np.degrees(ukvar_spread.RA), 
-                     np.degrees(ukvar_spread.DEC), 
+    fig.show_markers(xmarker_array, ymarker_array,
                      marker='+',edgecolor='w', s=40)
 
-    fig.show_markers(np.degrees(ukvar_spread.RA), 
-                     np.degrees(ukvar_spread.DEC), 
+    fig.show_markers(xmarker_array, ymarker_array, 
                      marker='o',edgecolor='r', s=2)
 
 
@@ -79,4 +79,8 @@ def figure_1(dots=True, rect=True, latex=True):
 
     return fig
  
-0.0167
+
+def figure_1(**kwargs):
+
+    return m42_map(np.degrees(ukvar_spread.RA), 
+                   np.degrees(ukvar_spread.DEC))
