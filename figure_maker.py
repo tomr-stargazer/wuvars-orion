@@ -804,7 +804,7 @@ def f_comparison_observing_log():
 
     """
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(9,2.5))
 
     chs01_start = 51580 #2000 Feb 6 in MJD 
     chs01_end = 51639 # 2000 Apr 8 in MJD
@@ -868,6 +868,10 @@ def f_comparison_observing_log():
     plt.xticks(xticks_values[::2], xticklabels_values[::2])
 
     plt.title("History of IR monitoring campaigns in the ONC")
+
+    plt.text(51500, 0.5, "Carpenter et al. 2001")
+    plt.text(55050, 0.7, "YSOVAR")
+    plt.text(54100, 0.6, "Rice et al. 2014")
     
     plt.show()
 
