@@ -84,3 +84,46 @@ def figure_1(**kwargs):
 
     return m42_map(np.degrees(ukvar_spread.RA), 
                    np.degrees(ukvar_spread.DEC))
+
+def map_of_EBs(**kwargs):
+
+    # define the EB coordinates
+    previously_known_EB_tuples = [
+        (83.7737916667,	-5.39836111111),
+        (84.0247916667,	-5.01144444444),
+        (83.841, -5.76902777777778),
+        (83.6160416666667,	-5.69383333333333),
+        (83.7964166666667,	-5.61422222222222),
+        (83.8006083333333,	-5.52745833333333) ]
+    previously_known_EB_ra = [x for (x,y) in previously_known_EB_tuples]
+    previously_known_EB_dec = [y for (x,y) in previously_known_EB_tuples]
+
+    too_bright_EB_tuples = [
+        (83.8147916667,	-5.42058333333),
+        (83.8156666667,	-5.38608333333),
+        (83.825125,		-5.36816666667)]
+    too_bright_EB_ra = [x for (x,y) in too_bright_EB_tuples]
+    too_bright_EB_dec = [y for (x,y) in too_bright_EB_tuples]
+
+    new_EB_tuples = [
+        (83.50864084,		-5.29046598),
+        (84.08421509,		-5.23937444),
+        (84.2290583333333,	-4.97219638888889),
+        (84.2247291666667,	-5.43198555555556)]        
+    new_EB_ra = [x for (x,y) in new_EB_tuples]
+    new_EB_dec = [y for (x,y) in new_EB_tuples]
+
+    fig = m42_map(**kwargs)
+    fig.show_grayscale()
+
+    fig.show_markers(previously_known_EB_ra, previously_known_EB_dec, 
+                     marker='o', edgecolor='w', facecolor='r', s=30)
+    fig.show_markers(too_bright_EB_ra, too_bright_EB_dec, 
+                     marker='o', edgecolor='w', facecolor='b', s=30)
+    fig.show_markers(new_EB_ra, new_EB_dec, 
+                     marker='*', edgecolor='w', facecolor='g', s=60)
+    
+    
+
+    return fig
+
