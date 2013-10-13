@@ -117,11 +117,11 @@ def map_of_EBs(**kwargs):
     fig.show_grayscale()
 
     fig.show_markers(previously_known_EB_ra, previously_known_EB_dec, 
-                     marker='o', edgecolor='w', facecolor='r', s=30)
+                     marker='o', edgecolor='w', facecolor='b', s=60)
     fig.show_markers(too_bright_EB_ra, too_bright_EB_dec, 
-                     marker='o', edgecolor='w', facecolor='b', s=30)
+                     marker='o', edgecolor='w', facecolor='b', s=60)
     fig.show_markers(new_EB_ra, new_EB_dec, 
-                     marker='*', edgecolor='w', facecolor='g', s=60)
+                     marker='*', edgecolor='w', facecolor='r', s=150)
     
     
 
