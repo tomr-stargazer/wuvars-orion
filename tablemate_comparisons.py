@@ -311,6 +311,9 @@ def how_many_periods_are_new():
             
 
     print n_new, n_old, n_missed
+    print "We found %d unknown periodic stars" % n_new 
+    print "%d of our periodic stars are already known to be periodic" % n_old
+    print "%d of our non-periodic variables were previously reported periodic" % n_missed
 
 period_table = source_period_digger(mated_ukvar)
 pt = period_table
