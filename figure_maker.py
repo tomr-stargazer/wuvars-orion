@@ -606,7 +606,7 @@ def f_period_lit_comparisons():
              label='RodriguezLedesma2009 periods')
 
     
-    plt.legend()
+    plt.legend(numpoints=1)
 
     plt.xlabel("Periods derived in our study (days)")
     plt.ylabel("Literature periods (days)")
