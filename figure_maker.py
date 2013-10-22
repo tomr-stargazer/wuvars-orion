@@ -598,20 +598,18 @@ def f_period_lit_comparisons(pretty=True):
     plt.plot([0,40],[0,80], 'g:')
     plt.plot([0,80],[0,40], 'g:')
     
-    # 
     plt.plot(ukvar_periods, lit_periods.GCVS_period, 'o', 
-             label='GCVS periods')
+             label='General Catalog of Variable Stars')
     plt.plot(ukvar_periods, lit_periods.CHS01_period, 'o', 
-             label='CHS01 periods')
+             label='Carpenter+2001')
     plt.plot(ukvar_periods, lit_periods.YSOVAR_period, 'o', 
-             label='YSOVAR periods')
+             label='(YSOVAR) Morales-Calderon+2011')
     plt.plot(ukvar_periods, lit_periods.Herbst2002_period, 'o', 
-             label='Herbst2002 periods')
+             label='Herbst+2002')
     plt.plot(ukvar_periods, lit_periods.Parihar2009_period, 'o', 
-             label='Parihar2009 periods')
+             label='Parihar+2009')
     plt.plot(ukvar_periods, lit_periods.RodriguezLedesma2009_period, 'o', 
-             label='RodriguezLedesma2009 periods')
-
+             label='Rodriguez-Ledesma+2009')
     
     plt.legend(numpoints=1, loc='Upper Left', framealpha=0.5)
 
