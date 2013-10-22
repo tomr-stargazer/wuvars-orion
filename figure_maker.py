@@ -574,17 +574,24 @@ def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Mege
             ukvar_periods[megeath_class_column == 'D'], 
             ukvar_periods[megeath_class_column == 'ND'])
 
-def f_period_lit_comparisons():
+def f_period_lit_comparisons(pretty=True):
     """
     A figure plotting the periods that we derive in our study
     against literature periods.
+
+    Parameters
+    ----------
+    pretty : bool, optional, default: True
+        Make this plot publication-quality? 
+        Involves scaling the axes and changing the size of the figure.
+        
     """
     lit_periods = source_period_digger(mated_ukvar)
 
     # what we REALLY need is a table that does UKvars and best periods...
     # problem solved! `ukvar_periods`
     
-    fig = plt.figure()
+    fig = plt.figure(figsize=(8,8))
 
 
     plt.plot([0,40],[0,40], 'b--')
@@ -606,12 +613,16 @@ def f_period_lit_comparisons():
              label='RodriguezLedesma2009 periods')
 
     
-    plt.legend(numpoints=1)
+    plt.legend(numpoints=1, loc='Upper Left', framealpha=0.5)
 
     plt.xlabel("Periods derived in our study (days)")
     plt.ylabel("Literature periods (days)")
 
     plt.gca().set_aspect('equal')
+
+    if pretty:
+        plt.xlim(0,20)
+        plt.ylim(0,20)
 
     plt.show()
 
