@@ -328,9 +328,15 @@ Parihar2009_period_ratio = ukvar_periods / pt.Parihar2009_period
 RL2009_period_ratio = ukvar_periods / pt.RodriguezLedesma2009_period
 
 
-def how_do_our_periods_compare():
+def how_do_our_periods_compare(pretty_print=True):
     """
     Makes six histograms
+
+    Parameters
+    ----------
+    pretty_print : bool, optional, default: True
+        Print out a pretty, LaTeX-style table?
+
     """
 
     fig = plt.figure()
@@ -353,10 +359,18 @@ def how_do_our_periods_compare():
         sub.hist(ratio[~np.isnan(ratio)], range=(0,5), bins=50, color=c, 
                  label=name)
         sub.legend()
+        sub.set_xlim(0,5)
 
         # How many of our periods are within 10% of literature?
-        print (len(defined_ratio[np.abs(defined_ratio-1) < .1])/
-               len(defined_ratio)), "of", len(defined_ratio)
+        agreement_fraction = (
+            len(defined_ratio[np.abs(defined_ratio-1) < .1])/
+            len(defined_ratio))
+
+        if pretty_print:
+            print "%s & %.2f%% & %d \\\\" % (name, 100*agreement_fraction, 
+                                              len(defined_ratio))
+        else:
+            print agreement_fraction, "of", len(defined_ratio)
         
     plt.xlabel("ratio: 'our period / literature period'")
 
