@@ -16,6 +16,11 @@ from __future__ import division
 import numpy as np
 import atpy
 
+import spread3
+
+from variables_data_filterer import variables_photometry, autovars_true
+from color_slope_filtering import filter_color_slopes
+
 
 def calculate_color_slope_ratios_versus_time_baseline():
     """
@@ -23,28 +28,90 @@ def calculate_color_slope_ratios_versus_time_baseline():
 
     """
 
-    # For a bunch of different delta-t's...
+    date_list = np.sort(list(set(np.floor(variables_photometry.MEANMJDOBS))))
 
-      # For a bunch of different obs_initial's...
+    autovars_photometry = variables_photometry.where(
+        np.in1d(variables_photometry.SOURCEID, autovars_true.SOURCEID))
 
-        # Calculate a spreadsheet for the "maxvars", "minimum" or "variables_data" photometry table
+    time_baseline_list = []
+    n_positive_slope_list = []
+    n_negative_slope_list = []
+    n_undef_slope_list = []
+    n_obs_list = []
 
-        # Extract the stars with "good data" in this regime (probably just confirm that it's in autovars_true)
+    # For a bunch of different obs_initial's...
+    # (note: when we test this, we may want to only go from the FIRST observation, and then add in the complexity of all the other ones later)
+    # also note: we'll probably want to truncate the MJDs to the nearest integer to avoid any complications from the whole four-exposures-per-band-per-night thing.
+    last_n_obs = 0
+    for obs_initial in date_list:
 
-        # then run color_slope_filtering on it...
+        print "Starting from: MJD %f" % obs_initial
+        longest_time_separation = max(date_list) - obs_initial
 
-        # and extract which guys have colors in the relevant ranges!
+        for delta_t in range(int(np.ceil(longest_time_separation))):
 
+            relevant_data = autovars_photometry.where(
+                (autovars_photometry.MEANMJDOBS >= obs_initial) &
+                (autovars_photometry.MEANMJDOBS < obs_initial + delta_t) )
+
+            n_obs = len(list(set(np.floor(relevant_data.MEANMJDOBS))))
+            print "%d observations over %d (delta-t) days" % (n_obs, delta_t)
+
+            if n_obs < 2:
+                print "not enough observations for this to be called 'variability'. Continuing."
+                continue
+            elif n_obs == last_n_obs:
+                print "No new observations have been added. Continuing."
+                continue
+            else:
+                last_n_obs = n_obs
+
+            timespan_of_relevant_data = (relevant_data.MEANMJDOBS.max() -
+                                         relevant_data.MEANMJDOBS.min())
+            
+            # note: 
+            # if you don't add any new observations between this delta-t 
+            # and the last delta-t, DON'T COMPUTE A SPREADSHEET. just continue.  
+            if timespan_of_relevant_data <= (delta_t - 1):
+                print timespan_of_relevant_data, delta_t, "timespan is too short to be considered in this delta_t bin. Continuing."
+                continue
+
+            relevant_lookup = spread3.base_lookup(relevant_data, 0 )
+            relevant_spreadsheet = spread3.spreadsheet_write_efficient(
+                20, relevant_data, relevant_lookup, -1, None,
+                flags=0, colorslope=True, rob=True)
+
+            # then run color_slope_filtering on it...
+            relevant_khk_spreadsheet = filter_color_slopes(
+                relevant_spreadsheet, 'hk')
+            relevant_khk_spreadsheet_no_slope_confidence = filter_color_slopes(
+                relevant_spreadsheet, 'hk', slope_confidence=None)
+
+            # and extract which guys have colors in the relevant ranges!
+            n_positive_slope = len(relevant_khk_spreadsheet[
+                (np.degrees(np.arctan(relevant_khk_spreadsheet.khk_slope)) > 25) ])
+            n_negative_slope = len(relevant_khk_spreadsheet[
+                (np.degrees(np.arctan(relevant_khk_spreadsheet.khk_slope)) < -25) ])
+            n_undef_slope = (len(relevant_khk_spreadsheet_no_slope_confidence) -
+                                (n_positive_slope + n_negative_slope) )
+
+            time_baseline_list.append( delta_t )
+            n_positive_slope_list.append( n_positive_slope )
+            n_negative_slope_list.append( n_negative_slope )
+            n_undef_slope_list.append( n_undef_slope )
+            n_obs_list.append( n_obs )
+
+        break
 
     color_slope_ratios_table = atpy.Table()
 
     addc = color_slope_ratios_table.add_column
 
-    addc("time_baseline", time_baseline)
-    addc("n_positive_slope", n_positive_slope)
-    addc("n_negative_slope", n_negative_slope)
-    addc("n_indef_slope", n_undef_slope)
-    addc("n_obs", n_obs)
+    addc("time_baseline", time_baseline_list)
+    addc("n_positive_slope", n_positive_slope_list)
+    addc("n_negative_slope", n_negative_slope_list)
+    addc("n_undef_slope", n_undef_slope_list)
+    addc("n_obs", n_obs_list)
     
     return color_slope_ratios_table
 

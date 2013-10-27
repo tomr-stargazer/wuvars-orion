@@ -11,7 +11,7 @@ import numpy as np
 import atpy
 
 from tablemate_comparisons import ukvar_spread
-from official_star_counter import maxvars
+from official_star_counter import maxvars, autovars_true
 
 dropbox_bo_data = os.path.expanduser("~/Dropbox/Bo_Tom/data/")
 
