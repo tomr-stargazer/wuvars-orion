@@ -6,6 +6,9 @@ Some of the parameters I've chosen are inspired by Fig. 20 from
 Carpenter, Hillenbrand & Skrutskie 2001:
 "Only variable stars in which the observed rms of the appropriate colors or magnitudes exceeded the expected rms by a factor of 1.5 are shown. The open histograms are for all stars that meet these criteria, and the hatched histograms are those stars in which the slope have been determined to an accuracy of better than 20%."
 
+Included functions:
+filter_color_slopes
+
 """
 
 from official_star_counter import *
