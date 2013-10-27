@@ -100,7 +100,7 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None):
             n_undef_slope = (len(relevant_khk_spreadsheet_no_slope_confidence) -
                                 (n_positive_slope + n_negative_slope) )
 
-            time_baseline_list.append( delta_t )
+            time_baseline_list.append( timespan_of_relevant_data )
             n_positive_slope_list.append( n_positive_slope )
             n_negative_slope_list.append( n_negative_slope )
             n_undef_slope_list.append( n_undef_slope )
