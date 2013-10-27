@@ -22,7 +22,7 @@ from variables_data_filterer import variables_photometry, autovars_true
 from color_slope_filtering import filter_color_slopes
 
 
-def calculate_color_slope_ratios_versus_time_baseline():
+def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None):
     """
     Calculates the color slope ratios for each possible time baseline.
 
@@ -48,7 +48,10 @@ def calculate_color_slope_ratios_versus_time_baseline():
         print "Starting from: MJD %f" % obs_initial
         longest_time_separation = max(date_list) - obs_initial
 
-        for delta_t in range(int(np.ceil(longest_time_separation))):
+        if delta_t_list == None:
+            delta_t_list = range(int(np.ceil(longest_time_separation)))
+
+        for delta_t in delta_t_list:
 
             relevant_data = autovars_photometry.where(
                 (autovars_photometry.MEANMJDOBS >= obs_initial) &
@@ -72,9 +75,9 @@ def calculate_color_slope_ratios_versus_time_baseline():
             # note: 
             # if you don't add any new observations between this delta-t 
             # and the last delta-t, DON'T COMPUTE A SPREADSHEET. just continue.  
-            if timespan_of_relevant_data <= (delta_t - 1):
-                print timespan_of_relevant_data, delta_t, "timespan is too short to be considered in this delta_t bin. Continuing."
-                continue
+            # if timespan_of_relevant_data <= (delta_t - 1):
+            #     print timespan_of_relevant_data, delta_t, "timespan is too short to be considered in this delta_t bin. Continuing."
+            #                continue
 
             relevant_lookup = spread3.base_lookup(relevant_data, 0 )
             relevant_spreadsheet = spread3.spreadsheet_write_efficient(
@@ -83,9 +86,11 @@ def calculate_color_slope_ratios_versus_time_baseline():
 
             # then run color_slope_filtering on it...
             relevant_khk_spreadsheet = filter_color_slopes(
-                relevant_spreadsheet, 'hk')
+                relevant_spreadsheet, 'hk', 
+                lower_obs_limit=n_obs/3, upper_obs_limit=n_obs*1.5)
             relevant_khk_spreadsheet_no_slope_confidence = filter_color_slopes(
-                relevant_spreadsheet, 'hk', slope_confidence=None)
+                relevant_spreadsheet, 'hk', slope_confidence=None,
+                lower_obs_limit=n_obs/3, upper_obs_limit=n_obs*1.5)
 
             # and extract which guys have colors in the relevant ranges!
             n_positive_slope = len(relevant_khk_spreadsheet[
