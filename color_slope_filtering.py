@@ -14,7 +14,8 @@ filter_color_slopes
 from official_star_counter import *
 
 
-def filter_color_slopes(data, color, noise_threshold=1.5, slope_confidence=0.2):
+def filter_color_slopes(data, color, noise_threshold=1.5, slope_confidence=0.2,
+                        lower_obs_limit=50, upper_obs_limit=125):
     """
     Filters color slopes on quality. Returns a sub-table with good cslopes.
 
@@ -87,13 +88,15 @@ def filter_color_slopes(data, color, noise_threshold=1.5, slope_confidence=0.2):
         # Blue and Red pristine - copied from "case1" re: official_star_counter
         filtered_data_soft = data.where(
         (    # BLUE band criteria
-            (data[N_blue] >= 50) & (data[N_blue] <= 125) &
+            (data[N_blue] >= lower_obs_limit) & 
+            (data[N_blue] <= upper_obs_limit) &
             (data[blue_mean] > 11) &
             (data[blue_mean] < faintness_cutoff[blue_band]) &
             (data[N_blue_info] == 0)
             ) &
         (   # RED band criteria
-            (data[N_red] >= 50) & (data[N_red] <= 125) &
+            (data[N_red] >= lower_obs_limit) & 
+            (data[N_red] <= upper_obs_limit) &
             (data[red_mean] > 11) &
             (data[red_mean] < faintness_cutoff[red_band]) &
             (data[N_red_info] == 0)
