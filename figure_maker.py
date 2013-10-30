@@ -945,10 +945,14 @@ def f_observing_map():
 
     tile_spreadsheets = filter_by_tile()[1]
 
-    fig = plt.figure(4,4)
+    fig = plt.figure(figsize=(6,6))
 
     ij_list = [(x, y) for x in range(4) for y in range(4)]
 
+    text_params = {'horizontalalignment':'center',
+                   'verticalalignment':'center'}
+
+    # print the nice text and stuff
     for k, ij, tile_spreadsheet in zip(range(len(tile_spreadsheets)),
                                        ij_list, tile_spreadsheets):
 
@@ -958,17 +962,50 @@ def f_observing_map():
         tile_dec = min_dec + tile_size_dec*dec_j + tile_size_dec/2
 
         plt.text(np.degrees(tile_ra), np.degrees(tile_dec+tile_size_dec/4),
-                 "Tile #%d" % (k+1))
-        plt.text(np.degrees(tile_ra), np.degrees(tile_dec+tile_size_dec/8),
-                 "J: %3d" % tile_spreadsheet.N_j.max(), color='b')
-        plt.text(np.degrees(tile_ra), np.degrees(tile_dec),
-                 "H: %3d" % tile_spreadsheet.N_h.max(), color='g')
-        plt.text(np.degrees(tile_ra), np.degrees(tile_dec-tile_size_dec/8),
-                 "K: %3d" % tile_spreadsheet.N_k.max(), color='r')
+                 "Tile #%d" % (k+1), **text_params)
+        plt.text(np.degrees(tile_ra), np.degrees(tile_dec+tile_size_dec/12),
+                 "J: %3d" % tile_spreadsheet.N_j.max(), color='b',
+                 **text_params)
+        plt.text(np.degrees(tile_ra), np.degrees(tile_dec-tile_size_dec/12),
+                 "H: %3d" % tile_spreadsheet.N_h.max(), color='g',
+                 **text_params)
+        plt.text(np.degrees(tile_ra), np.degrees(tile_dec-tile_size_dec/4),
+                 "K: %3d" % tile_spreadsheet.N_k.max(), color='r', 
+                 **text_params)
 
 
-    plt.xlim(84.259245789276761, 83.311339962013491)
-    plt.ylim(-5.8092520267772434, -4.9909333418814104)
+    physical_tile_size_ra = (max_ra - min_ra) / 3.88
+    physical_tile_size_dec = (max_dec - min_dec) / 3.88
+
+    # make the overlapping rectangles
+    for k, ij in zip(range(len(ij_list)), ij_list):
+
+        ra_i, dec_j = ij
+
+        southeast_corner_ra = min_ra + 0.94*physical_tile_size_ra*ra_i
+        southeast_corner_dec = min_dec + 0.94*physical_tile_size_dec*dec_j
+
+        if ij == (0,0) or ij == (0,2) or ij == (2,0) or ij == (2,2):
+            rectangle_params = {'color': '0.85',
+                                'zorder':-10}
+        else:
+            rectangle_params = {'fill': False}
+        
+        plt.gca().add_patch(
+            plt.Rectangle((np.degrees(southeast_corner_ra), 
+                           np.degrees(southeast_corner_dec)),
+                          np.degrees(physical_tile_size_ra), 
+                          np.degrees(physical_tile_size_dec),
+                          ec='k', **rectangle_params))
+
+    northeast_corner = (np.degrees(maxvars.RA.max() + 0.001),
+                        np.degrees(maxvars.DEC.max() + 0.001))
+
+    southwest_corner = (np.degrees(maxvars.RA.min() - 0.001),
+                        np.degrees(maxvars.DEC.min() - 0.001))    
+
+    plt.xlim(northeast_corner[0], southwest_corner[0])
+    plt.ylim(southwest_corner[1], northeast_corner[1])
 
     plt.xlabel("RA (deg)")
     plt.ylabel("Dec (deg)")
