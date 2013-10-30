@@ -184,7 +184,7 @@ def f_cc_generic(spread, title=""):
 
     # First group: only group! Because of how the data quality works.
     plt.scatter(spread.hmk_median, spread.jmh_median, c=spread.k_median,
-                vmin=11, vmax=15)
+                vmin=11, vmax=15, cmap='cubehelix_r')
 
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $J-H$")
