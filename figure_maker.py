@@ -826,7 +826,7 @@ def f_comparison_observing_log():
 
     j_wavelength = 1.1 #microns
     h_wavelength = 1.6
-    ks_wavelength = 2.0
+    ks_wavelength = 2.15
     k_wavelength = 2.2
     irac1_wavelength = 3.6
     irac2_wavelength = 4.5
@@ -878,9 +878,18 @@ def f_comparison_observing_log():
 
     plt.title("History of IR monitoring campaigns in the ONC")
 
-    plt.text(51500, 0.5, "Carpenter et al. 2001")
-    plt.text(55050, 0.7, "YSOVAR")
-    plt.text(54100, 0.6, "Rice et al. 2014")
+    plt.text(51550, 3, "Carpenter+2001")
+    plt.text(55050, 0.8, "YSOVAR$^a$")
+    plt.text(53960, 3, "This paper's contribution")
+
+    plt.text(55230, 4.5, "[4.5]", color='k', size=16)
+    plt.text(55230, 3.6, "[3.6]", color='m', size=16)
+    plt.text(55200, 2.5, "$K_s$", color='r', size=16)
+    plt.text(55230, 1.3, "$J$", color='b', size=16)
+
+    plt.text(53900, 2.5, "$K$", color='red', size=16)
+    plt.text(53900, 1.8, "$H$", color='green', size=16)
+    plt.text(53915, 1.1, "$J$", color='blue', size=16)
     
     plt.show()
 
