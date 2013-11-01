@@ -399,7 +399,7 @@ def f_color_slopes_and_periods(title1="K, H-K color slope distributions: "
 
 # Attaching periods to ukvar_spread
 
-def f_cc_cmd_and_map_by_megeath_class(sample='all'):
+def f_cc_cmd_and_map_by_megeath_class(sample='all', title=True):
     """
     A color-color diagram where stars are colored by Megeath class.
 
@@ -416,6 +416,9 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
     elif 'per' in sample.lower():
         sample_boolean_criterion = ~np.isnan(ukvar_periods)
         sample_name = "Periodic"
+    elif 'strict' in sample.lower():
+        sample_boolean_criterion = (ukvar_spread.strict == 1)
+        sample_name = "Q=2"
     else:
         sample_boolean_criterion = (np.zeros_like(ukvar_periods) == 0) #all true
         sample_name = "All"
@@ -446,21 +449,22 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
 
     plt.plot(ukvar_spread.hmk_median[nondisk_indices],
              ukvar_spread.jmh_median[nondisk_indices],
-             'bo', ms=4, label="Megeath Non-disks")
+             'bo', ms=4, label="Non-disks")
     plt.plot(ukvar_spread.hmk_median[disk_indices],
              ukvar_spread.jmh_median[disk_indices],
-             'ro', ms=4, label="Megeath Disks")
+             'ro', ms=4, label="Disks")
     plt.plot(ukvar_spread.hmk_median[protostar_indices],
              ukvar_spread.jmh_median[protostar_indices],
-             'c*', ms=10, label="Megeath Protostars")
+             'c*', ms=10, label="Protostars")
 
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $J-H$")
 
     plt.xlim(-0.1,3.1)
     plt.ylim(-0.2, 4.4)
-    
-    plt.title(sample_name + " variables, colored by Megeath 2012 class")
+
+    if title:
+        plt.title(sample_name + " variables, colored by Megeath+2012 class")
 
     plt.legend(loc='lower right')
 
@@ -472,13 +476,13 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
 
     plt.plot(ukvar_spread.hmk_median[nondisk_indices],
              ukvar_spread.k_median[nondisk_indices],
-             'bo', ms=4, label="Megeath Non-disks")
+             'bo', ms=4, label="Non-disks")
     plt.plot(ukvar_spread.hmk_median[disk_indices],
              ukvar_spread.k_median[disk_indices],
-             'ro', ms=4, label="Megeath Disks")
+             'ro', ms=4, label="Disks")
     plt.plot(ukvar_spread.hmk_median[protostar_indices],
              ukvar_spread.k_median[protostar_indices],
-             'c*', ms=10, label="Megeath Protostars")
+             'c*', ms=10, label="Protostars")
 
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $K$ mag")
@@ -495,13 +499,13 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all'):
 
     plt.plot(np.degrees(ukvar_spread.RA)[nondisk_indices], 
              np.degrees(ukvar_spread.DEC)[nondisk_indices], 
-             'bo', ms=4, label="Megeath Non-disks")
+             'bo', ms=4, label="Non-disks")
     plt.plot(np.degrees(ukvar_spread.RA)[disk_indices], 
              np.degrees(ukvar_spread.DEC)[disk_indices], 
-             'ro', ms=4, label="Megeath Disks")
+             'ro', ms=4, label="Disks")
     plt.plot(np.degrees(ukvar_spread.RA)[protostar_indices], 
              np.degrees(ukvar_spread.DEC)[protostar_indices], 
-             'c*', ms=10, label="Megeath Protostars")
+             'c*', ms=10, label="Protostars")
 
     plt.legend()
     plt.gca().invert_xaxis()
