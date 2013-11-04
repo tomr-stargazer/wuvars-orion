@@ -790,8 +790,11 @@ def table2_latex_output(write=False, begin=0, end=30, decimal_precision=2):
     if write:
         filename = output_directory+"Table_2.tex"
 
+        namestring = r"""Variability properties of periodic stars
+		\label{tab:var_periodics}"""
+
         write_and_correct_latex_table(
-            latex_table, filename, "Variability properties of periodic stars",
+            latex_table, filename, namestring,
             begin=begin, end=end)
         
     return latex_table
@@ -853,9 +856,11 @@ def table3_latex_output(write=False, begin=0, end=30, decimal_precision=2):
     if write:
         filename = output_directory+"Table_3.tex"
 
+        namestring = r"""Variability properties of nonperiodic stars
+		\label{tab:var_nonperiodics}"""
+
         write_and_correct_latex_table(
-            latex_table, filename, 
-            "Variability properties of nonperiodic stars",
+            latex_table, filename, namestring,
             begin=begin, end=end)
         
     return latex_table
