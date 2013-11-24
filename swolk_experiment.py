@@ -246,7 +246,7 @@ def match_spitzer_to_ukirt():
         strict_delta = uks_d.k_range[m.where(m[uks_i] != -1)[uks_i]]
 
         print ("%s Median delta-K (max-min) for Q=2: %.3f +- %.2f" % 
-               (name, np.median(strict_delta), strict_delta.std()))
+               (name, np.median(strict_delta), rb.mad(strict_delta)))
 
 
         # What fraction have good periods? Not answerable right now.
