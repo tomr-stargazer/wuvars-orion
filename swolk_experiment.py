@@ -194,7 +194,7 @@ def match_spitzer_to_ukirt():
                 uka_d.Stetson[ 
                     m.where(m[uka_i] != -1)[uka_i] 
                     ], 
-                range=[0,5], bins=20, color='b', label="1-band pristine"
+                range=[0,5], bins=20, color='b', label="Q=1"
                 )
         except: pass
         try:
@@ -203,7 +203,7 @@ def match_spitzer_to_ukirt():
                 uks_d.Stetson[ 
                     m.where(m[uks_i] != -1)[uks_i] 
                     ], 
-                range=[0,5], bins=20, color='r', label="3-band pristine"
+                range=[0,5], bins=20, color='r', label="Q=2"
                 )
         except: pass
 
@@ -211,9 +211,9 @@ def match_spitzer_to_ukirt():
         auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
         strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
 
-        print ("%s Median Stetson for auto-stars: %.3f +- %.2f" % 
+        print ("%s Median Stetson for Q=1+2: %.3f +- %.2f" % 
                (name, np.median(auto_stetson), rb.mad(auto_stetson)))
-        print ("%s Median Stetson for strict-stars: %.3f +- %.2f" % 
+        print ("%s Median Stetson for Q=2: %.3f +- %.2f" % 
                (name, np.median(strict_stetson), rb.mad(strict_stetson)))
         
         # annotate each subplot so they're readable
@@ -245,7 +245,7 @@ def match_spitzer_to_ukirt():
 #        auto_delta = uka_d.[m.where(m[uka_i] != -1)[uka_i]]# doesn't quite work
         strict_delta = uks_d.k_range[m.where(m[uks_i] != -1)[uks_i]]
 
-        print ("%s Median delta-K (max-min) for strict-stars: %.3f +- %.2f" % 
+        print ("%s Median delta-K (max-min) for Q=2: %.3f +- %.2f" % 
                (name, np.median(strict_delta), strict_delta.std()))
 
 
@@ -268,8 +268,8 @@ def match_spitzer_to_ukirt():
     auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
     strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
 
-    plt.plot( auto_alpha_irac, auto_stetson, 'bo', label="1-band pristine")
-    plt.plot( strict_alpha_irac, strict_stetson, 'ro', label="3-band pristine")
+    plt.plot( auto_alpha_irac, auto_stetson, 'bo', label="Q=1")
+    plt.plot( strict_alpha_irac, strict_stetson, 'ro', label="Q=2")
         
     plt.legend()
 
