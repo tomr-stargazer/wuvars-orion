@@ -243,7 +243,7 @@ def match_spitzer_to_ukirt():
     for s, m, name in zip(subplot_list, mated_list, name_list):
         # Mean Delta Mag (and sigmas)?
 #        auto_delta = uka_d.[m.where(m[uka_i] != -1)[uka_i]]# doesn't quite work
-        strict_delta = uks_d.k_range[m.where(m[uks_i] != -1)[uks_i]]
+        strict_delta = uks_d.k_ranger[m.where(m[uks_i] != -1)[uks_i]]
 
         print ("%s Median delta-K (max-min) for Q=2: %.3f +- %.2f" % 
                (name, np.median(strict_delta), rb.mad(strict_delta)))

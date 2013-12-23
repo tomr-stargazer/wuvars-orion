@@ -44,6 +44,7 @@ from table_maker import make_megeath_class_column
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 from plot2 import plot_trajectory_vanilla
 from helpers3 import band_cut
+import robust as rb
 
 # Let's grab IRAC colors from Megeath.
 megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
@@ -665,26 +666,29 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
             jsub1.hist(strict_protostars['%s_ranger' % b], color='c', 
                        **hist_kwargs)
             jsub1.text(0.5, 0.65, "Megeath protostars \n"
-                       r"median $\Delta %s: %.2f" % (
+                       r"median $\Delta %s: $%.2f \pm %.2f$" % (
                     n.replace(' ', '$ '), 
-                    np.median(strict_protostars['%s_ranger' % b])),
+                    np.median(strict_protostars['%s_ranger' % b]),
+                    rb.mad(strict_protostars['%s_ranger' % b])),
                        transform = jsub1.transAxes)
 
             jsub2 = plt.subplot(3,1,2, sharex=jsub1)
             jsub2.hist(strict_disks['%s_ranger' % b], color='r', **hist_kwargs)
             jsub2.text(0.5, 0.65, "Megeath disks \n"
-                       r"median $\Delta %s: %.2f" % (
+                       r"median $\Delta %s: $%.2f \pm %.2f$" % (
                     n.replace(' ', '$ '), 
-                    np.median(strict_disks['%s_ranger' % b])),
+                    np.median(strict_disks['%s_ranger' % b]),
+                    rb.mad(strict_disks['%s_ranger' % b])),
                        transform = jsub2.transAxes)
 
             jsub3 = plt.subplot(3,1,3, sharex=jsub1)
             jsub3.hist(strict_nondisks['%s_ranger' % b], color='b', 
                        **hist_kwargs)
             jsub3.text(0.5, 0.65, "Megeath non-disks \n"
-                       r"median $\Delta %s: %.2f" % (
+                       r"median $\Delta %s: $%.2f \pm %.2f$" % (
                     n.replace(' ', '$ '), 
-                    np.median(strict_nondisks['%s_ranger' % b])),
+                    np.median(strict_nondisks['%s_ranger' % b]),
+                    rb.mad(strict_nondisks['%s_ranger' % b])),
                        transform = jsub3.transAxes)
 
             jsub1.set_title("%s range (robust) for pristine-data variables"%n)
