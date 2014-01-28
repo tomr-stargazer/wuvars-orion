@@ -126,22 +126,25 @@ def match_xmm_to_ukirt():
     # For each group, print the stuff.
 
     for s, m, name in zip(subplot_list, mated_list, name_list):
-        # Mean S and Variance?
+        # Median S and MAD?
         auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
         strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
 
-        print ("%s Mean Stetson for auto-stars: %.3f +- %.2f" % 
-               (name, auto_stetson.mean(), auto_stetson.std()))
-        print ("%s Mean Stetson for strict-stars: %.3f +- %.2f" % 
-               (name, strict_stetson.mean(), strict_stetson.std()))
+        print ("%s Median Stetson for Q=1+2: %.3f +- %.2f" % 
+               (name, np.median(auto_stetson), rb.mad(auto_stetson)))
+        print "N = %d" % len(auto_stetson)        
+        print ("%s Median Stetson for Q=2: %.3f +- %.2f" % 
+               (name, np.median(strict_stetson), rb.mad(strict_stetson)))
+        print "N = %d" % len(strict_stetson)        
         
     for s, m, name in zip(subplot_list, mated_list, name_list):
-        # Mean Delta Mag (and sigmas)?
+        # Median Delta Mag (and MAD)?
 #        auto_delta = uka_d.[m.where(m[uka_i] != -1)[uka_i]]# doesn't quite work
         strict_delta = uks_d.k_range[m.where(m[uks_i] != -1)[uks_i]]
 
-        print ("%s Mean delta-K (max-min) for strict-stars: %.3f +- %.2f" % 
-               (name, strict_delta.mean(), strict_delta.std()))
+        print ("%s Median delta-K (max-min) for strict-stars: %.3f +- %.2f" % 
+               (name, np.median(strict_delta), rb.mad(strict_delta)))
+        print "N = %d" % len(strict_delta)
 
 
         # What fraction have good periods? Not answerable right now.
