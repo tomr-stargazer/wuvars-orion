@@ -648,6 +648,9 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
     strict_nondisks = ukvar_spread.where(
         (ukvar_spread.strict == 1) & (megeath_class_column == 'ND'))
 
+    print "Protostars: %d, Disks: %d, Nondisks: %d" % (
+        len(strict_protostars), len(strict_disks), len(strict_nondisks) )
+
     # Let's test the J mag aspect of this, and then define some dicts or forloops to iterate through all "5" bands.
 
     names = ['J mag', 'H mag', 'K mag', 'J-H color', 'H-K color']

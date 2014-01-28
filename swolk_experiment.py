@@ -213,8 +213,10 @@ def match_spitzer_to_ukirt():
 
         print ("%s Median Stetson for Q=1+2: %.3f +- %.2f" % 
                (name, np.median(auto_stetson), rb.mad(auto_stetson)))
+        print "N = %d" % len(auto_stetson)
         print ("%s Median Stetson for Q=2: %.3f +- %.2f" % 
                (name, np.median(strict_stetson), rb.mad(strict_stetson)))
+        print "N = %d" % len(strict_stetson)
         
         # annotate each subplot so they're readable
         if s == s1:
