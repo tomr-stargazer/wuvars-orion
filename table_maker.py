@@ -39,8 +39,9 @@ from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D,
-                              Megeath_Full, Megeath_Allgoodsources)
-from orion_tablemate import index_secondary_by_primary
+                              Megeath_Full, Megeath_Allgoodsources,
+                              XMM_north, Rice_UKvars)
+from orion_tablemate import index_secondary_by_primary, tablemater
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 
@@ -55,6 +56,10 @@ megeath2012_full_by_ukvar = index_secondary_by_primary(mated_ukvar,
                                                        Megeath_Full)
 megeath2012_all_by_ukvar = index_secondary_by_primary(mated_ukvar,
                                                       Megeath_Allgoodsources)
+
+# XMM catalog gets matched too.
+XMM_north_by_ukvar = index_secondary_by_primary(
+    tablemater(Rice_UKvars, [XMM_north]), XMM_north)
 
 # And let's make some color slope references that we like.
 jhk_slope_reference = filter_color_slopes(autovars_strict, 'jhk',
@@ -131,6 +136,36 @@ def make_megeath_class_column():
             megeath_class_column[i] = 'ND'
 
     return megeath_class_column
+
+
+def make_xmm_class_column():
+    """
+    Generates a Class column from the XMM data.
+
+    Prostar: data.proto == 1
+    Disk: data.disks == 1
+    C3: data.c3cnd == '1'
+    na: all three of those zero.
+    
+    """
+
+    xmm_class_column = np.zeros_like(XMM_north_by_ukvar.disks, dtype='|S2')
+
+    for i in range(len(xmm_class_column)):
+        
+        if XMM_north_by_ukvar.proto[i] == 1: xmm_class_column[i] = 'P'
+
+        elif XMM_north_by_ukvar.disks[i] == 1: xmm_class_column[i] = 'D'
+
+        elif XMM_north_by_ukvar.c3cnd[i] == '1': xmm_class_column[i] = 'C3'
+
+        elif ((XMM_north_by_ukvar.proto[i] == 0) & 
+              (XMM_north_by_ukvar.disks[i] == 0) & 
+              (XMM_north_by_ukvar.c3cnd[i] == '0')): xmm_class_column[i] = 'na'
+        else:
+            xmm_class_column[i] = 'na'
+        
+    return xmm_class_column
 
         
 def t_table1_radec_xref_jhk_irac(write=False):
