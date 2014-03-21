@@ -294,7 +294,7 @@ def f_colorslope_threepanel(title=False):
     s1.hist(np.degrees(np.arctan(jhk_empty.jhk_slope)), range=[-90, 90],
             bins=36, color='k', histtype='step')
     s1.hist(np.degrees(np.arctan(jhk_filled.jhk_slope)), range=[-90, 90],
-            bins=36, color='g')
+            bins=36, color='0.75')
     s1.set_xlim(-90,90)
     s1.set_xticks([-90, -45, 0, 45, 90])
     s1.set_xticks(np.arange(-90, 90, 15), minor=True)
@@ -303,7 +303,7 @@ def f_colorslope_threepanel(title=False):
     s2.hist(np.degrees(np.arctan(jh_empty.jjh_slope)), range=[-90, 90],
             bins=36, color='k', histtype='step')
     s2.hist(np.degrees(np.arctan(jh_filled.jjh_slope)), range=[-90, 90],
-            bins=36, color='b')
+            bins=36, color='0.5')
     s2.set_xlim(-90,90)
     s2.set_xticks([-90, -45, 0, 45, 90])
     s2.set_xticks(np.arange(-90, 90, 15), minor=True)
@@ -312,7 +312,7 @@ def f_colorslope_threepanel(title=False):
     s3.hist(np.degrees(np.arctan(hk_empty.khk_slope)), range=[-90, 90],
             bins=36, color='k', histtype='step')
     s3.hist(np.degrees(np.arctan(hk_filled.khk_slope)), range=[-90, 90],
-            bins=36, color='r')
+            bins=36, color='0.25')
     s3.set_xlim(-90,90)
     s3.set_xticks([-90, -45, 0, 45, 90])
     s3.set_xticks(np.arange(-90, 90, 15), minor=True)
