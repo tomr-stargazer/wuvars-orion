@@ -518,7 +518,7 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all', title=True):
 
     
 
-def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Megeath 2012"):
+def f_periods_by_megeath_class(title="Periodic ONCvar stars, with class from Megeath et al. 2012"):
     """
     A histogram of periods for stars that have Megeath classes.
 
@@ -561,9 +561,9 @@ def f_periods_by_megeath_class(title="Periodic UKvar stars, with class from Mege
     
     sub3.set_xlabel("Period (days)")
 
-    sub1.text(10, 1, "Megeath Periodic Protostar sample")
-    sub2.text(10,15, "Megeath Periodic Disk sample")
-    sub3.text(10,25, "Megeath Periodic Non-disk sample")
+    sub1.text(10, 1, "Periodic Protostar sample")
+    sub2.text(10,15, "Periodic Disk sample")
+    sub3.text(10,25, "Periodic Non-disk sample")
 
     if title:
         sub1.set_title(title)
