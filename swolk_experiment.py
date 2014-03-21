@@ -94,7 +94,7 @@ def match_xmm_to_ukirt():
                 uka_d.Stetson[ 
                     m.where(m[uka_i] != -1)[uka_i] 
                     ], 
-                range=[0,5], bins=20, color='b', label="1-band pristine"
+                range=[0,5], bins=20, color='0.7', label="1-band pristine"
                 )
         except: pass
         try:
@@ -103,7 +103,7 @@ def match_xmm_to_ukirt():
                 uks_d.Stetson[ 
                     m.where(m[uks_i] != -1)[uks_i] 
                     ], 
-                range=[0,5], bins=20, color='r', label="3-band pristine"
+                range=[0,5], bins=20, color='0.2', label="3-band pristine"
                 )
         except: pass
 
@@ -197,7 +197,7 @@ def match_spitzer_to_ukirt():
                 uka_d.Stetson[ 
                     m.where(m[uka_i] != -1)[uka_i] 
                     ], 
-                range=[0,5], bins=20, color='b', label="Q=1"
+                range=[0,5], bins=20, color='0.7', label="Q=1"
                 )
         except: pass
         try:
@@ -206,7 +206,7 @@ def match_spitzer_to_ukirt():
                 uks_d.Stetson[ 
                     m.where(m[uks_i] != -1)[uks_i] 
                     ], 
-                range=[0,5], bins=20, color='r', label="Q=2"
+                range=[0,5], bins=20, color='0.2', label="Q=2"
                 )
         except: pass
 
@@ -273,8 +273,8 @@ def match_spitzer_to_ukirt():
     auto_stetson = uka_d.Stetson[m.where(m[uka_i] != -1)[uka_i]]
     strict_stetson = uks_d.Stetson[m.where(m[uks_i] != -1)[uks_i]]
 
-    plt.plot( auto_alpha_irac, auto_stetson, 'bo', label="Q=1")
-    plt.plot( strict_alpha_irac, strict_stetson, 'ro', label="Q=2")
+    plt.plot( auto_alpha_irac, auto_stetson, 'o', color='0.7', label="Q=1")
+    plt.plot( strict_alpha_irac, strict_stetson, 'o', color='0.2', label="Q=2")
         
     plt.legend()
 
