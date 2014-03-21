@@ -887,14 +887,14 @@ def f_comparison_observing_log():
 
     plt.xticks(xticks_values[::2], xticklabels_values[::2])
 
-    plt.title("History of IR monitoring campaigns in the ONC")
+    plt.title("History of infrared monitoring campaigns in the ONC")
 
-    plt.text(51550, 3, "Carpenter+2001")
+    plt.text(51550, 0.8, "Carpenter et al. 2001")
     plt.text(55050, 0.8, "YSOVAR$^a$")
-    plt.text(53960, 3, "This paper's contribution")
+    plt.text(54250, 0.8, "This paper")
 
-    plt.text(55230, 4.5, "[4.5]", color='k', size=16)
-    plt.text(55230, 3.6, "[3.6]", color='m', size=16)
+    plt.text(55220, 4.5, "[4.5]", color='k', size=14, verticalalignment='center')
+    plt.text(55220, 3.6, "[3.6]", color='m', size=14, verticalalignment='center')
     plt.text(55200, 2.5, "$K_s$", color='r', size=16)
     plt.text(55230, 1.3, "$J$", color='b', size=16)
 
