@@ -170,7 +170,7 @@ def match_spitzer_to_ukirt():
     mated_list = [mated_P, mated_D, mated_ND]
 
     # What kinds of plots do we want?
-    # Histogram of S, for each IR category (incl. "all")
+    # Histogram of S, for each IR category
     fig = plt.figure()
 
     uks_i = 'UKIRT_autocan_strict_allstars_index'
@@ -287,7 +287,7 @@ def match_spitzer_to_ukirt():
 
     plt.show()
 
-    return mated_spitzer, mated_P, mated_D
+    return mated_spitzer, mated_P, mated_D, fig, fig2
 
 
 # crude copy

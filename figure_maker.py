@@ -632,6 +632,7 @@ def f_period_lit_comparisons(pretty=True):
         plt.ylim(0,20)
 
     plt.show()
+    return fig
 
 
 def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
@@ -644,7 +645,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
     megeath_class_column = make_megeath_class_column()
     
     strict_protostars = ukvar_spread.where(
-        (ukvar_spread.strict == 1) & (megeath_class_column == 'P') )
+        (ukvar_spread.strict == 1) & (megeath_class_column == 'P'))
 
     strict_disks = ukvar_spread.where(
         (ukvar_spread.strict == 1) & (megeath_class_column == 'D'))
@@ -659,20 +660,22 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
 
     names = ['J mag', 'H mag', 'K mag', 'J-H color', 'H-K color']
     bands = ['j', 'h', 'k', 'jmh', 'hmk']
+    text_xposition = [0.375, 0.375, 0.375, 0.3, 0.3]
 
     figs = []
 
     hist_kwargs = {'range':(0,2), 'bins':20}
 
     if threepanels:
-        for b, n in zip(bands, names):
+        for b, n, x in zip(bands, names, text_xposition):
 
-            j_fig = plt.figure()
+            j_fig = plt.figure(figsize=(5,6))
+            figs.append(j_fig)
 
             jsub1 = plt.subplot(3,1,1)
             jsub1.hist(strict_protostars['%s_ranger' % b], color=color_dict['protostar'], 
                        **hist_kwargs)
-            jsub1.text(0.5, 0.65, "Megeath protostars \n"
+            jsub1.text(x, 0.65, "protostars \n"
                        r"median $\Delta %s: $%.2f \pm %.2f$" % (
                     n.replace(' ', '$ '), 
                     np.median(strict_protostars['%s_ranger' % b]),
@@ -681,7 +684,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
 
             jsub2 = plt.subplot(3,1,2, sharex=jsub1)
             jsub2.hist(strict_disks['%s_ranger' % b], color=color_dict['disk'], **hist_kwargs)
-            jsub2.text(0.5, 0.65, "Megeath disks \n"
+            jsub2.text(x, 0.65, "disks \n"
                        r"median $\Delta %s: $%.2f \pm %.2f$" % (
                     n.replace(' ', '$ '), 
                     np.median(strict_disks['%s_ranger' % b]),
@@ -691,14 +694,14 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
             jsub3 = plt.subplot(3,1,3, sharex=jsub1)
             jsub3.hist(strict_nondisks['%s_ranger' % b], color=color_dict['nondisk'], 
                        **hist_kwargs)
-            jsub3.text(0.5, 0.65, "Megeath non-disks \n"
+            jsub3.text(x, 0.65, "non-disks \n"
                        r"median $\Delta %s: $%.2f \pm %.2f$" % (
                     n.replace(' ', '$ '), 
                     np.median(strict_nondisks['%s_ranger' % b]),
                     rb.mad(strict_nondisks['%s_ranger' % b])),
                        transform = jsub3.transAxes)
 
-            jsub1.set_title("%s range (robust) for pristine-data variables"%n)
+            jsub1.set_title("%s range for $Q=2$ variables"%n)
             jsub3.set_xlabel(r"$\Delta %s (outlier-proof)" % 
                              n.replace(' ', '$ '))
 
@@ -706,6 +709,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
     if onepanels:
 
         fig = plt.figure()
+        figs.append(fig)
         
         plt.hist(strict_nondisks['k_ranger'], 
                  color=color_dict['nondisk'], hatch='/', label='Megeath Non-disks',
@@ -724,6 +728,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
 
             
     plt.show()
+    return figs
 
 
 def f_stetson_versus_Hmag_strict_candidates(

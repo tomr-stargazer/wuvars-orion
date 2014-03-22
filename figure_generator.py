@@ -7,6 +7,7 @@ from __future__ import division
 import os
 
 from figure_maker import *
+from swolk_experiment import match_spitzer_to_ukirt
 
 publication_figures = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_figures/")
 publication_lcs = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_lcs/")
@@ -30,18 +31,32 @@ def generate_figures_somewhere(path):
 	"""
 
 	# Fig 4: eight example lightcurves
+	"""
+	not ready yet
+	fig4.savefig(path+"example_lcs_draft.png")
+	"""
 
 	# Fig 5: Observed RMS error, JHK
+	fig5 = f_sensitivity_per_band()
+	fig5.savefig(path+"sensitivity_per_band.pdf")
 
 	# Fig 6: Distribution of Stetson indices
+	fig6 = f_stetson_versus_Hmag_strict_candidates()
+	fig6.savefig(path+"Stetson_vs_Hmag.pdf")
 
 	# Fig 7: Comparison of periods
+	f_period_lit_comparisons().savefig(path+"period_lit_comparisons.pdf")
 
 	# Fig 8: Median J-H, H-K colors by Megeath class
+	f_cc_cmd_and_map_by_megeath_class()[0].savefig(path+"cc_by_class.pdf")
 
 	# Fig 9: Histogram of stetson indices by class
+	match_spitzer_to_ukirt()[3].savefig(path+"Stetson_by_class.pdf")
 
 	# Fig 10: Histograms of K, H-K variability amplitudes
+	j, h, k, jmh, hmk = f_magnitude_hists_by_class()
+	k.savefig(path+"delta_k_hists.pdf")
+	hmk.savefig(path+"delta_hmk_hists.pdf")
 
 	# Fig 11: Color-color distribution of all Q=2 periodic stars
 
