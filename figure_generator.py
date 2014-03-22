@@ -59,16 +59,21 @@ def generate_figures_somewhere(path):
 	hmk.savefig(path+"delta_hmk_hists.pdf")
 
 	# Fig 11: Color-color distribution of all Q=2 periodic stars
+	fig11 = f_cc_periodics()
+	plt.text(1.25, 1, "Periodic variables", fontsize=18)
+	fig11.savefig(path+"cc_periodics.pdf")
 
 	# Fig 12: Distribution of periods by class
+	f_periods_by_megeath_class()[0].savefig(path+"period_distributions.pdf")
 
 	# Fig 13, 14, 15: lightcurves
 
 	# Fig 16: Illustration of two example KHK tracks
 
 	# Fig 17: Colorslope threepanel
+	f_colorslope_threepanel().savefig(path+"color_slope_threepanel.pdf")
 
-	# Fig 18: Temporal color experiemnt
+	# Fig 18: Temporal color experiment
 
 	# Fig 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32: Light curves
 

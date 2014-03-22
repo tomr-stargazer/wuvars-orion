@@ -91,6 +91,8 @@ def f_hist_periods():
     
     plt.show()
 
+    return fig
+
 def f_map_periods():
     """
     A figure showing positions of periodic variables.
@@ -334,6 +336,7 @@ def f_colorslope_threepanel(title=False):
         s1.set_title("Histograms of slopes in color-color and color-magnitude space")
     
     plt.show()
+    return fig
 
 
 def f_color_slopes_and_periods(title1="K, H-K color slope distributions: "
@@ -565,9 +568,9 @@ def f_periods_by_megeath_class(title="Periodic ONCvar stars, with class from Meg
     
     sub3.set_xlabel("Period (days)")
 
-    sub1.text(10, 1, "Periodic Protostar sample")
-    sub2.text(10,15, "Periodic Disk sample")
-    sub3.text(10,25, "Periodic Non-disk sample")
+    sub1.text(0.5, 0.5, "Periodic Protostar sample", transform=sub1.transAxes)
+    sub2.text(0.5, 0.5, "Periodic Disk sample", transform=sub2.transAxes)
+    sub3.text(0.5, 0.5, "Periodic Non-disk sample", transform=sub3.transAxes)
 
     if title:
         sub1.set_title(title)
@@ -1055,9 +1058,14 @@ def f_sensitivity_per_band():
     plt.xlim(10.5, 17.5)
 
     s3.set_xlabel("Magnitude")
+    s3.set_ylabel("Observed rms")
     for s in [s1,s2,s3]:
         s.set_ylim(0,0.1)
         s.set_yticks([0, 0.05, 0.1])
+
+    s1.text(0.2, 0.6, "$J$", fontsize=24, color='b', transform=s1.transAxes)
+    s2.text(0.2, 0.6, "$H$", fontsize=24, color='g', transform=s2.transAxes)
+    s3.text(0.2, 0.6, "$K$", fontsize=24, color='r', transform=s3.transAxes)        
 
     plt.show()
 
