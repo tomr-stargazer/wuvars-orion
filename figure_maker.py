@@ -51,6 +51,10 @@ megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
 
 # As a test, let's make a histogram of periods.
 
+color_dict = {}
+color_dict['disk'] = '#e41a1c' # red
+color_dict['nondisk'] = '#377eb8' # blue
+color_dict['protostar'] = '#4daf4a' # green
 
 # Filled: strict dudes
 # Cross-hatched: autovars_true
@@ -450,13 +454,13 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all', title=True):
 
     plt.plot(ukvar_spread.hmk_median[nondisk_indices],
              ukvar_spread.jmh_median[nondisk_indices],
-             'bo', ms=4, label="Non-disks")
+             'o', color=color_dict['nondisk'], ms=4, label="Non-disks")
     plt.plot(ukvar_spread.hmk_median[disk_indices],
              ukvar_spread.jmh_median[disk_indices],
-             'ro', ms=4, label="Disks")
+             'o', color=color_dict['disk'], ms=4, label="Disks")
     plt.plot(ukvar_spread.hmk_median[protostar_indices],
              ukvar_spread.jmh_median[protostar_indices],
-             'c*', ms=10, label="Protostars")
+             '*', color=color_dict['protostar'], ms=10, label="Protostars")
 
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $J-H$")
@@ -477,13 +481,13 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all', title=True):
 
     plt.plot(ukvar_spread.hmk_median[nondisk_indices],
              ukvar_spread.k_median[nondisk_indices],
-             'bo', ms=4, label="Non-disks")
+             'o', color=color_dict['nondisk'], ms=4, label="Non-disks")
     plt.plot(ukvar_spread.hmk_median[disk_indices],
              ukvar_spread.k_median[disk_indices],
-             'ro', ms=4, label="Disks")
+             'o', color=color_dict['disk'], ms=4, label="Disks")
     plt.plot(ukvar_spread.hmk_median[protostar_indices],
              ukvar_spread.k_median[protostar_indices],
-             'c*', ms=10, label="Protostars")
+             '*', color=color_dict['protostar'], ms=10, label="Protostars")
 
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $K$ mag")
@@ -500,13 +504,13 @@ def f_cc_cmd_and_map_by_megeath_class(sample='all', title=True):
 
     plt.plot(np.degrees(ukvar_spread.RA)[nondisk_indices], 
              np.degrees(ukvar_spread.DEC)[nondisk_indices], 
-             'bo', ms=4, label="Non-disks")
+             'o', color=color_dict['nondisk'], ms=4, label="Non-disks")
     plt.plot(np.degrees(ukvar_spread.RA)[disk_indices], 
              np.degrees(ukvar_spread.DEC)[disk_indices], 
-             'ro', ms=4, label="Disks")
+             'o', color=color_dict['disk'], ms=4, label="Disks")
     plt.plot(np.degrees(ukvar_spread.RA)[protostar_indices], 
              np.degrees(ukvar_spread.DEC)[protostar_indices], 
-             'c*', ms=10, label="Protostars")
+             '*', color=color_dict['protostar'], ms=10, label="Protostars")
 
     plt.legend()
     plt.gca().invert_xaxis()
@@ -549,15 +553,15 @@ def f_periods_by_megeath_class(title="Periodic ONCvar stars, with class from Meg
 
     sub1 = plt.subplot(3,1,1)
     plt.hist(ukvar_periods[megeath_class_column == 'P'],
-             range=[0,20], bins=40, color='c')
+             range=[0,20], bins=40, color=color_dict['protostar'])
 
     sub2 = plt.subplot(3,1,2, sharex=sub1)
     plt.hist(ukvar_periods[megeath_class_column == 'D'],
-             range=[0,20], bins=40, color='r')
+             range=[0,20], bins=40, color=color_dict['disk'])
 
     sub3 = plt.subplot(3,1,3, sharex=sub1)
     plt.hist(ukvar_periods[megeath_class_column == 'ND'],
-             range=[0,20], bins=40, color='b')
+             range=[0,20], bins=40, color=color_dict['nondisk'])
     
     sub3.set_xlabel("Period (days)")
 
@@ -666,7 +670,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
             j_fig = plt.figure()
 
             jsub1 = plt.subplot(3,1,1)
-            jsub1.hist(strict_protostars['%s_ranger' % b], color='c', 
+            jsub1.hist(strict_protostars['%s_ranger' % b], color=color_dict['protostar'], 
                        **hist_kwargs)
             jsub1.text(0.5, 0.65, "Megeath protostars \n"
                        r"median $\Delta %s: $%.2f \pm %.2f$" % (
@@ -676,7 +680,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
                        transform = jsub1.transAxes)
 
             jsub2 = plt.subplot(3,1,2, sharex=jsub1)
-            jsub2.hist(strict_disks['%s_ranger' % b], color='r', **hist_kwargs)
+            jsub2.hist(strict_disks['%s_ranger' % b], color=color_dict['disk'], **hist_kwargs)
             jsub2.text(0.5, 0.65, "Megeath disks \n"
                        r"median $\Delta %s: $%.2f \pm %.2f$" % (
                     n.replace(' ', '$ '), 
@@ -685,7 +689,7 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
                        transform = jsub2.transAxes)
 
             jsub3 = plt.subplot(3,1,3, sharex=jsub1)
-            jsub3.hist(strict_nondisks['%s_ranger' % b], color='b', 
+            jsub3.hist(strict_nondisks['%s_ranger' % b], color=color_dict['nondisk'], 
                        **hist_kwargs)
             jsub3.text(0.5, 0.65, "Megeath non-disks \n"
                        r"median $\Delta %s: $%.2f \pm %.2f$" % (
@@ -704,13 +708,13 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
         fig = plt.figure()
         
         plt.hist(strict_nondisks['k_ranger'], 
-                 color='b', hatch='/', label='Megeath Non-disks',
+                 color=color_dict['nondisk'], hatch='/', label='Megeath Non-disks',
                  **hist_kwargs)
         plt.hist(strict_disks['k_ranger'], 
-                 color='r', alpha=0.5, hatch='\\', label='Megeath Disks',
+                 color=color_dict['disk'], alpha=0.5, hatch='\\', label='Megeath Disks',
                  **hist_kwargs)
         plt.hist(strict_protostars['k_ranger'], 
-                 color='c', hatch='--', label='Megeath Protostars',
+                 color=color_dict['protostar'], hatch='--', label='Megeath Protostars',
                  **hist_kwargs)
 
         plt.title("K magnitude range (robust) for pristine-data variables")
