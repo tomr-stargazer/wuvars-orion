@@ -661,9 +661,9 @@ def f_magnitude_hists_by_class(threepanels=True, onepanels=False):
 
     # Let's test the J mag aspect of this, and then define some dicts or forloops to iterate through all "5" bands.
 
-    names = ['J mag', 'H mag', 'K mag', 'J-H color', 'H-K color']
+    names = ['J mag', 'H mag', 'K mag', '(J-H) color', '(H-K) color']
     bands = ['j', 'h', 'k', 'jmh', 'hmk']
-    text_xposition = [0.375, 0.375, 0.375, 0.3, 0.3]
+    text_xposition = [0.375, 0.375, 0.375, 0.275, 0.275]
 
     figs = []
 
