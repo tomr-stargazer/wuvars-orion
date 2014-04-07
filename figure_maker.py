@@ -49,16 +49,10 @@ import robust as rb
 # Let's grab IRAC colors from Megeath.
 megeath2012_by_ukvar = index_secondary_by_primary(mated_ukvar, Megeath2012)
 
-# As a test, let's make a histogram of periods.
-
 color_dict = {}
 color_dict['disk'] = '#e41a1c' # red
 color_dict['nondisk'] = '#377eb8' # blue
 color_dict['protostar'] = '#4daf4a' # green
-
-# Filled: strict dudes
-# Cross-hatched: autovars_true
-# open: subjectives
 
 def f_hist_periods():
     """ 
@@ -237,8 +231,6 @@ def f_cc_nonpers(title=False):
         title_string = ""
 
     return f_cc_generic(autovars_strict_nonpers, title=title_string)
-
-# HERE IS SOME FILTERING FOR COLOR SLOPES... moved to color_slope_filtering.py
 
 def f_cc_color_vars(title=False):
     """
