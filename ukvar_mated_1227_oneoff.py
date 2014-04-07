@@ -7,6 +7,8 @@ columns appended from ukvar_spread_w1226.
 Update: now it also removes the "easties" (UKvar 1200-1225 minus 1203,1204)
 by default, since tablemate_script implicitly does that.
 
+Second update: Now we add in ONCvar 1227.
+
 """
 
 from __future__ import division
@@ -36,7 +38,7 @@ for (col, name) in zip(missing_cols, missing_colnames):
 mated_ukvar.table_name = "Mated UKvar"
 
 # Don't write the file if it doesn't conform to what we expect it to look like!
-assert len(mated_ukvar) == 1202, "Mated UKvar does not have 1202 rows!"
+assert len(mated_ukvar) == 1203, "Mated UKvar does not have 1203 rows!"
 assert len(mated_ukvar.columns) == 46, "Mated UKvar does not have 46 columns!"
 
-mated_ukvar.write(dpath+"ukvar_matched_table_withSIMBAD_w1226_minusEasties_2013_9_23.fits")
+mated_ukvar.write(dpath+"ukvar_matched_table_withSIMBAD_w1226_minusEasties_w1227_2014_04_07.fits")
