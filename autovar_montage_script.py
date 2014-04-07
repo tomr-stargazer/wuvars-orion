@@ -53,7 +53,7 @@ dropbox_bo_aux_catalogs = os.path.expanduser("~/Dropbox/Bo_Tom/aux_catalogs/")
 
 data = atpy.Table(dropbox_bo_data+"fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits")
 
-ukvar = atpy.Table(dropbox_bo_aux_catalogs+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties_renamedOldONCvarColumn.fits")
+ukvar = atpy.Table(dropbox_bo_aux_catalogs+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties_renamedOldONCvarColumn_w1227.fits")
 
 # Let's make a function that does periods for "high-variables".
 

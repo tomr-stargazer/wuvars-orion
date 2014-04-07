@@ -35,9 +35,9 @@ Rice_2013_vars = TableParameters(
     name_col = 'SOURCEID')
 
 Rice_UKvars =  TableParameters(
-    data = dpath+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties_renamedOldONCvarColumn.fits",
+    data = dpath+"UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties_renamedOldONCvarColumn_w1227.fits",
     alias= "Rice2013_UKvars",
-    full_name = "'Master spreadsheet for 1202 ONC variables', from 'High-amplitude and Periodic Near-Infrared Variables in the Orion Nebula Cluster', Rice, Reipurth, Vaz, Wolk, Cross, Guimaraes 2013.",
+    full_name = "'Master spreadsheet for 1203 ONC variables', from 'High-amplitude and Periodic Near-Infrared Variables in the Orion Nebula Cluster', Rice, Reipurth, Wolk, Vaz, Cross 2013.",
     ra_cols = ['RA'], dec_cols=['DEC'],
     radec_fmt = 'decimal-radians',
     name_col = 'UKvar_ID')

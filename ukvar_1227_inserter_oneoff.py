@@ -75,9 +75,6 @@ print uk1227.shape
 ukvar_spread_w1227 = ukvar_spread.where(ukvar_spread.SOURCEID > 0)
 ukvar_spread_w1227.append(uk1227)
 
-# don't write anything till I'm ready!
-assert 1==2
-
 ukvar_spread_w1227.write(
     os.path.expanduser(
         "~/Dropbox/Bo_Tom/aux_catalogs/UKvar_spreadsheet_withSIMBADnames_w1226_minusEasties_renamedOldONCvarColumn_w1227.fits"))
