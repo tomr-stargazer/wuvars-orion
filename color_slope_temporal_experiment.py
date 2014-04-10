@@ -21,6 +21,7 @@ import spread3
 
 from variables_data_filterer import variables_photometry, autovars_true
 from color_slope_filtering import filter_color_slopes
+from robust import mad
 
 
 def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_offset=0, shuffle_dates=False):
@@ -44,6 +45,14 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_of
     n_negative_slope_list = []
     n_undef_slope_list = []
     n_obs_list = []
+
+    n_variables_list = []
+    median_j_amplitude_list = []
+    median_j_deviation_list = []    
+    median_h_amplitude_list = []
+    median_h_deviation_list = []    
+    median_k_amplitude_list = []
+    median_k_deviation_list = []    
 
     # For a bunch of different obs_initial's...
     # (note: when we test this, we may want to only go from the FIRST observation, and then add in the complexity of all the other ones later)
@@ -106,11 +115,27 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_of
             n_undef_slope = (len(relevant_khk_spreadsheet_no_slope_confidence) -
                                 (n_positive_slope + n_negative_slope) )
 
+            n_variables = len(relevant_spreadsheet[relevant_spreadsheet.Stetson >= 1.0])
+            median_j_amplitude = np.median(relevant_spreadsheet.j_ranger)
+            median_j_deviation = mad(relevant_spreadsheet.j_ranger)            
+            median_h_amplitude = np.median(relevant_spreadsheet.h_ranger)
+            median_h_deviation = mad(relevant_spreadsheet.h_ranger)            
+            median_k_amplitude = np.median(relevant_spreadsheet.k_ranger)
+            median_k_deviation = mad(relevant_spreadsheet.k_ranger)            
+
             time_baseline_list.append( timespan_of_relevant_data )
             n_positive_slope_list.append( n_positive_slope )
             n_negative_slope_list.append( n_negative_slope )
             n_undef_slope_list.append( n_undef_slope )
             n_obs_list.append( n_obs )
+
+            n_variables_list.append( n_variables)
+            median_j_amplitude_list.append( median_j_amplitude)
+            median_j_deviation_list.append( median_j_deviation)    
+            median_h_amplitude_list.append( median_h_amplitude)
+            median_h_deviation_list.append( median_h_deviation)    
+            median_k_amplitude_list.append( median_k_amplitude)
+            median_k_deviation_list.append( median_k_deviation)  
 
         break
 
@@ -123,7 +148,15 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_of
     addc("n_negative_slope", n_negative_slope_list)
     addc("n_undef_slope", n_undef_slope_list)
     addc("n_obs", n_obs_list)
-    
+
+    addc("n_variables", n_variables_list)
+    addc("median_j_amplitude", median_j_amplitude_list)
+    addc("median_j_deviation", median_j_deviation_list)
+    addc("median_h_amplitude", median_h_amplitude_list)
+    addc("median_h_deviation", median_h_deviation_list)
+    addc("median_k_amplitude", median_k_amplitude_list)
+    addc("median_k_deviation", median_k_deviation_list)    
+
     return color_slope_ratios_table
 
 
