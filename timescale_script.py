@@ -9,8 +9,8 @@ from color_slope_temporal_experiment import *
 
 import matplotlib.pyplot as plt
 
-#delta_t_list = [5,10,20, 25, 30, 40, 50, 75, 100]
-delta_t_list = [10, 40]
+delta_t_list = [5,10,20, 25, 30, 40, 50, 75, 100]
+#delta_t_list = [10, 40]
 
 def make_shuffle_dudes(n_iterations=3):
 
@@ -51,6 +51,6 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 	return fig1, fig2
 
 
-def do_it():
-	list_of_shuffle_dudes, non_shuffled = make_shuffle_dudes()
+def do_it(**kwargs):
+	list_of_shuffle_dudes, non_shuffled = make_shuffle_dudes(**kwargs)
 	return plot_shuffle_dudes(list_of_shuffle_dudes, non_shuffled), list_of_shuffle_dudes, non_shuffled
