@@ -23,16 +23,17 @@ from variables_data_filterer import variables_photometry, autovars_true
 from color_slope_filtering import filter_color_slopes
 
 
-def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, shuffle_dates=False):
+def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_offset=0, shuffle_dates=False):
     """
     Calculates the color slope ratios for each possible time baseline.
 
     """
 
-    date_list = np.sort(list(set(np.floor(variables_photometry.MEANMJDOBS))))
-
     autovars_photometry = variables_photometry.where(
-        np.in1d(variables_photometry.SOURCEID, autovars_true.SOURCEID))
+        np.in1d(variables_photometry.SOURCEID, autovars_true.SOURCEID) & 
+        (variables_photometry.MEANMJDOBS >= np.min(variables_photometry.MEANMJDOBS) + date_offset))
+
+    date_list = np.sort(list(set(np.floor(autovars_photometry.MEANMJDOBS))))    
 
     # I think this is the only place I need to shuffle? Maybe?
     if shuffle_dates:
