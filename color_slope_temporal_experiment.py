@@ -12,6 +12,7 @@ time baseline, especially as a function of variable class.
 """
 
 from __future__ import division
+import random
 
 import numpy as np
 import atpy
@@ -22,7 +23,7 @@ from variables_data_filterer import variables_photometry, autovars_true
 from color_slope_filtering import filter_color_slopes
 
 
-def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None):
+def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, shuffle_dates=False):
     """
     Calculates the color slope ratios for each possible time baseline.
 
@@ -32,6 +33,10 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None):
 
     autovars_photometry = variables_photometry.where(
         np.in1d(variables_photometry.SOURCEID, autovars_true.SOURCEID))
+
+    # I think this is the only place I need to shuffle? Maybe?
+    if shuffle_dates:
+        random.shuffle(autovars_photometry.MEANMJDOBS)
 
     time_baseline_list = []
     n_positive_slope_list = []
