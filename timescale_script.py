@@ -42,13 +42,47 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 		plt.plot(non_shuffle.time_baseline, non_shuffle.n_negative_slope, 'b.')
 
 	fig2 = plt.figure()
+	plt.title("Shuffled")
 
 	for shuffle in list_of_shuffle_dudes:
 
 		plt.plot(shuffle.time_baseline, shuffle.n_positive_slope, 'r.')
 		plt.plot(shuffle.time_baseline, shuffle.n_negative_slope, 'b.')
 
-	return fig1, fig2
+	fig3 = plt.figure()
+	plt.title("Non shuffled.")
+	plt.ylabel("Number of variables detected")
+
+	for non_shuffle in list_of_non_shuffled:
+
+		plt.plot(non_shuffle.time_baseline, non_shuffle.n_variables, 'k.')
+
+	fig4 = plt.figure()
+	plt.title("Shuffled")
+	plt.ylabel("Number of variables detected")	
+
+	for shuffle in list_of_shuffle_dudes:
+
+		plt.plot(shuffle.time_baseline, shuffle.n_variables, 'k.')
+
+	fig5 = plt.figure()
+	plt.title("Non shuffled.")
+	plt.ylabel("K amplitude")	
+
+	for non_shuffle in list_of_non_shuffled:
+
+		plt.errorbar(non_shuffle.time_baseline, non_shuffle.median_k_amplitude, yerr=non_shuffle.median_k_deviation,fmt='k.')
+
+	fig6 = plt.figure()
+	plt.title("shuffled.")
+	plt.ylabel("K amplitude")
+
+	for shuffle in list_of_shuffle_dudes:
+
+		plt.errorbar(shuffle.time_baseline, shuffle.median_k_amplitude, yerr=shuffle.median_k_deviation,fmt='k.')
+
+
+	return fig1, fig2, fig3, fig4, fig5, fig6
 
 
 def do_it(**kwargs):
