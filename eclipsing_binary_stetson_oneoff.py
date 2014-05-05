@@ -41,3 +41,26 @@ plot3.graded_phase(v1916ori_out_of_eclipse, v1916ori_sid, period=v1916ori_period
 
 plot3.graded_phase(v1916ori_data, v1916ori_sid, period=v1916ori_period, timecolor=True,
 	               name="V1916 Ori, with eclipses")
+
+
+# V2716 Ori has SOURCEID: 44199508497099
+v2716ori_sid = 44199508497099
+v2716ori_data = source_photometry.where(source_photometry.SOURCEID == v2716ori_sid)
+
+# I looked at the lightcurve and concluded that all eclipses can be removed by excluding data where H is fainter than 13.7928 
+
+v2716ori_Hmag = v2716ori_data.HAPERMAG3
+
+v2716ori_out_of_eclipse = v2716ori_data.where(v2716ori_Hmag < 13.7928)
+
+print len(v2716ori_out_of_eclipse)
+print "Datapoints removed: {0}".format(len(v2716ori_data) - len(v2716ori_out_of_eclipse))
+
+print "Stetson of V2716 Ori, full data: {0}".format(Stetson_machine(v2716ori_data, flags=256))
+print "Stetson of V2716 Ori out of eclipse: {0}".format(Stetson_machine(v2716ori_out_of_eclipse, flags=256))
+
+plot3.graded_lc(v2716ori_out_of_eclipse, v2716ori_sid, timecolor=True, abridged=True,
+             	name="V2716 Ori, eclipse data removed")
+
+plot3.graded_lc(v2716ori_data, v2716ori_sid, timecolor=True, abridged=True,
+	               name="V2716 Ori, with eclipses")
