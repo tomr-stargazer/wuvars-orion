@@ -13,15 +13,38 @@ time baseline, especially as a function of variable class.
 
 from __future__ import division
 import random
+from functools import partial
 
 import numpy as np
 import atpy
 
 import spread3
 
-from variables_data_filterer import variables_photometry, autovars_true
+from table_maker import make_megeath_class_column
+from variables_data_filterer import variables_photometry, autovars_true, ukvar_spread
 from color_slope_filtering import filter_color_slopes
 from robust import mad
+
+megeath_class_column = make_megeath_class_column()
+
+protostar_IDs = ukvar_spread.SOURCEID[megeath_class_column == 'P']
+disk_IDs = ukvar_spread.SOURCEID[megeath_class_column == 'D']
+nondisk_IDs = ukvar_spread.SOURCEID[megeath_class_column == 'ND']
+
+def compute_function_on_column(function, column, spreadsheet):
+    return function(spreadsheet[column])
+
+def compute_function_on_column_selected(function, column, selection, spreadsheet):
+    return function(spreadsheet[column][np.in1d(spreadsheet.SOURCEID, selection)])
+
+def get_timespan(data): 
+    return (data.MEANMJDOBS.max() - data.MEANMJDOBS.min())
+
+def get_n_variables_stetson(spreadsheet, stetson=1.0):
+    return len(spreadsheet[spreadsheet.Stetson >= stetson])
+
+def get_n_obs(data):
+    return len(list(set(np.floor(data.MEANMJDOBS))))
 
 
 def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_offset=0, shuffle_dates=False):
@@ -34,25 +57,59 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_of
         np.in1d(variables_photometry.SOURCEID, autovars_true.SOURCEID) & 
         (variables_photometry.MEANMJDOBS >= np.min(variables_photometry.MEANMJDOBS) + date_offset))
 
-    date_list = np.sort(list(set(np.floor(autovars_photometry.MEANMJDOBS))))    
+    date_list = np.sort(list(set(np.floor(autovars_photometry.MEANMJDOBS))))
 
     # I think this is the only place I need to shuffle? Maybe?
     if shuffle_dates:
         random.shuffle(autovars_photometry.MEANMJDOBS)
 
-    time_baseline_list = []
     n_positive_slope_list = []
     n_negative_slope_list = []
     n_undef_slope_list = []
-    n_obs_list = []
 
     n_variables_list = []
-    median_j_amplitude_list = []
-    median_j_deviation_list = []    
-    median_h_amplitude_list = []
-    median_h_deviation_list = []    
-    median_k_amplitude_list = []
-    median_k_deviation_list = []    
+
+    # calculate these properties:
+    # most basic
+    properties = [{'name':'time_baseline',
+                   'function':get_timespan,
+                   'target':'data',
+                   'container':[]},
+
+                   {'name':'n_obs',
+                   'function':get_n_obs,
+                   'target':'data',
+                   'container':[]}]
+
+    # how many variables, using different stetson cuts?
+    properties.extend(
+        [{'name':'n_variables_{0}'.format(x),
+          'function':partial(get_n_variables_stetson, stetson=x),
+          'target':'spreadsheet',
+          'container':[]} 
+          for x in (0.8, 1.0, 1.2) ] )
+
+    # basic properties -- j, h, k amplitudes / deviations
+    properties.extend(
+       [{'name':'median_{0}_{1}'.format(x,y1),
+         'function':partial(compute_function_on_column,y2,'{0}_ranger'.format(x)),
+         'target':'spreadsheet',
+         'container':[]
+         } 
+         for x in ('j', 'h', 'k')
+         for y1, y2 in zip(('amplitude', 'deviation'), (np.median, mad))] )
+
+    # now broken down into Class
+    properties.extend(
+       [{'name':'{2}_median_{0}_{1}'.format(x,y1, z1),
+         'function':partial(compute_function_on_column_selected,y2,'{0}_ranger'.format(x),z2),
+         'target':'spreadsheet',
+         'container':[]
+         } 
+         for x in ('j', 'h', 'k')
+         for y1, y2 in zip(('amplitude', 'deviation'), (np.median, mad))
+         for z1, z2 in zip(('protostar', 'disk', 'nondisk'), (protostar_IDs, disk_IDs, nondisk_IDs))] )
+
 
     # For a bunch of different obs_initial's...
     # (note: when we test this, we may want to only go from the FIRST observation, and then add in the complexity of all the other ones later)
@@ -84,9 +141,6 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_of
             else:
                 last_n_obs = n_obs
 
-            timespan_of_relevant_data = (relevant_data.MEANMJDOBS.max() -
-                                         relevant_data.MEANMJDOBS.min())
-            
             # note: 
             # if you don't add any new observations between this delta-t 
             # and the last delta-t, DON'T COMPUTE A SPREADSHEET. just continue.  
@@ -107,6 +161,10 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_of
                 relevant_spreadsheet, 'hk', slope_confidence=None,
                 lower_obs_limit=n_obs/3, upper_obs_limit=n_obs*1.5)
 
+            targets = {}
+            targets['spreadsheet'] = relevant_spreadsheet
+            targets['data'] = relevant_data
+
             # and extract which guys have colors in the relevant ranges!
             n_positive_slope = len(relevant_khk_spreadsheet[
                 (np.degrees(np.arctan(relevant_khk_spreadsheet.khk_slope)) > 25) ])
@@ -116,26 +174,15 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_of
                                 (n_positive_slope + n_negative_slope) )
 
             n_variables = len(relevant_spreadsheet[relevant_spreadsheet.Stetson >= 1.0])
-            median_j_amplitude = np.median(relevant_spreadsheet.j_ranger)
-            median_j_deviation = mad(relevant_spreadsheet.j_ranger)            
-            median_h_amplitude = np.median(relevant_spreadsheet.h_ranger)
-            median_h_deviation = mad(relevant_spreadsheet.h_ranger)            
-            median_k_amplitude = np.median(relevant_spreadsheet.k_ranger)
-            median_k_deviation = mad(relevant_spreadsheet.k_ranger)            
 
-            time_baseline_list.append( timespan_of_relevant_data )
+            for prop in properties:
+                prop['container'].append(prop['function'](targets[prop['target']]) )
+
             n_positive_slope_list.append( n_positive_slope )
             n_negative_slope_list.append( n_negative_slope )
             n_undef_slope_list.append( n_undef_slope )
-            n_obs_list.append( n_obs )
 
             n_variables_list.append( n_variables)
-            median_j_amplitude_list.append( median_j_amplitude)
-            median_j_deviation_list.append( median_j_deviation)    
-            median_h_amplitude_list.append( median_h_amplitude)
-            median_h_deviation_list.append( median_h_deviation)    
-            median_k_amplitude_list.append( median_k_amplitude)
-            median_k_deviation_list.append( median_k_deviation)  
 
         break
 
@@ -143,19 +190,14 @@ def calculate_color_slope_ratios_versus_time_baseline(delta_t_list=None, date_of
 
     addc = color_slope_ratios_table.add_column
 
-    addc("time_baseline", time_baseline_list)
     addc("n_positive_slope", n_positive_slope_list)
     addc("n_negative_slope", n_negative_slope_list)
     addc("n_undef_slope", n_undef_slope_list)
-    addc("n_obs", n_obs_list)
 
     addc("n_variables", n_variables_list)
-    addc("median_j_amplitude", median_j_amplitude_list)
-    addc("median_j_deviation", median_j_deviation_list)
-    addc("median_h_amplitude", median_h_amplitude_list)
-    addc("median_h_deviation", median_h_deviation_list)
-    addc("median_k_amplitude", median_k_amplitude_list)
-    addc("median_k_deviation", median_k_deviation_list)    
+
+    for prop in properties:
+        addc(prop['name'], prop['container'])
 
     return color_slope_ratios_table
 
