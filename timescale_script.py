@@ -9,7 +9,7 @@ from color_slope_temporal_experiment import *
 
 import matplotlib.pyplot as plt
 
-delta_t_list = [5,10,20, 25, 30, 40, 50, 75, 100]
+delta_t_list = [5,10,20, 25, 30, 40, 50, 75, 100, 200, 1000]
 #delta_t_list = [10, 40]
 
 def make_shuffle_dudes(n_iterations=3):
