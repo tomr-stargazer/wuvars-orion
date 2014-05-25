@@ -8,6 +8,7 @@ import os
 
 from figure_maker import *
 from swolk_experiment import match_spitzer_to_ukirt
+from lightcurve_maker import *
 
 publication_figures = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_figures/")
 publication_lcs = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_lcs/")
@@ -76,6 +77,10 @@ def generate_figures_somewhere(path):
 	# Fig 18: Temporal color experiment
 
 	# Fig 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32: Light curves
+	eightpanel_479().savefig(path+"onc479_phase_lc.pdf")
+	eightpanel_149().savefig(path+"onc149_phase_lc.pdf")	
+	eightpanel_1226().savefig(path+"onc1226_phase_lc.pdf")		
+	eightpanel_957().savefig(path+"onc957_phase_lc.pdf")
 
 	# Fig 33: Eclipsing binary light curves
 
