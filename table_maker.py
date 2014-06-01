@@ -41,7 +41,7 @@ from tablemate_comparisons import (mated_ukvar, ukvar_spread,
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D,
                               Megeath_Full, Megeath_Allgoodsources,
                               XMM_north, Rice_UKvars)
-from orion_tablemate import index_secondary_by_primary, tablemater
+from tablemate_core import index_secondary_by_primary, tablemater
 
 from montage_script import conf_subj_periodics, conf_subj_nonpers
 

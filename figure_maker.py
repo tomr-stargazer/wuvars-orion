@@ -37,7 +37,7 @@ from color_slope_filtering import (jhk_empty, jhk_filled, jh_empty, jh_filled,
 from tablemate_comparisons import (mated_ukvar, ukvar_spread, 
                                    ukvar_periods, source_period_digger)
 from tablemate_script import (Megeath2012, Megeath_P, Megeath_D)
-from orion_tablemate import index_secondary_by_primary
+from tablemate_core import index_secondary_by_primary
 from variables_data_filterer import filter_by_tile, variables_photometry
 from table_maker import make_megeath_class_column
 

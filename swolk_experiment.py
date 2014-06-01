@@ -23,7 +23,7 @@ from plot2 import plot_trajectory_vanilla
 from tablemate_script import (XMM_north, XMM_north_c1, 
                               XMM_north_c2, XMM_north_c3,
                               Megeath2012, Megeath_P, Megeath_D, Megeath_ND)
-from orion_tablemate import tablemater, TableParameters
+from tablemate_core import tablemater, TableParameters
 from official_star_counter import autocan_strict, autocan_true
 
 # We'll be "mating" these tables to the XMM data.

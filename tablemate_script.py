@@ -1,6 +1,6 @@
 """
 This is the SCRIPT that mates tables in the Orion catalog,
-by calling the MODULE orion_tablemate.py.
+by calling the MODULE tablemate_core.py.
 
 This should be kept, broadly, in sync with the Google Doc
 "Auxiliary Tables in ONC".
@@ -16,8 +16,8 @@ import os
 
 import numpy as np
 
-import orion_tablemate
-from orion_tablemate import TableParameters, atpy
+import tablemate_core
+from tablemate_core import TableParameters, atpy
 import megeath_fulltable_parser_oneoff
 
 # Top half of the script: defining various tables
@@ -330,7 +330,7 @@ Megeath_ND = TableParameters(
     
 # Here's our first function, that we'll use just to get things rolling
 def test():
-    wov = orion_tablemate.osc.autovars_strict
+    wov = tablemate_core.osc.autovars_strict
 
     wov_avs = TableParameters(
         #data
@@ -347,7 +347,7 @@ def test():
         'SOURCEID')
 
 
-    return orion_tablemate.tablemater(wov_avs, [
+    return tablemate_core.tablemater(wov_avs, [
             Herbst2002, YSOVAR_NoExcess, YSOVAR_YSOs, DaRio_2010,
             DaRio_2009, Carpenter_2001, COUP_Getman2005, eso_ha])
             
@@ -360,8 +360,8 @@ def vars_match():
     Takes about 15 seconds (2/13/13).
     """
 
-    return orion_tablemate.tablemater( Rice_2013_vars, tables)
+    return tablemate_core.tablemater( Rice_2013_vars, tables)
 
 def UKvars_match():
     
-    return orion_tablemate.tablemater( Rice_UKvars, tables)
+    return tablemate_core.tablemater( Rice_UKvars, tables)
