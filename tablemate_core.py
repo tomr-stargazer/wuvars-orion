@@ -71,7 +71,7 @@ class TableParameters(object):
         elif type(data) is str:
             try:
                 self.path = data
-                self.data = atpy.Table(self.path)
+                self.data = atpy.Table(self.path, verbose=False)
             except IOError:
                 raise IOError("File '%s' not found" % data)
             except Exception, e:
