@@ -126,10 +126,10 @@ def best_period( periodic_spread ):
     r.add_column("best_period", best_period)
 
     periodic_spread_updated = r
-    return r
+    return periodic_spread_updated
 
 
-def long_periodic_selector( spread, min_period=50, max_period=200 ):
+def long_periodic_selector( spread, min_period=50, max_period=200, period_override={} ):
     """
     Selects real periodic variables using periodogram parameters.
 
@@ -139,6 +139,9 @@ def long_periodic_selector( spread, min_period=50, max_period=200 ):
     ----------
     spread : atpy.Table
         Table of spreadsheet info on variable stars.
+    period_override : dict, optional
+        Dictionary of SOURCEIDs -> forced periods to override the 
+        usual periodic selection.
 
     Returns
     -------
@@ -148,6 +151,8 @@ def long_periodic_selector( spread, min_period=50, max_period=200 ):
     """
 
     s = spread
+
+    override_SOURCEIDS = np.array(period_override.keys())
 
     r = s.where(
         ( # J, H
@@ -176,14 +181,16 @@ def long_periodic_selector( spread, min_period=50, max_period=200 ):
             ) |
         ( #K
             (s.k_lsp_pow > 15) & (s.k_lsp_per > min_period) & (s.k_lsp_per < max_period) 
-            ) 
+            ) |
+        ( # override
+            (np.in1d(s.SOURCEID, override_SOURCEIDS)))
         )
     
     periodic_spread = r
     return periodic_spread
 
 
-def best_long_period( periodic_spread, min_period=50, max_period=200 ):
+def best_long_period( periodic_spread, min_period=50, max_period=200, period_override={} ):
     """ 
     A function that chooses the best period of the six returned.
 
@@ -193,6 +200,9 @@ def best_long_period( periodic_spread, min_period=50, max_period=200 ):
     ----------
     periodic_spread : atpy.Table
         Table containing periodic variables
+    period_override : dict, optional
+        Dictionary of SOURCEIDs -> forced periods to override the 
+        usual period selection.
 
     Returns
     -------
@@ -206,8 +216,11 @@ def best_long_period( periodic_spread, min_period=50, max_period=200 ):
     r = periodic_spread
 
     for i in range(len(periodic_spread)):
+        # override
+        if r.SOURCEID[i] in period_override:
+            best_period[i] = period_override[r.SOURCEID[i]]
         # J, H
-        if ((r.j_lsp_per[i] < r.h_lsp_per[i] * 1.05) and
+        elif ((r.j_lsp_per[i] < r.h_lsp_per[i] * 1.05) and
             (r.j_lsp_per[i] > r.h_lsp_per[i] * 0.95) and
             (r.j_lsp_per[i] > min_period) and (r.j_lsp_per[i] < max_period) and
             (r.j_lsp_pow[i] > 12) and (r.h_lsp_pow[i] > 12)
