@@ -43,7 +43,7 @@ def eightpanel_957():
 def aatau_tenpanel(**kwargs):
 
 	aatau_oncvar_ids = [130, 234, 295, 311, 334, 337, 371, 431, 553, 929]
-	offsets = [-0.2, -0.15, 0.5, 0.25, 0, -0.25, 0.5, 0.3, 0.1]
+	offsets = [-0.2, -0.15, 0.5, 0.25, 0, -0.25, 0.5, 0.3, 0.1, 0.1]
 
 	aatau_sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in aatau_oncvar_ids]
 	aatau_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in aatau_oncvar_ids]
