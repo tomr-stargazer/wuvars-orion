@@ -159,7 +159,7 @@ def f_map_nonpers():
 
     plt.show()
 
-def f_cc_generic(spread, title=""):
+def f_cc_generic(spread, title="", cmap='cubehelix_r'):
     """
     Given an input dataset, makes a color-color plot with cool 
     colors and stuff.
@@ -185,7 +185,7 @@ def f_cc_generic(spread, title=""):
 
     # First group: only group! Because of how the data quality works.
     plt.scatter(spread.hmk_median, spread.jmh_median, c=spread.k_median,
-                vmin=11, vmax=15, cmap='cubehelix_r')
+                vmin=11, vmax=15, cmap=cmap)
 
     plt.xlabel(r"median $H-K$")
     plt.ylabel(r"median $J-H$")
