@@ -89,13 +89,18 @@ def aatau_period_plots():
 #4. color mag, color color
 def aatau_colors():
 
+	periods_less_than_10 = aatau_periods < 10
+
 	fig1 = plt.figure()
 
-	plt.scatter(aatau_spread.hmk_medianr, aatau_spread.k_medianr, c=aatau_periods, cmap='jet_r', vmin=2, vmax=10)
+	plt.scatter(aatau_spread.hmk_medianr[periods_less_than_10], aatau_spread.k_medianr[periods_less_than_10], 
+		c=aatau_periods[periods_less_than_10], cmap='jet_r', vmin=2, vmax=10)
 	plt.gca().invert_yaxis()
 
 	plt.xlabel("AA Tau median $H-K$")
 	plt.ylabel("AA Tau $K$ mag")
+
+	plt.title("Color-mag diagram of AA Taus, colored by period")
 
 	cbar = plt.colorbar()
 	cbar.set_label(r"AA Tau period")
