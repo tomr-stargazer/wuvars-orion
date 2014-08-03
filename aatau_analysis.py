@@ -11,6 +11,7 @@ from __future__ import division
 import os
 
 import numpy as np
+import matplotlib.pyplot as plt
 import astropy.table
 
 import plot3
@@ -62,5 +63,42 @@ num_periodic_disks = np.sum((megeath_class_column == 'D') & (~np.isnan(ukvar_per
 print "There are {0} disked stars, and {1} periodic disked stars.".format(num_disks, num_periodic_disks)
 print "Thus {:.1f}% of all disked stars are of AA Tau type,\nand {:.1f}% of periodic disked stars are of AA Tau type".format(100*num_aatau_disks/num_disks, 100*num_aatau_disks/num_periodic_disks)
 
-# 3. distribution of AA Tau periods, also versus mass
+# 3. distribution of AA Tau periods, also versus "mass"
+def aatau_period_plots():
 
+	fig1 = plt.figure()
+
+	plt.hist(aatau_periods, range=(2,20), bins=18)
+
+	plt.xlabel("AA Tau period (days)")
+	plt.title("Histogram of AA Tau periods")
+
+	fig2 = plt.figure()
+
+	plt.plot(aatau_periods, aatau_spread.k_medianr, 'ro')
+
+	plt.gca().invert_yaxis()
+
+	plt.xlabel("AA Tau period (days)")
+	plt.ylabel("AA Tau $K$ mag")
+	plt.title("Bright AA Taus have longer periods than faint AA Taus")
+
+	return fig1, fig2
+
+
+#4. color mag, color color
+def aatau_colors():
+
+	fig1 = plt.figure()
+
+	plt.scatter(aatau_spread.hmk_medianr, aatau_spread.k_medianr, c=aatau_periods, cmap='jet_r', vmin=2, vmax=10)
+	plt.gca().invert_yaxis()
+
+	plt.xlabel("AA Tau median $H-K$")
+	plt.ylabel("AA Tau $K$ mag")
+
+	cbar = plt.colorbar()
+	cbar.set_label(r"AA Tau period")
+
+
+	return fig1
