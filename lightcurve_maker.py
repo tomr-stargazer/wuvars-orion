@@ -70,3 +70,37 @@ def aatau_tenpanel(**kwargs):
 
 		aafig.canvas.draw()
 	return aafig
+
+
+def seven_longperiod_variables_bo(**kwargs):
+
+	sevenlong_oncvar_ids = [479, 149, 1226, 637, 802, 874, 665]
+	offsets = [0.5, -0.35, 0.12, -0.1, 0.3, 0.05, -0.05]
+
+	sevenlong_sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in sevenlong_oncvar_ids]
+	# try:
+	# 	sevenlong_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in sevenlong_oncvar_ids]
+	sevenlong_periods = [17.79, 36.4, 88.5, 42.5, 158.8, 75.16, 44.27]
+
+	sevenlong_stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(oncvar_id)) for sourceid, oncvar_id in zip(sevenlong_sourceids, sevenlong_oncvar_ids)]
+
+	bands = ['k']*7
+
+	seven_fig = multi_lc_phase_colors(sevenlong_stardatas, bands, sevenlong_periods, offsets, **kwargs)
+
+	for stardata, period, axes_dict in zip(seven_fig.stardatas, seven_fig.periods, seven_fig.axes_dicts):
+
+		name = stardata.name 
+		ax_phase = axes_dict['phase']
+		ax_jhk = axes_dict['jhk']
+
+		print "Doing thing with ONCvar {0}!".format(name)
+
+		ax_phase.text(0.1, 0.8, "ONCvar {0}".format(stardata.name), transform=ax_phase.transAxes, fontsize='small')
+		ax_phase.text(0.6, 0.8, "P = {0:.2f} d".format(period), transform=ax_phase.transAxes, fontsize='small')
+
+		ax_jhk.set_xlim(0,2)
+		ax_jhk.set_ylim(0,2.5)
+
+		seven_fig.canvas.draw()
+	return seven_fig
