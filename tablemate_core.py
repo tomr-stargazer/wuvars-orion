@@ -17,6 +17,7 @@ ago in `match.py` is expected.
 import copy
 
 import numpy as np
+import astropy.table
 
 import atpy
 try:
@@ -76,6 +77,9 @@ class TableParameters(object):
                 raise IOError("File '%s' not found" % data)
             except Exception, e:
                 raise e
+        elif type(data) is astropy.table.table.Table:
+            self.data = data
+            self.path = None
         else:
             raise Exception("Data in `data` is invalid.")
 
