@@ -8,7 +8,7 @@ from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 
-from plot4 import lc_and_phase_and_colors
+from plot4 import lc_and_phase_and_colors, multi_lc_phase_colors
 from orion_plot import OrionStarData
 from tablemate_comparisons import ukvar_spread, ukvar_periods
 from variables_data_filterer import variables_photometry
@@ -39,3 +39,16 @@ def eightpanel_1226():
 
 def eightpanel_957():
 	return eightpanel_by_oncvar(957, offset=0.25)
+
+def aatau_tenpanel(**kwargs):
+
+	aatau_oncvar_ids = [130, 234, 295, 311, 334, 337, 371, 431, 553, 929]
+	aatau_sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in aatau_oncvar_ids]
+	aatau_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in aatau_oncvar_ids]
+
+	aatau_stardatas = [OrionStarData(variables_photometry, sourceid) for sourceid in aatau_sourceids]
+
+	bands = ['k']*10
+
+	offsets = [0]*10
+	return multi_lc_phase_colors(aatau_stardatas, bands, aatau_periods, offsets, **kwargs)
