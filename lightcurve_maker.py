@@ -48,8 +48,21 @@ def aatau_tenpanel(**kwargs):
 	aatau_sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in aatau_oncvar_ids]
 	aatau_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in aatau_oncvar_ids]
 
-	aatau_stardatas = [OrionStarData(variables_photometry, sourceid) for sourceid in aatau_sourceids]
+	aatau_stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(oncvar_id)) for sourceid, oncvar_id in zip(aatau_sourceids, aatau_oncvar_ids)]
 
 	bands = ['k']*10
 
-	return multi_lc_phase_colors(aatau_stardatas, bands, aatau_periods, offsets, **kwargs)
+	aafig = multi_lc_phase_colors(aatau_stardatas, bands, aatau_periods, offsets, **kwargs)
+
+	for stardata, period, axes_dict in zip(aafig.stardatas, aafig.periods, aafig.axes_dicts):
+
+		name = stardata.name 
+		ax = axes_dict['phase']
+
+		print "Doing thing with ONCvar {0}!".format(name)
+
+		ax.text(0.1, 0.1, "ONCvar {0}".format(stardata.name), transform=ax.transAxes, fontsize='small')
+		ax.text(0.6, 0.1, "P = {0:.2f} d".format(period), transform=ax.transAxes, fontsize='small')
+
+		aafig.canvas.draw()
+	return aafig
