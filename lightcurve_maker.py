@@ -57,12 +57,16 @@ def aatau_tenpanel(**kwargs):
 	for stardata, period, axes_dict in zip(aafig.stardatas, aafig.periods, aafig.axes_dicts):
 
 		name = stardata.name 
-		ax = axes_dict['phase']
+		ax_phase = axes_dict['phase']
+		ax_jhk = axes_dict['jhk']
 
 		print "Doing thing with ONCvar {0}!".format(name)
 
-		ax.text(0.1, 0.1, "ONCvar {0}".format(stardata.name), transform=ax.transAxes, fontsize='small')
-		ax.text(0.6, 0.1, "P = {0:.2f} d".format(period), transform=ax.transAxes, fontsize='small')
+		ax_phase.text(0.1, 0.1, "ONCvar {0}".format(stardata.name), transform=ax_phase.transAxes, fontsize='small')
+		ax_phase.text(0.6, 0.1, "P = {0:.2f} d".format(period), transform=ax_phase.transAxes, fontsize='small')
+
+		ax_jhk.set_xlim(0,1.5)
+		ax_jhk.set_ylim(0,2)
 
 		aafig.canvas.draw()
 	return aafig
