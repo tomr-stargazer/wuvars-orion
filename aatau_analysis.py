@@ -17,7 +17,7 @@ import astropy.table
 import plot3
 from variables_data_filterer import source_photometry
 from tablemate_comparisons import ukvar_spread, ukvar_periods
-from table_maker import make_megeath_class_column
+from table_maker import make_megeath_class_column, megeath2012_by_ukvar
 
 megeath_class_column = make_megeath_class_column()
 
@@ -30,6 +30,8 @@ aatau_spread = ukvar_spread.where(np.in1d(ukvar_spread['UKvar_ID'], aatau_ids))
 aatau_periods = ukvar_periods[np.in1d(ukvar_spread['UKvar_ID'], aatau_ids)]
 aatau_classes = megeath_class_column[np.in1d(ukvar_spread['UKvar_ID'], aatau_ids)]
 
+
+aatau_megeath = megeath2012_by_ukvar.where(np.in1d(ukvar_spread['UKvar_ID'], aatau_ids))
 
 # things to compute:
 # 1. number of AA Taus, versus total number of periodic variables
@@ -83,7 +85,36 @@ def aatau_period_plots():
 	plt.ylabel("AA Tau $K$ mag")
 	plt.title("Bright AA Taus have longer periods than faint AA Taus")
 
-	return fig1, fig2
+	fig3 = plt.figure()
+
+	plt.subplot(221)
+	plt.plot(aatau_periods, aatau_megeath['3.6mag'], 'bo')
+	plt.gca().invert_yaxis()
+	plt.text(10, 12.5, "[3.6]", fontsize=14)
+
+	plt.subplot(222)
+	plt.plot(aatau_periods, aatau_megeath['4.5mag'], 'go')
+	plt.gca().invert_yaxis()
+	plt.text(10, 12, "[4.5]", fontsize=14)
+
+	plt.subplot(223)
+	plt.plot(aatau_periods, aatau_megeath['5.8mag'], 'ro')
+	plt.xlabel("AA Tau period (days)")
+	plt.ylabel("Magnitude")
+	plt.gca().invert_yaxis()	
+	plt.ylim(12, 7.5)
+	plt.text(10, 11.5, "[5.8]", fontsize=14)
+
+	plt.subplot(224)
+	plt.plot(aatau_periods, aatau_megeath['8.0mag'], 'mo')
+	plt.gca().invert_yaxis()	
+	plt.ylim(12, 7)	
+	plt.text(10, 11.5, "[8.0]", fontsize=14)
+
+	plt.suptitle("AA Tau magnitude-period relation for Spitzer photometry")
+
+
+	return fig1, fig2, fig3
 
 
 #4. color mag, color color
