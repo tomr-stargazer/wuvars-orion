@@ -8,7 +8,7 @@ from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 
-from plot4 import lc_and_phase_and_colors, multi_lc_phase_colors
+from plot4 import lc_and_phase_and_colors, multi_lc_phase_colors, multi_lc_colors
 from orion_plot import OrionStarData
 from tablemate_comparisons import ukvar_spread, ukvar_periods
 from variables_data_filterer import variables_photometry
@@ -70,6 +70,68 @@ def aatau_tenpanel(**kwargs):
 
 		aafig.canvas.draw()
 	return aafig
+
+def longterm_nonperiodic_tenpanel(**kwargs):
+
+	# compiled on 10 Sep 2010
+	longnononcvar_ids = sorted([1030, 30, 910, 1156, 148, 177, 28, 313, 605, 705])
+
+	longnonsourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in longnononcvar_ids]
+	longnonstardatas = [
+    	OrionStarData(
+	    	variables_photometry, sourceid, 
+		    name='{}'.format(oncvar_id)) for sourceid, oncvar_id in zip(longnonsourceids, longnononcvar_ids)]
+
+	bands = ['k']*10
+
+	longnon_fig = multi_lc_colors(longnonstardatas, bands, **kwargs)
+
+	for stardata, axes_dict in zip(longnon_fig.stardatas, longnon_fig.axes_dicts):
+
+		name = stardata.name
+		ax_jhk = axes_dict['jhk']
+		ax_lc = axes_dict['lc']
+
+		print "Doing thing with ONCvar {0}!".format(name)
+
+		ax_lc.text(0.6, 0.8, "ONCvar {0}".format(stardata.name), transform=ax_lc.transAxes, fontsize='small')
+
+		ax_jhk.set_xlim(0,1.5)
+		ax_jhk.set_ylim(0,2)
+
+		longnon_fig.canvas.draw()
+	return longnon_fig
+
+def dipper_nonperiodic_fivepanel(**kwargs):
+
+	# compiled on 10 Sep 2010
+	dipper_oncvar_ids = sorted([600, 165, 185, 423, 441])
+
+	dipper_sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in dipper_oncvar_ids]
+	dipper_stardatas = [
+    	OrionStarData(
+	    	variables_photometry, sourceid, 
+		    name='{}'.format(oncvar_id)) for sourceid, oncvar_id in zip(dipper_sourceids, dipper_oncvar_ids)]
+
+	bands = ['k']*len(dipper_oncvar_ids)
+
+	dipper_fig = multi_lc_colors(dipper_stardatas, bands, **kwargs)
+
+	for stardata, axes_dict in zip(dipper_fig.stardatas, dipper_fig.axes_dicts):
+
+		name = stardata.name
+		ax_jhk = axes_dict['jhk']
+		ax_lc = axes_dict['lc']
+
+		print "Doing thing with ONCvar {0}!".format(name)
+
+		ax_lc.text(0.6, 0.1, "ONCvar {0}".format(stardata.name), transform=ax_lc.transAxes, fontsize='small')
+
+		ax_jhk.set_xlim(0,1.5)
+		ax_jhk.set_ylim(0,2)
+
+		dipper_fig.canvas.draw()
+	return dipper_fig
 
 
 def seven_longperiod_variables_bo(**kwargs):
