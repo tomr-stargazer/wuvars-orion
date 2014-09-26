@@ -621,7 +621,7 @@ def f_period_lit_comparisons(pretty=True):
     plt.plot(ukvar_periods, lit_periods.RodriguezLedesma2009_period, 'o', 
              label='Rodriguez-Ledesma+2009')
     
-    plt.legend(numpoints=1, loc='Upper Left', framealpha=0.5)
+    plt.legend(numpoints=1, loc='upper left', framealpha=0.5)
 
     plt.xlabel("Periods derived in our study (days)")
     plt.ylabel("Literature periods (days)")
