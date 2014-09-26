@@ -13,7 +13,40 @@ from orion_plot import OrionStarData
 from tablemate_comparisons import ukvar_spread, ukvar_periods
 from variables_data_filterer import variables_photometry
 
-def eightpanel_by_oncvar(oncvar, period=None, **kwargs):
+# custom colormap - inspired by http://stackoverflow.com/questions/16152052/matplotlib-python-change-single-color-in-colormap/16163481
+from matplotlib.colors import LinearSegmentedColormap
+
+# original stretched thing that I like:
+# dic = {'red': ((0., 1, 0),
+#                (0.24, 1, 1),
+#                (0.939,1, 1),
+#                (1, 0.5, 0.5)),
+#        'green': ((0., 1, 0),
+#                 (0.136,1, 1),
+#                 (0.8,1, 1),
+#                 (0.95,0,0),
+#                 (1, 0, 0)),
+#        'blue': ((0., 1, 1),
+#                (0.124, 1, 1),
+#                (0.806,0, 0),
+#                (1, 0, 0))}
+orion_color_dic = {'red': ((0., 1, 0),
+               (0.4, 1, 1),
+               (0.9,1, 1),
+               (1, 0.5, 0.5)),
+       'green': ((0., 1, 0),
+                (0.136,1, 1),
+                (0.8,1, 1),
+                (0.9,0,0),
+                (1, 0, 0)),
+       'blue': ((0., 1, 1),
+               (0.2, 0.5, 0.5),
+               (0.7,0, 0),
+               (1, 0, 0))}
+
+orion_cmap = LinearSegmentedColormap('orion_cmap', orion_color_dic)
+
+def eightpanel_by_oncvar(oncvar, period=None, cmap=orion_cmap, **kwargs):
 	""" 
 	Makes a lc_and_phase_and_colors plot 'smartly' based on an input ONCvar ID.
 
@@ -26,10 +59,10 @@ def eightpanel_by_oncvar(oncvar, period=None, **kwargs):
 
 	stardata = OrionStarData(variables_photometry, sourceid)
 
-	return lc_and_phase_and_colors(stardata, period, **kwargs)
+	return lc_and_phase_and_colors(stardata, period, time_cmap=cmap, **kwargs)
 
-def eightpanel_149():
-	return eightpanel_by_oncvar(149, period=36.403, offset=0.65)
+def eightpanel_149(**kwargs):
+	return eightpanel_by_oncvar(149, period=36.403, offset=0.65, **kwargs)
 
 def eightpanel_479():
 	return eightpanel_by_oncvar(479, period=17.786, offset=0.5)
@@ -37,8 +70,8 @@ def eightpanel_479():
 def eightpanel_1226():
 	return eightpanel_by_oncvar(1226, period=88.496, offset=0.1)
 
-def eightpanel_957():
-	return eightpanel_by_oncvar(957, offset=0.25)
+def eightpanel_957(**kwargs):
+	return eightpanel_by_oncvar(957, offset=0.25, **kwargs)
 
 def aatau_tenpanel(**kwargs):
 
