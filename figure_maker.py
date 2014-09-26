@@ -320,10 +320,16 @@ def f_colorslope_threepanel(title=False):
     s3.set_xlabel("Slope (degrees)")
     s3.set_ylabel("N_stars")
 
-    s1.text(-80, 28, r"$J-H$ vs. $H-K$")
-    s2.text(-80, 28, r"$J$  vs. $J-H$")
-    s3.text(-80, 28, r"$K$  vs. $H-K$")
-    
+    s1.text(-30, 28, r"$J-H$ vs. $H-K$")
+    s2.text(-30, 28, r"$J$  vs. $J-H$")
+    s3.text(-30, 28, r"$K$  vs. $H-K$")
+
+    s3.plot([-45,-45],[-50,50], 'k--', scalex=False, scaley=False)
+    s3.plot([30,30],[-50,50], 'k--', scalex=False, scaley=False)
+
+    s3.text(-85, 20, "Accretion &\nDisk Activity", color='blue', weight='bold')
+    s3.text(45, 25, "Dust reddening", color='red', weight='bold')    
+
     if title:
         s1.set_title("Histograms of slopes in color-color and color-magnitude space")
     
