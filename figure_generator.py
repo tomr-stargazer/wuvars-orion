@@ -67,7 +67,12 @@ def generate_figures_somewhere(path):
 	# Fig 12: Distribution of periods by class
 	f_periods_by_megeath_class()[0].savefig(path+"period_distributions.pdf")
 
+	# Fig. 12: seven-deep rotators, figscale=0.5
+	seven_clean_rotators(figscale=0.5).savefig(path+"rotator_lightcurves.pdf")
+
 	# Fig 13, 14, 15: lightcurves
+	# Fig 15: ONCvar 539 fivepanel
+	fivepanel_539().savefig(path+"onc539.pdf")
 
 	# Fig 16: Illustration of two example KHK tracks
 
@@ -77,10 +82,24 @@ def generate_figures_somewhere(path):
 	# Fig 18: Temporal color experiment
 
 	# Fig 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32: Light curves
+	fivepanel_218().savefig(path+"onc218.pdf")
+	fivepanel_212().savefig(path+"onc212.pdf")
+	fivepanel_466().savefig(path+"onc466.pdf")
+
+	fivepanel_310().savefig(path+"onc310.pdf")
+	dipper_nonperiodic_fivepanel(figscale=0.5).savefig(path+"irregular_dipper_multipanel.pdf")
+	aatau_tenpanel(figscale=0.5).savefig(path+"aatau_tenpanel.pdf")
+
 	eightpanel_479().savefig(path+"onc479_phase_lc.pdf")
 	eightpanel_149().savefig(path+"onc149_phase_lc.pdf")	
 	eightpanel_1226().savefig(path+"onc1226_phase_lc.pdf")		
+
+	seven_longperiod_variables_bo(figscale=0.5).savefig(path+"longperiod_sevenpanel.pdf")
+	fivepanel_663().savefig(path+"onc663.pdf")
+
 	eightpanel_957().savefig(path+"onc957_phase_lc.pdf")
+
+	longterm_nonperiodic_tenpanel(figscale=0.5).savefig(path+"longterm_nonperiodic_multipanel.pdf")
 
 	# Fig 33: Eclipsing binary light curves
 
