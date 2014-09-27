@@ -102,6 +102,9 @@ def generate_figures_somewhere(path):
 	longterm_nonperiodic_tenpanel(figscale=0.5).savefig(path+"longterm_nonperiodic_multipanel.pdf")
 
 	# Fig 33: Eclipsing binary light curves
+	eightpanel_1191().savefig(path+"onc1191.pdf")
+	three_new_eclipsing_binaries(figscale=0.75).savefig(path+"new_ebs.pdf")
+	six_old_eclipsing_binaries(figscale=0.75).savefig(path+"old_ebs.pdf")
 
 	# 
 	return
