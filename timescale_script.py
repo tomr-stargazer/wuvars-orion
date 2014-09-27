@@ -9,7 +9,7 @@ from color_slope_temporal_experiment import *
 
 import matplotlib.pyplot as plt
 
-delta_t_list = [5,10,20, 25, 30, 35, 40, 50, 75, 100, 200, 1000]
+delta_t_list = [5,10,20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 100, 120, 150, 175, 200, 1000]
 #delta_t_list = [10, 40]
 
 def make_shuffle_dudes(n_iterations=3):
@@ -32,55 +32,66 @@ def make_shuffle_dudes(n_iterations=3):
 
 def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 
-	fig1 = plt.figure()
+	fig1 = plt.figure(figsize=(4,5))
 
 	plt.title("Non shuffled. Each run offset by 30 days.")
 
 	for non_shuffle in list_of_non_shuffled:
 
-		plt.plot(non_shuffle.time_baseline, non_shuffle.n_positive_slope, 'r.')
-		plt.plot(non_shuffle.time_baseline, non_shuffle.n_negative_slope, 'b.')
+		plt.plot(non_shuffle['time_baseline'], non_shuffle['n_positive_slope'], 'r.')
+		plt.plot(non_shuffle['time_baseline'], non_shuffle['n_negative_slope'], 'b.')
 
-	fig2 = plt.figure()
+	plt.xlim(0,200)
+
+	fig2 = plt.figure(figsize=(4,5))
 	plt.title("Shuffled")
 
 	for shuffle in list_of_shuffle_dudes:
 
-		plt.plot(shuffle.time_baseline, shuffle.n_positive_slope, 'r.')
-		plt.plot(shuffle.time_baseline, shuffle.n_negative_slope, 'b.')
+		plt.plot(shuffle['time_baseline'], shuffle['n_positive_slope'], 'r.')
+		plt.plot(shuffle['time_baseline'], shuffle['n_negative_slope'], 'b.')
 
-	fig3 = plt.figure()
+	plt.xlim(0,200)
+
+	fig3 = plt.figure(figsize=(4,5))
 	plt.title("Non shuffled.")
 	plt.ylabel("Number of variables detected")
 
 	for non_shuffle in list_of_non_shuffled:
 
-		plt.plot(non_shuffle.time_baseline, non_shuffle.n_variables, 'k.')
+		plt.plot(non_shuffle['time_baseline'], non_shuffle['n_variables'], 'k.')
 
-	fig4 = plt.figure()
+	plt.xlim(0,200)
+
+	fig4 = plt.figure(figsize=(4,5))
 	plt.title("Shuffled")
 	plt.ylabel("Number of variables detected")	
 
 	for shuffle in list_of_shuffle_dudes:
 
-		plt.plot(shuffle.time_baseline, shuffle.n_variables, 'k.')
+		plt.plot(shuffle['time_baseline'], shuffle['n_variables'], 'k.')
 
-	fig5 = plt.figure()
+	plt.xlim(0,200)
+
+	fig5 = plt.figure(figsize=(4,5))
 	plt.title("Non shuffled.")
 	plt.ylabel("K amplitude")	
 
 	for non_shuffle in list_of_non_shuffled:
 
-		plt.errorbar(non_shuffle.time_baseline, non_shuffle.median_k_amplitude, yerr=non_shuffle.median_k_deviation,fmt='k.')
+		plt.errorbar(non_shuffle['time_baseline'], non_shuffle['median_k_amplitude'], yerr=non_shuffle['median_k_deviation'],fmt='k.')
 
-	fig6 = plt.figure()
+	plt.xlim(0,200)
+
+	fig6 = plt.figure(figsize=(4,5))
 	plt.title("shuffled.")
 	plt.ylabel("K amplitude")
 
 	for shuffle in list_of_shuffle_dudes:
 
-		plt.errorbar(shuffle.time_baseline, shuffle.median_k_amplitude, yerr=shuffle.median_k_deviation,fmt='k.')
+		plt.errorbar(shuffle['time_baseline'], shuffle['median_k_amplitude'], yerr=shuffle['median_k_deviation'],fmt='k.')
 
+	plt.xlim(0,200)
 
 	return fig1, fig2, fig3, fig4, fig5, fig6
 
