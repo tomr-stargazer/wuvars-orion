@@ -136,6 +136,15 @@ def eightpanel_1226():
 def eightpanel_957(**kwargs):
 	return eightpanel_by_oncvar(957, offset=0.25, **kwargs)
 
+def eightpanel_1191(**kwargs):
+	fig = eightpanel_by_oncvar(1191, period=3.2225, offset=0, **kwargs)
+
+	fig.ax_j_phase.set_title("ONCvar 1191 (V2716 Ori)")
+	fig.canvas.draw()
+
+	return fig
+
+
 def aatau_tenpanel(cmap=orion_cmap, **kwargs):
 
 	aatau_oncvar_ids = [130, 234, 295, 311, 334, 337, 371, 431, 553, 929]
@@ -330,3 +339,81 @@ def seven_clean_rotators(cmap=orion_cmap, **kwargs):
 	rotator_fig.canvas.draw()
 
 	return rotator_fig
+
+def three_new_eclipsing_binaries(cmap=orion_cmap, **kwargs):
+	oncvar_ids = [47, 1147, 1190]
+	offsets = [-0.25, -0.25, 0.35] # [0.5, 0.2, 0.1, 0.5, 0, 0.1, 0]
+
+	sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in oncvar_ids]
+	periods = [1.1123, 0.395535, 3.031]
+	#[ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in oncvar_ids]
+
+	stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(oncvar_id)) for sourceid, oncvar_id in zip(sourceids, oncvar_ids)]
+
+	bands = ['k']*len(oncvar_ids)
+
+	fig = multi_lc_phase_colors(stardatas, bands, periods, offsets, cmap=cmap, **kwargs)
+
+	for stardata, period, axes_dict in zip(fig.stardatas, fig.periods, fig.axes_dicts):
+
+		name = stardata.name 
+		ax_phase = axes_dict['phase']
+		ax_jhk = axes_dict['jhk']
+
+		print "Doing thing with ONCvar {0}!".format(name)
+
+		ax_phase.text(0.03, 0.1, "ONCvar {0}".format(stardata.name), transform=ax_phase.transAxes, fontsize='small')
+		ax_phase.text(0.7, 0.1, "P = {0:.2f} d".format(period), transform=ax_phase.transAxes, fontsize='small')
+
+		ax_jhk.set_xlim(0,2)
+		ax_jhk.set_ylim(0,2.5)
+
+		fig.canvas.draw()
+
+	fig.axes_dicts[0]['phase'].set_title("Period-folded light curve", fontsize='small')
+	fig.axes_dicts[0]['lc'].set_title("Light curve (MJD - 54034)", fontsize='small')
+	fig.axes_dicts[0]['jhk'].set_title("$J-H$ vs. $H-K$", fontsize='small')
+	fig.axes_dicts[0]['khk'].set_title("$K$ vs. $H-K$", fontsize='small')	
+
+	fig.canvas.draw()
+
+	return fig	
+
+def six_old_eclipsing_binaries(cmap=orion_cmap, **kwargs):
+	oncvar_ids = [122, 427, 518, 1227, 788, 1100]
+	offsets = [0, 0, -0.15, -0.4, -0.4, -0.15]
+
+	sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in oncvar_ids]
+	periods = [2.635, 20.48, 4.674, 2.65, 9.78, 3.57]
+#	periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in oncvar_ids]
+
+	stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(oncvar_id)) for sourceid, oncvar_id in zip(sourceids, oncvar_ids)]
+
+	bands = ['k']*len(oncvar_ids)
+
+	fig = multi_lc_phase_colors(stardatas, bands, periods, offsets, cmap=cmap, **kwargs)
+
+	for stardata, period, axes_dict in zip(fig.stardatas, fig.periods, fig.axes_dicts):
+
+		name = stardata.name 
+		ax_phase = axes_dict['phase']
+		ax_jhk = axes_dict['jhk']
+
+		print "Doing thing with ONCvar {0}!".format(name)
+
+		ax_phase.text(0.03, 0.1, "ONCvar {0}".format(stardata.name), transform=ax_phase.transAxes, fontsize='small')
+		ax_phase.text(0.7, 0.1, "P = {0:.2f} d".format(period), transform=ax_phase.transAxes, fontsize='small')
+
+		ax_jhk.set_xlim(0,2)
+		ax_jhk.set_ylim(0,2.5)
+
+		fig.canvas.draw()
+
+	fig.axes_dicts[0]['phase'].set_title("Period-folded light curve", fontsize='small')
+	fig.axes_dicts[0]['lc'].set_title("Light curve (MJD - 54034)", fontsize='small')
+	fig.axes_dicts[0]['jhk'].set_title("$J-H$ vs. $H-K$", fontsize='small')
+	fig.axes_dicts[0]['khk'].set_title("$K$ vs. $H-K$", fontsize='small')	
+
+	fig.canvas.draw()
+
+	return fig	
