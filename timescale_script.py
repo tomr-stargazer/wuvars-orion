@@ -39,7 +39,7 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 	for non_shuffle in list_of_non_shuffled:
 
 		plt.plot(non_shuffle['time_baseline'], non_shuffle['n_positive_slope'], 'r.')
-		plt.plot(non_shuffle['time_baseline'], non_shuffle['n_negative_slope'], 'b.')
+		plt.plot(non_shuffle['time_baseline'], non_shuffle['n_negative_slope'], 'bx', mew=2)
 
 	plt.xlim(0,200)
 
@@ -49,12 +49,12 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 	for shuffle in list_of_shuffle_dudes:
 
 		plt.plot(shuffle['time_baseline'], shuffle['n_positive_slope'], 'r.')
-		plt.plot(shuffle['time_baseline'], shuffle['n_negative_slope'], 'b.')
+		plt.plot(shuffle['time_baseline'], shuffle['n_negative_slope'], 'bx', mew=2)
 
 	plt.xlim(0,200)
 
 	fig3 = plt.figure(figsize=(4,5))
-	plt.title("Non shuffled.")
+	plt.title("Non-shuffled")
 	plt.ylabel("Number of variables detected")
 
 	for non_shuffle in list_of_non_shuffled:
@@ -64,7 +64,7 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 	plt.xlim(0,200)
 
 	fig4 = plt.figure(figsize=(4,5))
-	plt.title("Shuffled")
+	plt.title("Time shuffled")
 	plt.ylabel("Number of variables detected")	
 
 	for shuffle in list_of_shuffle_dudes:
@@ -74,7 +74,7 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 	plt.xlim(0,200)
 
 	fig5 = plt.figure(figsize=(4,5))
-	plt.title("Non shuffled.")
+	plt.title("Non shuffled")
 	plt.ylabel("K amplitude")	
 
 	for non_shuffle in list_of_non_shuffled:
@@ -84,7 +84,7 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 	plt.xlim(0,200)
 
 	fig6 = plt.figure(figsize=(4,5))
-	plt.title("shuffled.")
+	plt.title("Time shuffled")
 	plt.ylabel("K amplitude")
 
 	for shuffle in list_of_shuffle_dudes:
