@@ -131,7 +131,12 @@ def eightpanel_479():
 	return eightpanel_by_oncvar(479, period=17.786, offset=0.5)
 
 def eightpanel_1226():
-	return eightpanel_by_oncvar(1226, period=88.496, offset=0.1)
+	fig = eightpanel_by_oncvar(1226, period=88.496, offset=0.1)
+
+	fig.ax_jhk.set_xlim(0.1, 0.6)
+	fig.ax_jhk.set_ylim(0.45, 0.95)
+	
+	return fig
 
 def eightpanel_957(**kwargs):
 	return eightpanel_by_oncvar(957, offset=0.25, **kwargs)
@@ -326,8 +331,8 @@ def seven_clean_rotators(cmap=orion_cmap, **kwargs):
 		ax_phase.text(0.1, 0.8, "ONCvar {0}".format(stardata.name), transform=ax_phase.transAxes, fontsize='small')
 		ax_phase.text(0.6, 0.1, "P = {0:.2f} d".format(period), transform=ax_phase.transAxes, fontsize='small')
 
-		ax_jhk.set_xlim(0,2)
-		ax_jhk.set_ylim(0,2.5)
+		ax_jhk.set_xlim(0.095,1.05)
+		ax_jhk.set_ylim(0.5,2)
 
 		rotator_fig.canvas.draw()
 
