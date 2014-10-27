@@ -9,6 +9,7 @@ import os
 from figure_maker import *
 from swolk_experiment import match_spitzer_to_ukirt
 from lightcurve_maker import *
+from ysovar_data_read import make_ysovar_light_curve
 
 publication_figures = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_figures/")
 publication_lcs = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_lcs/")
@@ -93,6 +94,8 @@ def generate_figures_somewhere(path):
 	eightpanel_479().savefig(path+"onc479_phase_lc.pdf")
 	eightpanel_149().savefig(path+"onc149_phase_lc.pdf")	
 	eightpanel_1226().savefig(path+"onc1226_phase_lc.pdf")		
+
+	make_ysovar_light_curve().savefig(path+"1226_ysovar.pdf", bbox_inches='tight')
 
 	seven_longperiod_variables_bo(figscale=0.5).savefig(path+"longperiod_sevenpanel.pdf")
 	fivepanel_663().savefig(path+"onc663.pdf")
