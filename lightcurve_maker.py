@@ -135,7 +135,7 @@ def eightpanel_1226():
 
 	fig.ax_jhk.set_xlim(0.1, 0.6)
 	fig.ax_jhk.set_ylim(0.45, 0.95)
-	
+
 	return fig
 
 def eightpanel_957(**kwargs):
@@ -191,8 +191,11 @@ def aatau_tenpanel(cmap=orion_cmap, **kwargs):
 
 def longterm_nonperiodic_tenpanel(cmap=orion_cmap, **kwargs):
 
-	# compiled on 10 Sep 2010
-	longnononcvar_ids = sorted([1030, 30, 910, 1156, 148, 177, 28, 313, 605, 705])
+	# compiled on 10 Sep 2014
+	# sorted([1030, 30, 910, 1156, 148, 177, 28, 313, 605, 705])
+	# re-sorted on 22 Oct 2014
+	longnononcvar_ids = [30, 313, 1030, 1156, 28, 148, 177, 605, 705, 910]
+
 
 	longnonsourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in longnononcvar_ids]
 	longnonstardatas = [
