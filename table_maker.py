@@ -43,7 +43,7 @@ from tablemate_script import (Megeath2012, Megeath_P, Megeath_D,
                               XMM_north, Rice_UKvars)
 from tablemate_core import index_secondary_by_primary, tablemater
 
-from montage_script import conf_subj_periodics, conf_subj_nonpers
+# from montage_script import conf_subj_periodics, conf_subj_nonpers
 
 dropbox_bo = os.path.expanduser("~/Dropbox/Bo_Tom/")
 output_directory = dropbox_bo+"paper/publication_tables/"
@@ -343,6 +343,9 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
         clobber_table_write(t2_nodisks, output_directory+"Table_2c.txt", type='ascii')
         clobber_table_write(t2_unknown, output_directory+"Table_2d.txt", type='ascii')
 
+        clobber_table_write(table, output_directory+"Table_2.txt", type='ascii')
+
+
     return table
 
 def t_table3_variability_nonperiodics_bymegeathclass(write=False):
@@ -431,6 +434,8 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
         clobber_table_write(t3_disks, output_directory+"Table_3b.txt", type='ascii')
         clobber_table_write(t3_nodisks, output_directory+"Table_3c.txt", type='ascii')
         clobber_table_write(t3_unknown, output_directory+"Table_3d.txt", type='ascii')
+
+        clobber_table_write(table, output_directory+"Table_3.txt", type='ascii')        
 
     return table
     
