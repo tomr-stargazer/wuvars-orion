@@ -42,6 +42,10 @@ def generate_figures_somewhere(path):
 	fig5 = f_sensitivity_per_band()
 	fig5.savefig(path+"sensitivity_per_band.pdf")
 
+	# Fig 5a: Reference star lightcurve
+	fig5a = fivepanel_reference_star()
+	fig5a.savefig(path+"reference_lightcurve.pdf")
+
 	# Fig 6: Distribution of Stetson indices
 	fig6 = f_stetson_versus_Hmag_strict_candidates()
 	fig6.savefig(path+"Stetson_vs_Hmag.pdf")

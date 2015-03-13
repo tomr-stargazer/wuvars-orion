@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from plot4 import lc_and_phase_and_colors, multi_lc_phase_colors, multi_lc_colors, basic_lc
 from orion_plot import OrionStarData
 from tablemate_comparisons import ukvar_spread, ukvar_periods
-from variables_data_filterer import variables_photometry
+from variables_data_filterer import variables_photometry, source_photometry
 
 # custom colormap - inspired by http://stackoverflow.com/questions/16152052/matplotlib-python-change-single-color-in-colormap/16163481
 from matplotlib.colors import LinearSegmentedColormap
@@ -46,6 +46,31 @@ orion_color_dic = {'red': ((0., 1, 0),
 
 orion_cmap = LinearSegmentedColormap('orion_cmap', orion_color_dic)
 
+
+def fivepanel_reference_star(cmap=orion_cmap, **kwargs):
+	"""
+	Makes a specific basic_lc plot of a chosen reference star.
+	"""
+
+	sourceid = 44199508496440
+	# from spread
+	j_mean = 14.05166016
+	h_mean = 13.45332571
+	k_mean = 13.24733934
+
+	stardata = OrionStarData(source_photometry, sourceid)
+
+	fig = basic_lc(stardata, time_cmap=cmap, **kwargs)
+
+	fig.ax_khk.set_ylim(13.30, 13.18)	
+	fig.ax_jhk.set_xlim(0, 1)
+	fig.ax_jhk.set_ylim(0, 1.2)
+
+	fig.ax_k.set_ylim(k_mean+0.1, k_mean-0.1)
+	fig.ax_h.set_ylim(h_mean+0.1, h_mean-0.1)
+	fig.ax_j.set_ylim(j_mean+0.1, j_mean-0.1)
+
+	return fig
 
 def fivepanel_by_oncvar(oncvar, cmap=orion_cmap, **kwargs):
 	""" 
