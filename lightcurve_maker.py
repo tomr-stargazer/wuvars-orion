@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from plot4 import lc_and_phase_and_colors, multi_lc_phase_colors, multi_lc_colors, basic_lc
+from plot3 import lsp_power
 from orion_plot import OrionStarData
 from tablemate_comparisons import ukvar_spread, ukvar_periods
 from variables_data_filterer import variables_photometry, source_photometry
@@ -71,6 +72,18 @@ def fivepanel_reference_star(cmap=orion_cmap, **kwargs):
 	fig.ax_j.set_ylim(j_mean+0.1, j_mean-0.1)
 
 	return fig
+
+def lsp_by_oncvar(oncvar, name=' '):
+
+	sourceid = ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0]
+
+# def lsp_power (table, sid, season=0, upper_frequency=0.5,
+#                outfile='', name='', png_too=False):
+
+	fig = lsp_power(source_photometry, sourceid, name=name)
+
+	return fig
+
 
 def fivepanel_by_oncvar(oncvar, cmap=orion_cmap, **kwargs):
 	""" 
@@ -302,7 +315,7 @@ def seven_longperiod_variables_bo(cmap=orion_cmap, **kwargs):
 	sevenlong_sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in sevenlong_oncvar_ids]
 	# try:
 	# 	sevenlong_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in sevenlong_oncvar_ids]
-	sevenlong_periods = [17.79, 36.4, 88.5, 42.5, 158.8, 75.16, 44.27]
+	sevenlong_periods = [17.79, 36.4, 88.5, 42.5, 158.8, 71.5, 44.27]
 
 	sevenlong_stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(oncvar_id)) for sourceid, oncvar_id in zip(sevenlong_sourceids, sevenlong_oncvar_ids)]
 
