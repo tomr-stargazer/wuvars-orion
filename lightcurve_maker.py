@@ -463,3 +463,20 @@ def six_old_eclipsing_binaries(cmap=orion_cmap, **kwargs):
 	fig.canvas.draw()
 
 	return fig	
+
+def two_lomb_scargle_periodograms():
+
+	oncvars = [40, 553]
+
+	lsp_40 = lsp_by_oncvar(40)
+	lsp_553 = lsp_by_oncvar(553)
+
+	figs = [lsp_40, lsp_553]
+
+	for fig in figs:
+		fig.set_figwidth(4/1.25)
+		fig.set_figheight(6.5/1.25)
+
+		fig.ax_k.set_xlim(2, 100)
+
+	return figs

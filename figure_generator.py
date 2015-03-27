@@ -50,6 +50,11 @@ def generate_figures_somewhere(path):
 	fig6 = f_stetson_versus_Hmag_strict_candidates()
 	fig6.savefig(path+"Stetson_vs_Hmag.pdf")
 
+	# New fig 8: Periodograms
+	newfig8 = two_lomb_scargle_periodograms()
+	newfig8[0].savefig(path+"lsp_demo_a.pdf", bbox_inches='tight')
+	newfig8[1].savefig(path+"lsp_demo_b.pdf", bbox_inches='tight')
+
 	# Fig 7: Comparison of periods
 	f_period_lit_comparisons().savefig(path+"period_lit_comparisons.pdf")
 
