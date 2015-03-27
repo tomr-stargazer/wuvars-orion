@@ -16,7 +16,7 @@ publication_lcs = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_lcs/")
 
 test_figure_directory = os.path.expanduser("~/Dropbox/Bo_Tom/paper/test_figure_directory/")
 
-def generate_figures_somewhere(path):
+def generate_figures_somewhere(path, abort_early=False):
 
 	# Fig 1: history of IR monitoring campaigns
 	fig1 = f_comparison_observing_log()
@@ -57,6 +57,9 @@ def generate_figures_somewhere(path):
 
 	# Fig 7: Comparison of periods
 	f_period_lit_comparisons().savefig(path+"period_lit_comparisons.pdf")
+
+	if abort_early:
+		return
 
 	# Fig 8: Median J-H, H-K colors by Megeath class
 	f_cc_cmd_and_map_by_megeath_class()[0].savefig(path+"cc_by_class.pdf")
@@ -121,13 +124,13 @@ def generate_figures_somewhere(path):
 	# 
 	return
 
-def generate_figures_test():
+def generate_figures_test(**kwargs):
 
-	generate_figures_somewhere(test_figure_directory)
+	generate_figures_somewhere(test_figure_directory, **kwargs)
 
-def generate_figures_real():
+def generate_figures_real(**kwargs):
 
-	generate_figures_somewhere(publication_figures)
+	generate_figures_somewhere(publication_figures, **kwargs)
 
 
 
