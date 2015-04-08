@@ -627,6 +627,9 @@ def f_period_lit_comparisons(pretty=True):
     
     plt.legend(numpoints=1, loc='upper left', framealpha=0.5)
 
+    # ref asks for a horizontal line at y=2 to guide the eye
+    plt.plot(np.arange(100), 2*np.ones(100), 'k--', scalex=False, scaley=False, lw=2)
+
     plt.xlabel("Periods derived in our study (days)")
     plt.ylabel("Literature periods (days)")
 
