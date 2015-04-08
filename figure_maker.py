@@ -1075,6 +1075,75 @@ def f_sensitivity_per_band():
     plt.show()
 
     return fig
+
+def f_flux_hist_per_band(plot_all=True):
+    """
+    Plots distribution of detected sources over magnitude for J, H, K.
+
+    """
+
+    fig = plt.figure()
+
+    j_all = spread.where((spread.N_j > 0))
+    h_all = spread.where((spread.N_h > 0))
+    k_all = spread.where((spread.N_k > 0))
+
+    j_minimum = minimum.where((minimum.N_j > 50))
+    h_minimum = minimum.where((minimum.N_h > 80))
+    k_minimum = minimum.where((minimum.N_k > 80))
+
+    j_strict = autocan_true.where( 
+        (autocan_true.N_j >= 50) & (autocan_true.N_j <= 125) &    # J band criteria
+        (autocan_true.j_mean > 11) & (autocan_true.j_mean < 17) & 
+        (autocan_true.N_j_info == 0) 
+        )
+
+    h_strict = autocan_true.where( 
+        (autocan_true.N_h >= 50) & (autocan_true.N_h <= 125) &    # H band criteria
+        (autocan_true.h_mean > 11) & (autocan_true.h_mean < 16) & 
+        (autocan_true.N_h_info == 0) 
+        )
+
+    k_strict = autocan_true.where( 
+        (autocan_true.N_k >= 50) & (autocan_true.N_k <= 125) &    # K band criteria
+        (autocan_true.k_mean > 11) & (autocan_true.k_mean < 16) & 
+        (autocan_true.N_k_info == 0) 
+        )
+
+    s1 = plt.subplot(3,1,1)
+    s2 = plt.subplot(3,1,2, sharex=s1)
+    s3 = plt.subplot(3,1,3, sharex=s1)
+    
+    if plot_all:
+        s1.hist(j_all.j_meanr, range=[8,20], bins=(20-8)*5, color='w', histtype='stepfilled')
+        s2.hist(h_all.h_meanr, range=[8,20], bins=(20-8)*5, color='w', histtype='stepfilled')
+        s3.hist(k_all.k_meanr, range=[8,20], bins=(20-8)*5, color='w', histtype='stepfilled')
+
+    minimum_color='0.8'
+    s1.hist(j_minimum.j_meanr, range=[8,20], bins=(20-8)*5, color=minimum_color, histtype='stepfilled')
+    s2.hist(h_minimum.h_meanr, range=[8,20], bins=(20-8)*5, color=minimum_color, histtype='stepfilled')
+    s3.hist(k_minimum.k_meanr, range=[8,20], bins=(20-8)*5, color=minimum_color, histtype='stepfilled')
+
+    s1.hist(j_strict.j_meanr, range=[8,20], bins=(20-8)*5, color='b')
+    s2.hist(h_strict.h_meanr, range=[8,20], bins=(20-8)*5, color='g')
+    s3.hist(k_strict.k_meanr, range=[8,20], bins=(20-8)*5, color='r')
+
+    # plt.xlim(10.5, 17.5)
+
+    s3.set_xlabel("Magnitude")
+    # s3.set_ylabel("Observed rms")
+    # for s in [s1,s2,s3]:
+    #     s.set_ylim(0,0.1)
+    #     s.set_yticks([0, 0.05, 0.1])
+
+    s1.text(0.2, 0.6, "$J$", fontsize=24, color='b', transform=s1.transAxes)
+    s2.text(0.2, 0.6, "$H$", fontsize=24, color='g', transform=s2.transAxes)
+    s3.text(0.2, 0.6, "$K$", fontsize=24, color='r', transform=s3.transAxes)        
+
+    plt.show()
+
+    return fig
+
     
 
 #outdated
