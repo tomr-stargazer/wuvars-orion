@@ -640,6 +640,28 @@ def f_period_lit_comparisons(pretty=True):
         plt.ylim(0,20)
 
     plt.show()
+
+    # let's count the number of (us) nonperiodic stars with periods in the literature
+    nonperiodics_with_lit_periods = ((~np.isnan(lit_periods.GCVS_period) |
+                                      ~np.isnan(lit_periods.CHS01_period) |
+                                      ~np.isnan(lit_periods.YSOVAR_period) |
+                                      ~np.isnan(lit_periods.Herbst2002_period ) |
+                                      ~np.isnan(lit_periods.Parihar2009_period ) |
+                                      ~np.isnan(lit_periods.RodriguezLedesma2009_period)) &
+                                     np.isnan(ukvar_periods))
+
+    print len(lit_periods[nonperiodics_with_lit_periods])
+
+    nonperiodics_with_sub2day_periods = (((lit_periods.GCVS_period < 2) |
+                                         (lit_periods.CHS01_period < 2) |
+                                         (lit_periods.YSOVAR_period < 2) |
+                                         (lit_periods.Herbst2002_period < 2) |
+                                         (lit_periods.Parihar2009_period < 2) |
+                                         (lit_periods.RodriguezLedesma2009_period < 2)) & np.isnan(ukvar_periods))
+
+
+    print len(lit_periods[nonperiodics_with_sub2day_periods])
+
     return fig
 
 
