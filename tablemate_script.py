@@ -16,6 +16,8 @@ import os
 
 import numpy as np
 
+import astropy
+
 import tablemate_core
 from tablemate_core import TableParameters, atpy
 import megeath_fulltable_parser_oneoff
@@ -112,6 +114,7 @@ DaRio_2010 = TableParameters(
     name_col = 'ID')
 tables.append(DaRio_2010)
 
+print "**** ABOUT TO YSO TABLE"
 YSOVAR_YSOs = TableParameters(
     data = atpy.Table(dpath+"YSOVAR_OrionYSOs.table", type='ascii'),
     alias = "YSOVAR_OrionYSOs",
@@ -120,7 +123,10 @@ YSOVAR_YSOs = TableParameters(
     radec_fmt = 'decimal degrees',
     name_col = 'SOYname')
 tables.append(YSOVAR_YSOs)
+print "**** DONE WITH YSO TABLE"
 
+print "**** ABOUT TO NO_EXCESS TABLE"
+# atpy.registry.register_reader('basic', astropy.io.ascii.basic.Basic.read, override=True)
 YSOVAR_NoExcess = TableParameters(
     data = atpy.Table(dpath+"YSOVAR_OrionNoExcess.table", type='ascii'),
     alias = "YSOVAR_OrionNoExcess",
@@ -129,6 +135,7 @@ YSOVAR_NoExcess = TableParameters(
     radec_fmt = 'decimal degrees',
     name_col = 'SOYname')
 tables.append(YSOVAR_NoExcess)
+print "**** DONE WITH NO_EXCESS TABLE"
 
 Herbst2002 = TableParameters(
     data = dpath+"Herbst2002_table1.fits",
