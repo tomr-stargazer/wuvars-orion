@@ -1076,17 +1076,13 @@ def f_sensitivity_per_band():
 
     return fig
 
-def f_flux_hist_per_band(plot_all=True):
+def f_flux_hist_per_band():
     """
     Plots distribution of detected sources over magnitude for J, H, K.
 
     """
 
     fig = plt.figure()
-
-    j_all = spread.where((spread.N_j > 0))
-    h_all = spread.where((spread.N_h > 0))
-    k_all = spread.where((spread.N_k > 0))
 
     j_minimum = minimum.where((minimum.N_j > 50))
     h_minimum = minimum.where((minimum.N_h > 80))
@@ -1114,12 +1110,7 @@ def f_flux_hist_per_band(plot_all=True):
     s2 = plt.subplot(3,1,2, sharex=s1)
     s3 = plt.subplot(3,1,3, sharex=s1)
     
-    if plot_all:
-        s1.hist(j_all.j_meanr, range=[8,20], bins=(20-8)*5, color='w', histtype='stepfilled')
-        s2.hist(h_all.h_meanr, range=[8,20], bins=(20-8)*5, color='w', histtype='stepfilled')
-        s3.hist(k_all.k_meanr, range=[8,20], bins=(20-8)*5, color='w', histtype='stepfilled')
-
-    minimum_color='0.8'
+    minimum_color='0.9'
     s1.hist(j_minimum.j_meanr, range=[8,20], bins=(20-8)*5, color=minimum_color, histtype='stepfilled')
     s2.hist(h_minimum.h_meanr, range=[8,20], bins=(20-8)*5, color=minimum_color, histtype='stepfilled')
     s3.hist(k_minimum.k_meanr, range=[8,20], bins=(20-8)*5, color=minimum_color, histtype='stepfilled')
@@ -1131,7 +1122,7 @@ def f_flux_hist_per_band(plot_all=True):
     # plt.xlim(10.5, 17.5)
 
     s3.set_xlabel("Magnitude")
-    # s3.set_ylabel("Observed rms")
+    s3.set_ylabel("Number of sources")
     # for s in [s1,s2,s3]:
     #     s.set_ylim(0,0.1)
     #     s.set_yticks([0, 0.05, 0.1])

@@ -42,6 +42,9 @@ def generate_figures_somewhere(path, abort_early=False):
 	fig5 = f_sensitivity_per_band()
 	fig5.savefig(path+"sensitivity_per_band.pdf")
 
+	fig5a = f_flux_hist_per_band()
+	fig5a.savefig(path+"flux_distribution_per_band.pdf")
+
 	# Fig 5a: Reference star lightcurve
 	fig5a = fivepanel_reference_star()
 	fig5a.savefig(path+"reference_lightcurve.pdf")
