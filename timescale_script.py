@@ -88,7 +88,6 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 
 
 	fig3 = plt.figure(figsize=(4,5))
-	plt.text(100, 250, "Non-shuffled", fontsize=16)
 
 	plt.ylabel("Number of variables detected")
 	plt.xlabel("Days")
@@ -108,7 +107,6 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 
 
 	fig4 = plt.figure(figsize=(4,5))
-	plt.text(100, 250, "Time shuffled", fontsize=16)	
 	plt.ylabel("Number of variables detected")	
 	plt.xlabel("Days")
 
@@ -127,7 +125,6 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 
 
 	fig5 = plt.figure(figsize=(4,5))
-	plt.text(10, 0.23, "Non-shuffled", fontsize=16)		
 	plt.ylabel("K amplitude")	
 	plt.xlabel("Days")
 
@@ -140,7 +137,6 @@ def plot_shuffle_dudes(list_of_shuffle_dudes, list_of_non_shuffled):
 
 
 	fig6 = plt.figure(figsize=(4,5))
-	plt.text(10, 0.23, "Time shuffled", fontsize=16)		
 	plt.ylabel("K amplitude")
 	plt.xlabel("Days")
 
