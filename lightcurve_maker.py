@@ -330,26 +330,26 @@ def dipper_nonperiodic_fivepanel(cmap=orion_cmap, **kwargs):
     return dipper_fig
 
 
-def seven_longperiod_variables_bo(cmap=orion_cmap, **kwargs):
+def four_longperiod_variables_bo(cmap=orion_cmap, **kwargs):
 
-    sevenlong_oncvar_ids = [479, 149, 1226, 637, 802, 874, 665]
-    offsets = [0.5, -0.35, 0.12, -0.1, 0.3, 0.05, -0.05]
+    fourlong_oncvar_ids = [637, 802, 874, 665]
+    offsets = [-0.1, 0.3, 0.05, -0.05]
 
-    sevenlong_sourceids = [ukvar_spread['SOURCEID'][
-        ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in sevenlong_oncvar_ids]
+    fourlong_sourceids = [ukvar_spread['SOURCEID'][
+        ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in fourlong_oncvar_ids]
     # try:
-    # 	sevenlong_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in sevenlong_oncvar_ids]
-    sevenlong_periods = [17.79, 36.4, 88.5, 42.5, 158.8, 71.5, 44.27]
+    # 	fourlong_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in fourlong_oncvar_ids]
+    fourlong_periods = [42.5, 158.8, 71.5, 44.27]
 
-    sevenlong_stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(
-        oncvar_id)) for sourceid, oncvar_id in zip(sevenlong_sourceids, sevenlong_oncvar_ids)]
+    fourlong_stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(
+        oncvar_id)) for sourceid, oncvar_id in zip(fourlong_sourceids, fourlong_oncvar_ids)]
 
-    bands = ['k'] * 7
+    bands = ['k'] * 4
 
-    seven_fig = multi_lc_phase_colors(
-        sevenlong_stardatas, bands, sevenlong_periods, offsets, cmap=cmap, **kwargs)
+    four_fig = multi_lc_phase_colors(
+        fourlong_stardatas, bands, fourlong_periods, offsets, cmap=cmap, **kwargs)
 
-    for stardata, period, axes_dict in zip(seven_fig.stardatas, seven_fig.periods, seven_fig.axes_dicts):
+    for stardata, period, axes_dict in zip(four_fig.stardatas, four_fig.periods, four_fig.axes_dicts):
 
         name = stardata.name
         ax_phase = axes_dict['phase']
@@ -365,16 +365,16 @@ def seven_longperiod_variables_bo(cmap=orion_cmap, **kwargs):
         ax_jhk.set_xlim(0, 2)
         ax_jhk.set_ylim(0, 2.5)
 
-        seven_fig.canvas.draw()
+        four_fig.canvas.draw()
 
-    seven_fig.axes_dicts[0]['phase'].set_title("Period-folded light curve", fontsize='small')
-    seven_fig.axes_dicts[0]['lc'].set_title("Light curve (MJD - 54034)", fontsize='small')
-    seven_fig.axes_dicts[0]['jhk'].set_title("$J-H$ vs. $H-K$", fontsize='small')
-    seven_fig.axes_dicts[0]['khk'].set_title("$K$ vs. $H-K$", fontsize='small')
+    four_fig.axes_dicts[0]['phase'].set_title("Period-folded light curve", fontsize='small')
+    four_fig.axes_dicts[0]['lc'].set_title("Light curve (MJD - 54034)", fontsize='small')
+    four_fig.axes_dicts[0]['jhk'].set_title("$J-H$ vs. $H-K$", fontsize='small')
+    four_fig.axes_dicts[0]['khk'].set_title("$K$ vs. $H-K$", fontsize='small')
 
-    seven_fig.canvas.draw()
+    four_fig.canvas.draw()
 
-    return seven_fig
+    return four_fig
 
 
 def seven_clean_rotators(cmap=orion_cmap, **kwargs):

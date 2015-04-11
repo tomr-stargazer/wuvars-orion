@@ -113,7 +113,7 @@ def generate_figures_somewhere(path, abort_early=False):
 
     make_ysovar_light_curve().savefig(path + "1226_ysovar.pdf", bbox_inches='tight')
 
-    seven_longperiod_variables_bo(figscale=0.5).savefig(path + "longperiod_sevenpanel.pdf")
+    four_longperiod_variables_bo(figscale=0.5).savefig(path + "longperiod_sevenpanel.pdf")
     fivepanel_663().savefig(path + "onc663.pdf")
 
     eightpanel_957().savefig(path + "onc957_phase_lc.pdf")
