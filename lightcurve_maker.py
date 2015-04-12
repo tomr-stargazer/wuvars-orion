@@ -338,7 +338,7 @@ def four_longperiod_variables_bo(cmap=orion_cmap, **kwargs):
     fourlong_sourceids = [ukvar_spread['SOURCEID'][
         ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in fourlong_oncvar_ids]
     # try:
-    # 	fourlong_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in fourlong_oncvar_ids]
+    #   fourlong_periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in fourlong_oncvar_ids]
     fourlong_periods = [42.5, 158.8, 71.5, 44.27]
 
     fourlong_stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(
@@ -407,8 +407,15 @@ def seven_clean_rotators(cmap=orion_cmap, **kwargs):
         ax_phase.text(0.6, 0.1, "P = {0:.2f} d".format(
             period), transform=ax_phase.transAxes, fontsize='small')
 
-        ax_jhk.set_xlim(0.095, 1.05)
-        ax_jhk.set_ylim(0.5, 2)
+        if '359' in stardata.name:
+            ax_jhk.set_xlim(0.83, 1.04)
+            ax_jhk.set_ylim(1.623, 1.987)
+        else:
+            ax_jhk.set_xlim(0.156, 0.436)
+            ax_jhk.set_ylim(0.555, 1.055)
+        # ax_jhk.set_xlim(0.095, 1.05)
+        # ax_jhk.set_ylim(0.5, 2)
+
 
         rotator_fig.canvas.draw()
 
@@ -473,7 +480,7 @@ def six_old_eclipsing_binaries(cmap=orion_cmap, **kwargs):
     sourceids = [ukvar_spread['SOURCEID'][ukvar_spread['UKvar_ID'] == oncvar][0]
                  for oncvar in oncvar_ids]
     periods = [2.635, 20.48, 4.674, 2.65, 9.78, 3.57]
-#	periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in oncvar_ids]
+#   periods = [ukvar_periods[ukvar_spread['UKvar_ID'] == oncvar][0] for oncvar in oncvar_ids]
 
     stardatas = [OrionStarData(variables_photometry, sourceid, name='{}'.format(
         oncvar_id)) for sourceid, oncvar_id in zip(sourceids, oncvar_ids)]
