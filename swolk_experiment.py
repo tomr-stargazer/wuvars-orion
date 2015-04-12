@@ -200,6 +200,10 @@ def match_spitzer_to_ukirt():
                 range=[0,5], bins=20, color='0.7', label="Q=1"
                 )
         except: pass
+        array_in_question = uka_d.Stetson[ 
+                    m.where(m[uka_i] != -1)[uka_i] 
+                    ]
+        print len(array_in_question[array_in_question>5])
         try:
             # STRICT
             s.hist( 
@@ -247,11 +251,13 @@ def match_spitzer_to_ukirt():
     print ""
     for s, m, name in zip(subplot_list, mated_list, name_list):
         # Mean Delta Mag (and sigmas)?
-#        auto_delta = uka_d.[m.where(m[uka_i] != -1)[uka_i]]# doesn't quite work
+        auto_delta = uka_d.k_ranger[m.where(m[uka_i] != -1)[uka_i]]# doesn't quite work
         strict_delta = uks_d.k_ranger[m.where(m[uks_i] != -1)[uks_i]]
 
         print ("%s Median delta-K (max-min) for Q=2: %.3f +- %.2f" % 
                (name, np.median(strict_delta), rb.mad(strict_delta)))
+        print ("%s Median delta-K (max-min) for Q=1+2: %.3f +- %.2f" % 
+               (name, np.median(auto_delta), rb.mad(auto_delta)))
 
 
         # What fraction have good periods? Not answerable right now.
