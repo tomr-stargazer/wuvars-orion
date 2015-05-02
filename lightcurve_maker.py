@@ -64,7 +64,11 @@ def fivepanel_reference_star(cmap=orion_cmap, **kwargs):
 
     fig = basic_lc(stardata, time_cmap=cmap, **kwargs)
 
-    fig.ax_khk.set_ylim(13.30, 13.18)
+    fig.ax_khk.set_ylim(13.40, 13.00)
+    fig.ax_khk.set_xlim(0, 0.4)
+    xticks = np.linspace(0, 0.4, 6)
+    fig.ax_khk.set_xticks(xticks)
+
     fig.ax_jhk.set_xlim(0, 1)
     fig.ax_jhk.set_ylim(0, 1.2)
 
