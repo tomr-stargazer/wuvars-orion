@@ -10,6 +10,7 @@ from figure_maker import *
 from swolk_experiment import match_spitzer_to_ukirt
 from lightcurve_maker import *
 from ysovar_data_read import make_ysovar_light_curve
+from aatau_analysis import aatau_period_plots
 
 publication_figures = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_figures/")
 publication_lcs = os.path.expanduser("~/Dropbox/Bo_Tom/paper/publication_lcs/")
@@ -61,6 +62,10 @@ def generate_figures_somewhere(path, abort_early=False):
 
     # Fig 7: Comparison of periods
     f_period_lit_comparisons().savefig(path + "period_lit_comparisons.pdf")
+
+    aatau_hist, aatau_scatter, nil = aatau_period_plots()
+    aatau_hist.savefig(path+"period_hist.pdf", bbox_inches='tight')
+    aatau_scatter.savefig(path+"period_mag_correlation.pdf", bbox_inches='tight')
 
     if abort_early:
         return
