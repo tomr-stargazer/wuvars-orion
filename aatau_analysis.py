@@ -68,14 +68,14 @@ print "Thus {:.1f}% of all disked stars are of AA Tau type,\nand {:.1f}% of peri
 # 3. distribution of AA Tau periods, also versus "mass"
 def aatau_period_plots():
 
-	fig1 = plt.figure()
+	hist_fig = plt.figure(figsize=(5,6))
 
 	plt.hist(aatau_periods, range=(2,20), bins=18)
 
 	plt.xlabel("AA Tau period (days)")
-	plt.title("Histogram of AA Tau periods")
+	plt.ylabel("Number of AA Taus")
 
-	fig2 = plt.figure()
+	periods_vs_k_fig = plt.figure(figsize=(5,6))
 
 	plt.plot(aatau_periods, aatau_spread.k_medianr, 'ro')
 
@@ -83,9 +83,9 @@ def aatau_period_plots():
 
 	plt.xlabel("AA Tau period (days)")
 	plt.ylabel("AA Tau $K$ mag")
-	plt.title("Bright AA Taus have longer periods than faint AA Taus")
+	# plt.title("Bright AA Taus have longer periods than faint AA Taus")
 
-	fig3 = plt.figure()
+	spitzer_fig = plt.figure()
 
 	plt.subplot(221)
 	plt.plot(aatau_periods, aatau_megeath['3.6mag'], 'bo')
@@ -114,7 +114,7 @@ def aatau_period_plots():
 	plt.suptitle("AA Tau magnitude-period relation for Spitzer photometry")
 
 
-	return fig1, fig2, fig3
+	return hist_fig, periods_vs_k_fig, spitzer_fig
 
 
 #4. color mag, color color
