@@ -195,39 +195,65 @@ def t_table1_radec_xref_jhk_irac(write=False):
 
     """
 
-    table = atpy.Table()
+    table = astropy.table.Table()
     table.table_name = "Table 1"
 
-    addc = table.add_column
+    columns = [
+        'ONCvar ID',
+        'R.A. (deg)',
+        'Decl. (deg)',
+        'SIMBAD Cross-reference',
+        'Data quality flag',
+        'Periodic flag',
+        'Median J mag',
+        'Median J mag error',
+        'Median H mag',
+        'Median H mag error',
+        'Median K mag',
+        'Median K mag error',
+        'Spitzer [3.6] mag',
+        'Spitzer [3.6] mag error',
+        'Spitzer [4.5] mag',
+        'Spitzer [4.5] mag error',
+        'Spitzer [5.8] mag',
+        'Spitzer [5.8] mag error',
+        'Spitzer [8.0] mag',
+        'Spitzer [8.0] mag error',
+        'Class (from Megeath et al. 2012)'
+    ]
 
-    addc('ONCvar ID', ukvar_spread.UKvar_ID)
-    addc('R.A. (deg)', np.degrees(ukvar_spread.RA))
-    addc('Decl. (deg)', np.degrees(ukvar_spread.DEC))
-    addc('SIMBAD Cross-reference', ukvar_spread.SIMBAD_name)
-    addc('Data quality flag', ukvar_spread.autovar + ukvar_spread.strict)
-    addc('Periodic flag', ukvar_spread.periodic)
-    addc('Median J mag', ukvar_spread.j_median)
-    addc('Median J mag error', ukvar_spread.j_err_median)
-    addc('Median H mag', ukvar_spread.h_median)
-    addc('Median H mag error', ukvar_spread.h_err_median)
-    addc('Median K mag', ukvar_spread.k_median)
-    addc('Median K mag error', ukvar_spread.k_err_median)
-    addc('Spitzer [3.6] mag', megeath2012_full_by_ukvar['3.6'])
-    addc('Spitzer [3.6] mag error', megeath2012_full_by_ukvar['e_3.6'])
-    addc('Spitzer [4.5] mag', megeath2012_full_by_ukvar['4.5'])
-    addc('Spitzer [4.5] mag error', megeath2012_full_by_ukvar['e_4.5'])
-    addc('Spitzer [5.8] mag', megeath2012_full_by_ukvar['5.8'])
-    addc('Spitzer [5.8] mag error', megeath2012_full_by_ukvar['e_5.8'])
-    addc('Spitzer [8.0] mag', megeath2012_full_by_ukvar['8'])
-    addc('Spitzer [8.0] mag error', megeath2012_full_by_ukvar['e_8'])
-    addc('Class (from Megeath et al. 2012)', make_megeath_class_column())
+    columns_to_data_and_formats = {
+        'ONCvar ID': (ukvar_spread.UKvar_ID, '%.2f'),
+        'R.A. (deg)': (np.degrees(ukvar_spread.RA), '%.6f'),
+        'Decl. (deg)': (np.degrees(ukvar_spread.DEC), '%.6f'),
+        'SIMBAD Cross-reference': (ukvar_spread.SIMBAD_name, '%s'),
+        'Data quality flag': (ukvar_spread.autovar + ukvar_spread.strict, '%i'),
+        'Periodic flag': (ukvar_spread.periodic, '%i'),
+        'Median J mag': (ukvar_spread.j_median, '%.2f'),
+        'Median J mag error': (ukvar_spread.j_err_median, '%.2f'),
+        'Median H mag': (ukvar_spread.h_median, '%.2f'),
+        'Median H mag error': (ukvar_spread.h_err_median, '%.2f'),
+        'Median K mag': (ukvar_spread.k_median, '%.2f'),
+        'Median K mag error': (ukvar_spread.k_err_median, '%.2f'),
+        'Spitzer [3.6] mag': (megeath2012_full_by_ukvar['3.6'], '%.2f'),
+        'Spitzer [3.6] mag error': (megeath2012_full_by_ukvar['e_3.6'], '%.2f'),
+        'Spitzer [4.5] mag': (megeath2012_full_by_ukvar['4.5'], '%.2f'),
+        'Spitzer [4.5] mag error': (megeath2012_full_by_ukvar['e_4.5'], '%.2f'),
+        'Spitzer [5.8] mag': (megeath2012_full_by_ukvar['5.8'], '%.2f'),
+        'Spitzer [5.8] mag error': (megeath2012_full_by_ukvar['e_5.8'], '%.2f'),
+        'Spitzer [8.0] mag': (megeath2012_full_by_ukvar['8'], '%.2f'),
+        'Spitzer [8.0] mag error': (megeath2012_full_by_ukvar['e_8'], '%.2f'),
+        'Class (from Megeath et al. 2012)': (make_megeath_class_column(), '%s')}
 
-    # This writing convention is not sustainable.
+    column_to_format = {}
+    for column in columns:
+        data, format = columns_to_data_and_formats[column]
+        table[column] = data
+        column_to_format[column] = format
 
     if write:
-        clobber_table_write(table,output_directory+"Table_1.txt", type='ascii')
-        clobber_table_write(table,output_directory+"Table_1.tbl", type='ipac')
-        clobber_table_write(table, output_directory+"Table_1.fits")
+        table.write(output_directory+'AJ_table_1.txt', format='ascii.basic', delimiter="&", formats=column_to_format)
+
 
     return table
 
