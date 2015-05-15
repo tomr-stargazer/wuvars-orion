@@ -355,10 +355,8 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
 
     """
 
-    table = atpy.Table()
+    table = astropy.table.Table()
     table.table_name = "Table 3"
-
-    addc = table.add_column
 
     nonperiodics = ukvar_spread.where(ukvar_spread.periodic == 0)
     megeath_class_by_nonperiodics = make_megeath_class_column()[ukvar_spread.periodic == 0]
@@ -379,48 +377,36 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
     khk_slope_column[~np.in1d(nonperiodics.SOURCEID, hk_slope_reference.SOURCEID)] = np.nan
     khk_slope_error[~np.in1d(nonperiodics.SOURCEID, hk_slope_reference.SOURCEID)] = np.nan
 
-    addc('ONCvar ID', nonperiodics.UKvar_ID)
-    addc('N_J', nonperiodics.N_j)
-    addc('N_H', nonperiodics.N_h)
-    addc('N_K', nonperiodics.N_k)
-    addc('J mag range (robust)', nonperiodics.j_ranger)
-    addc('H mag range (robust)', nonperiodics.h_ranger)
-    addc('K mag range (robust)', nonperiodics.k_ranger)
-    addc('J-H range (robust)', nonperiodics.jmh_ranger)
-    addc('H-K range (robust)', nonperiodics.hmk_ranger)
-    addc('(J-H), (H-K) color slope', jhk_slope_column)
-    addc('jhk_slope_error', jhk_slope_error)
-    addc('J, (J-H) color slope', jjh_slope_column)
-    addc('jjh_slope_error', jjh_slope_error)
-    addc('K, (H-K) color slope', khk_slope_column)
-    addc('khk_slope_error', khk_slope_error)
-    addc('Stetson Variability Index', nonperiodics.Stetson)
-    addc('Bands used to compute Stetson', nonperiodics.Stetson_choice)
-    addc('Data quality flag', nonperiodics.autovar + nonperiodics.strict)
-    addc('Class', megeath_class_by_nonperiodics)
+    columns_data_and_formats = [
+        ('ONCvar ID', nonperiodics.UKvar_ID, '%i'),
+        ('N_J', nonperiodics.N_j, '%i'),
+        ('N_H', nonperiodics.N_h, '%i'),
+        ('N_K', nonperiodics.N_k, '%i'),
+        ('J mag range (robust)', nonperiodics.j_ranger, '%.3f'),
+        ('H mag range (robust)', nonperiodics.h_ranger, '%.3f'),
+        ('K mag range (robust)', nonperiodics.k_ranger, '%.3f'),
+        ('J-H range (robust)', nonperiodics.jmh_ranger, '%.3f'),
+        ('H-K range (robust)', nonperiodics.hmk_ranger, '%.3f'),
+        ('(J-H), (H-K) color slope', jhk_slope_column, '%.3f'),
+        ('jhk_slope_error', jhk_slope_error, '%.3f'),
+        ('J, (J-H) color slope', jjh_slope_column, '%.3f'),
+        ('jjh_slope_error', jjh_slope_error, '%.3f'),
+        ('K, (H-K) color slope', khk_slope_column, '%.3f'),
+        ('khk_slope_error', khk_slope_error, '%.3f'),
+        ('Stetson Variability Index', nonperiodics.Stetson, '%.3f'),
+        ('Bands used to compute Stetson', nonperiodics.Stetson_choice, '%s'),
+        ('Data quality flag', nonperiodics.autovar + nonperiodics.strict, '%i'),
+        ('Class', megeath_class_by_nonperiodics, '%s')
+        ]
 
     # Now split it into three pieces and compute medians!
-    t3_proto = table.where((megeath_class_by_nonperiodics == 'P') |
-                           (megeath_class_by_nonperiodics == 'FP')|
-                           (megeath_class_by_nonperiodics == 'RP'))
-
-    t3_disks = table.where(megeath_class_by_nonperiodics == 'D')
-
-    t3_nodisks = table.where(megeath_class_by_nonperiodics == 'ND')
-
-    t3_unknown = table.where(megeath_class_by_nonperiodics == 'na')
-
-    assert (len(t3_proto) + len(t3_disks) +
-            len(t3_nodisks) + len(t3_unknown) == len(table)), \
-           "Tables don't add up to the right length!"
+    column_to_format = {}
+    for column, data, format in columns_data_and_formats:
+        table[column] = data
+        column_to_format[column] = format
 
     if write:
-        clobber_table_write(t3_proto, output_directory+"Table_3a.txt", type='ascii')
-        clobber_table_write(t3_disks, output_directory+"Table_3b.txt", type='ascii')
-        clobber_table_write(t3_nodisks, output_directory+"Table_3c.txt", type='ascii')
-        clobber_table_write(t3_unknown, output_directory+"Table_3d.txt", type='ascii')
-
-        clobber_table_write(table, output_directory+"Table_3.txt", type='ascii')        
+        table.write(output_directory+"AJ_table_3.txt", format='ascii.basic', delimiter="&", formats=column_to_format)
 
     return table
     
