@@ -227,7 +227,7 @@ def t_table1_radec_xref_jhk_irac(write=False):
         column_to_format[column] = format
 
     if write:
-        table.write(output_directory+'AJ_table_1.txt', format='ascii.basic', delimiter="&", formats=column_to_format)
+        table.write(output_directory+'AJ_table_2.txt', format='ascii.basic', delimiter="&", formats=column_to_format)
 
 
     return table
@@ -329,7 +329,7 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
 
 
     if write:
-        table.write(output_directory+"AJ_table_2.txt", format='ascii.basic', delimiter="&", formats=column_to_format)
+        table.write(output_directory+"AJ_table_4.txt", format='ascii.basic', delimiter="&", formats=column_to_format)
 
     return table
 
@@ -406,7 +406,7 @@ def t_table3_variability_nonperiodics_bymegeathclass(write=False):
         column_to_format[column] = format
 
     if write:
-        table.write(output_directory+"AJ_table_3.txt", format='ascii.basic', delimiter="&", formats=column_to_format)
+        table.write(output_directory+"AJ_table_5.txt", format='ascii.basic', delimiter="&", formats=column_to_format)
 
     return table
     
