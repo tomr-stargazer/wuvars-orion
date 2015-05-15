@@ -270,10 +270,8 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
       
     """
 
-    table = atpy.Table()
+    table = astropy.table.Table()
     table.table_name = "Table 2"
-
-    addc = table.add_column
 
     periodics = ukvar_spread.where(ukvar_spread.periodic != 0)
     periodic_periods = ukvar_periods[ukvar_spread.periodic != 0]
@@ -301,51 +299,37 @@ def t_table2_variability_periods_periodics_bymegeathclass(write=False):
     khk_slope_error[~np.in1d(periodics.SOURCEID,
                              hk_slope_reference.SOURCEID)] = np.nan
 
-    addc('ONCvar ID', periodics.UKvar_ID)
-    addc('N_J', periodics.N_j)
-    addc('N_H', periodics.N_h)
-    addc('N_K', periodics.N_k)
-    addc('J mag range (robust)', periodics.j_ranger)
-    addc('H mag range (robust)', periodics.h_ranger)
-    addc('K mag range (robust)', periodics.k_ranger)
-    addc('J-H range (robust)', periodics.jmh_ranger)
-    addc('H-K range (robust)', periodics.hmk_ranger)
-    addc('(J-H), (H-K) color slope', jhk_slope_column)
-    addc('jhk_slope_error', jhk_slope_error)
-    addc('J, (J-H) color slope', jjh_slope_column)
-    addc('jjh_slope_error', jjh_slope_error)
-    addc('K, (H-K) color slope', khk_slope_column)
-    addc('khk_slope_error', khk_slope_error)
-    addc('Stetson Variability Index', periodics.Stetson)
-    addc('Bands used to compute Stetson', periodics.Stetson_choice)
-    addc('Best-fit period', periodic_periods)
-    addc('Data quality flag', periodics.autovar + periodics.strict)
-    addc('Class', megeath_class_by_periodics)
+    columns_data_and_formats = [
+        ('ONCvar ID', periodics.UKvar_ID, '%i'),
+        ('N_J', periodics.N_j, '%i'),
+        ('N_H', periodics.N_h, '%i'),
+        ('N_K', periodics.N_k, '%i'),
+        ('J mag range (robust)', periodics.j_ranger, '%.3f'),
+        ('H mag range (robust)', periodics.h_ranger, '%.3f'),
+        ('K mag range (robust)', periodics.k_ranger, '%.3f'),
+        ('J-H range (robust)', periodics.jmh_ranger, '%.3f'),
+        ('H-K range (robust)', periodics.hmk_ranger, '%.3f'),
+        ('(J-H), (H-K) color slope', jhk_slope_column, '%.3f'),
+        ('jhk_slope_error', jhk_slope_error, '%.3f'),
+        ('J, (J-H) color slope', jjh_slope_column, '%.3f'),
+        ('jjh_slope_error', jjh_slope_error, '%.3f'),
+        ('K, (H-K) color slope', khk_slope_column, '%.3f'),
+        ('khk_slope_error', khk_slope_error, '%.3f'),
+        ('Stetson Variability Index', periodics.Stetson, '%.3f'),
+        ('Bands used to compute Stetson', periodics.Stetson_choice, '%s'),
+        ('Best-fit period', periodic_periods, '%.4f'),
+        ('Data quality flag', periodics.autovar + periodics.strict, '%i'),
+        ('Class', megeath_class_by_periodics, '%s')
+    ]
 
-    # Now split it into three pieces and compute medians!
-    
-    t2_proto = table.where((megeath_class_by_periodics == 'P') |
-                           (megeath_class_by_periodics == 'FP')|
-                           (megeath_class_by_periodics == 'RP'))
+    column_to_format = {}
+    for column, data, format in columns_data_and_formats:
+        table[column] = data
+        column_to_format[column] = format
 
-    t2_disks = table.where(megeath_class_by_periodics == 'D')
-
-    t2_nodisks = table.where(megeath_class_by_periodics == 'ND')
-
-    t2_unknown = table.where(megeath_class_by_periodics == 'na')
-
-    assert (len(t2_proto) + len(t2_disks) +
-            len(t2_nodisks) +len(t2_unknown) == len(table)), \
-            "Tables don't add up to the right length!"
 
     if write:
-        clobber_table_write(t2_proto, output_directory+"Table_2a.txt", type='ascii')
-        clobber_table_write(t2_disks, output_directory+"Table_2b.txt", type='ascii')
-        clobber_table_write(t2_nodisks, output_directory+"Table_2c.txt", type='ascii')
-        clobber_table_write(t2_unknown, output_directory+"Table_2d.txt", type='ascii')
-
-        clobber_table_write(table, output_directory+"Table_2.txt", type='ascii')
-
+        table.write(output_directory+"AJ_table_2.txt", format='ascii.basic', delimiter="&", formats=column_to_format)
 
     return table
 
