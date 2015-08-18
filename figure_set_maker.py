@@ -7,6 +7,9 @@ from __future__ import division
 
 import numpy as np
 import matplotlib
+import astropy
+from astropy import units as u
+from astropy.coordinates import SkyCoord
 
 from plot4 import (lc_and_phase_and_colors, 
                    multi_lc_phase_colors, 
@@ -44,12 +47,19 @@ def figureset_page(oncvar_id):
     else:
         period_fragment = '{0:.3f} days'.format(period)
 
-    ra = 111 # placeholder
-    dec = 222 # placeholder
-    
-    coordinates_string = r'Coordinates: $\alpha$ {0}, $\delta$ {1}'.format(ra, dec)
+    ra_decimal = np.degrees(ukvar_spread.RA[ukvar_spread.UKvar_ID == oncvar_id][0])
+    dec_decimal = np.degrees(ukvar_spread.DEC[ukvar_spread.UKvar_ID == oncvar_id][0])
+
+    coord_object = SkyCoord(ra=ra_decimal*u.deg, dec=dec_decimal*u.deg)
+
+    quality_number = int((ukvar_spread.autovar+ukvar_spread.strict)[ukvar_spread.UKvar_ID == oncvar_id][0])
+
+    ra_string = coord_object.ra.to_string(unit=u.hour, sep=':', precision=1)
+    dec_string = coord_object.dec.to_string(unit=u.deg, sep=':', precision=1)
+
+    coordinates_string = r'Coordinates: $\alpha$ {0}, $\delta$ {1}'.format(ra_string, dec_string)
+
     period_string = 'Period: {0}'.format(period_fragment)
-    quality_number = 2
     quality_dict = {0: 'all bands compromised',
                     1: '1-2 bands compromised',
                     2: 'no bands compromised'}
@@ -79,12 +89,12 @@ def generate_mock_figureset_page():
     return fig
 
 
-def save_mock_figureset_page():
+def save_mock_figureset_page(file_format='png'):
     """ Allows us to test the figureset pages. """
 
     fig = generate_mock_figureset_page()
 
-    fig.savefig_tight('test_blah.png')
+    fig.savefig_tight('test_blah.{0}'.format(file_format))
 
 
 def generate_all_figureset_pages():
